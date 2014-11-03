@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+<project name="ccfinderx" basedir="." default="jar">
+
+    <property name="src.dir" value="."/>
+    <property name="build.dir" value="build"/>
+    <property environment="env" />
+    <property name="JAVA_LIBS" value="/usr/share/java"/>
+
+    <fileset >
+        <include name="GemXMain.java"/>
+        <include name="ccfinderx/*.java"/>
+        <include name="gemx/*.java"/>
+        <include name="gemx/dialogs/*.java"/>
+        <include name="gemx/scatterplothelper/*.java"/>
+        <include name="model/*.java"/>
+        <include name="utility/*.java"/>
+        <include name="res/*.java"/>
+        <include name="constants/*.java"/>
+        <include name="customwidgets/*.java"/>
+        <include name="resources/*.java"/>
+    </fileset>
+
+    <path id="compile.classpath">
+        <fileset dir="jars">
+            <include name="*.jar"/>
+        </fileset>
+        <fileset dir="${JAVA_LIBS}">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
+
+    <target name="compile" description="Compile source files">
+        <mkdir dir="${build.dir}"/>
+        <javac includeantruntime="false" destdir="${build.dir}">
+            <src path="${src.dir}"/>
+            <classpath refid="compile.classpath"/>
+        </javac>
+    </target>
+
+    <target name="jar" description="Build gemxlib.jar" depends="compile">
+        <copy todir="${build.dir}/gemx">
+             <fileset dir="gemx" includes="*.png"/>
+        </copy>
+        <copy todir="${build.dir}/gemx/dialogs">
+             <fileset dir="gemx/dialogs" includes="*.png"/>
+        </copy>
+        <copy todir="${build.dir}/res">
+             <fileset dir="res" includes="messages.properties"/>
+        </copy>
+        <copy todir="${build.dir}/jars">
+             <fileset dir="jars" includes="*.jar"/>
+        </copy>
+
+        <jar destfile="gemxlib.jar"
+             basedir="${build.dir}">
+            <manifest>
+                <attribute name="Main-Class" value="GemXMain"/>
+                <attribute name="Class-Path" value="
+                    ${JAVA_LIBS}/com.ibm.icu.jar
+                    ${JAVA_LIBS}/swt.jar
+                    ${JAVA_LIBS}/trove.jar
+                    jars/icu4j-charsets-4_0_1.jar
+                    jars/icu4j-localespi-4_0_1.jar"/>
+            </manifest>
+        </jar>
+    </target>
+
+    <target name="clean" description="Clean output directories">
+        <delete includeemptydirs="true">
+            <fileset dir="${build.dir}">
+                <include name="**/*"/>
+            </fileset>
+        </delete>
+    </target>
+</project>
