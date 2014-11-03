@@ -691,8 +691,8 @@ public class ScatterPlotPane implements FileSelectionListener, CloneSelectionLis
 		}
 
 		this.selectedIndex = selectedIndex;
-		// this.setSelection(selectedIndex); ’¼Œã‚ÌsetCloneSelectionByFileAndOffset‚ÅÄ•`‰æ‚³‚ê‚é‚Ì‚ÅŒÄ‚Ño‚³‚È‚¢
-		mainWindow.setFileSelection(selectedIndex, null); // ’¼Œã‚ÌsetCloneSelectionByFileAndOffset‚ÅÄ•`‰æ‚³‚ê‚é‚Ì‚Ånull‚É‚µ‚Ä‚¨‚­
+        // this.setSelection(selectedIndex); setCloneSelectionByFileAndOffset
+        mainWindow.setFileSelection(selectedIndex, null); // setCloneSelectionByFileAndOffset
 
 		mainWindow.setCloneSelectionByFlieAndOffset(
 				yFileBegin, yb.offset, ye.offset, 

@@ -4,19 +4,19 @@
 import getopt
 import sys
 
-import easytorq
+import libeasytorq
 
 if __name__ == '__main__':
 	options, args = getopt.getopt(sys.argv[1:], "cv")
 	
 	for name, value in options:
 		if name == '-c':
-			c = easytorq.ICUConverter()
+			c = libeasytorq.ICUConverter()
 			for e in c.getavailableencodings():
 				print e
 			sys.exit(0)
 		elif name == '-v':
-			print ".".join([str(i) for i in easytorq.version()])
+			print ".".join([str(i) for i in libeasytorq.version()])
 		else:
 			assert False
 	

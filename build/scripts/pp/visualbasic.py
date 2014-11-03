@@ -307,9 +307,9 @@ TEXT scan= (r_End (r_If | r_Select | r_Loop | r_While))
 
 TEXT scan= ((block scan ^) | (def_block scan ^)) *(null <- statement_terminator);
 """
-        self.pat = easytorq.Pattern(patternStr)
+        self.pat = libeasytorq.Pattern(patternStr)
         
-        fmt = easytorq.CngFormatter()
+        fmt = libeasytorq.CngFormatter()
         
         # parameter by default
         fmt.addreplace('id', 'id|%s')
@@ -339,7 +339,7 @@ TEXT scan= ((block scan ^) | (def_block scan ^)) *(null <- statement_terminator)
         if self.pat == None:
             self.setoptions(None)
         
-        t = easytorq.Tree(sourceCodeStrInUtf8)
+        t = libeasytorq.Tree(sourceCodeStrInUtf8)
         self.pat.apply(t)
         s = self.fmt.format(t)
         return s
@@ -348,7 +348,7 @@ def getpreprocessor():
     return VisualbasicPreprocessor()
 
 if __name__ == '__main__':
-    cnv = easytorq.ICUConverter()
+    cnv = libeasytorq.ICUConverter()
     cnv.setencoding("char")
     
     f = file(sys.argv[1], "rb")

@@ -2701,8 +2701,13 @@ int main(int argc, char *argv[])
 		return 0;
 	}
 
+    void (std::vector<std::string>::*pFunctionName)(const std::string& ) = &std::vector<std::string>::push_back;
 	std::vector<std::string> argvec;
-	std::for_each(argv, argv + argc, boost::bind(&std::vector<std::string>::push_back, &argvec, _1));
+    std::for_each(
+        argv,
+        argv + argc,
+        boost::bind(pFunctionName, boost::ref(argvec), _1)
+    );
 	int r = expand_command_file(&argvec);
 	if (r != 0) {
 		return r;

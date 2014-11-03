@@ -369,10 +369,11 @@ public class Main {
 	}
 	
 	public static void main(String[] args, WidgetsFactory widgetsFactory) {
-		String defaultColorConfigString = "{}";
-		String colorConfigString = readColorConfigFile();
-		pathjson.Converter jsonConv = new pathjson.Converter();
-		LinkedHashMap<String, Object> settings = jsonConv.stringToMap(colorConfigString == null ? defaultColorConfigString : colorConfigString);
+		//String defaultColorConfigString = "{}";
+		//String colorConfigString = readColorConfigFile();
+		// pathjson.Converter jsonConv = new pathjson.Converter();
+		// LinkedHashMap<String, Object> settings = jsonConv.stringToMap(colorConfigString == null ? defaultColorConfigString : colorConfigString);
+		LinkedHashMap<String, Object> settings = new LinkedHashMap<String, Object>();
 			
 		Display display = new Display();
 		{

@@ -13,6 +13,7 @@
 #include <boost/array.hpp>
 #include <boost/thread.hpp>
 
+#include "../ccfx/ccfxcommon.h"
 #include "../threadqueue/threadqueue.h"
 
 #if defined _MSC_VER
@@ -1028,7 +1029,7 @@ private:
 				assert(h != 0);
 				value += h;
 			}
-			hashSeq[i] = value == 0 ? 1 : value; // 0��delimiter�ƌ��Ȃ���邽�߁A�n�b�V���l�Ƃ��ėp���邱�Ƃ͂ł��Ȃ�
+			hashSeq[i] = value == 0 ? 1 : value; // 0ÍdelimiterÆ©È³êé½ßAnbVlÆµÄp¢é±ÆÍÅ«È¢
 		}
 		std::fill(hashSeq.begin() + endPos - unitLength * multiply, hashSeq.begin() + endPos, 0);
 	}
@@ -1060,7 +1061,7 @@ private:
 			//assert(std::find(range_begin, range_end, 0) == range_end);
 			for (; i < endPos - unitLength; ++i) {
 				HashValueType hashValue = hashFunc(seq, i, i + unitLength);
-				hashSeq[i] = hashValue == 0 ? 1 : hashValue; // 0��delimiter�ƌ��Ȃ���邽�߁A�n�b�V���l�Ƃ��ėp���邱�Ƃ͂ł��Ȃ�
+				hashSeq[i] = hashValue == 0 ? 1 : hashValue; // 0ÍdelimiterÆ©È³êé½ßAnbVlÆµÄp¢é±ÆÍÅ«È¢
 			}
 		}
 		std::fill(hashSeq.begin() + i, hashSeq.begin() + endPos, 0);

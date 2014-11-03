@@ -3258,8 +3258,8 @@ public class MainWindow {
 	}
 
 	/*
-	 * CustomCTabFolderはCTabFolderをハックしたもの。タブをクリックして選択されたCTabFolderを知るために、
-	 * showItem()をオーバーライドしている
+     * CustomCTabFolder CTabFolder CTabFolder
+     * showItem()
 	 */
 	private interface CustomCTabFolderSelectionListener {
 		public void selected(CustomCTabFolder selectedFolder);

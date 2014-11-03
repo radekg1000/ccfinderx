@@ -179,4 +179,23 @@
       </Completion>
     </Configuration>
   </Settings>
+  <VirtualDirectory Name="scripts">
+    <File Name="build/scripts/ccfxconfig.py"/>
+    <File Name="build/scripts/easytorq_helper.py"/>
+    <File Name="build/scripts/libeasytorq.so"/>
+    <File Name="build/scripts/moduleloadutility.py"/>
+    <File Name="build/scripts/preprocess.py"/>
+    <File Name="build/scripts/threadingutil.py"/>
+    <File Name="build/scripts/utility.py"/>
+    <VirtualDirectory Name="pp">
+      <File Name="build/scripts/pp/__init__.py"/>
+      <File Name="build/scripts/pp/cobol.py"/>
+      <File Name="build/scripts/pp/cpp.py"/>
+      <File Name="build/scripts/pp/csharp.py"/>
+      <File Name="build/scripts/pp/java.py"/>
+      <File Name="build/scripts/pp/plaintext.py"/>
+      <File Name="build/scripts/pp/preprocessor.py"/>
+      <File Name="build/scripts/pp/visualbasic.py"/>
+    </VirtualDirectory>
+  </VirtualDirectory>
 </CodeLite_Project>

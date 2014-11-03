@@ -394,9 +394,9 @@ TEXT scan= (id | r_int | r_char | r_float | r_bool) id (param scan ^) *(comma id
     | id insert(c_func) (param scan ^)
     | (def_block scan ^) | (block scan ^) | (simple_statement scan ^) | (param scan ^) | (index scan ^); // recurse into block, simple_statement, param, index
 """ % (locals())
-        self.pat = easytorq.Pattern(patternStr)
+        self.pat = libeasytorq.Pattern(patternStr)
         
-        fmt = easytorq.CngFormatter()
+        fmt = libeasytorq.CngFormatter()
         
         # parameter by default
         fmt.addreplace('id', 'id|%s')
@@ -443,7 +443,7 @@ TEXT scan= (id | r_int | r_char | r_float | r_bool) id (param scan ^) *(comma id
         if self.pat == None:
             self.setoptions(None)
         
-        t = easytorq.Tree(sourceCodeStrInUtf8)
+        t = libeasytorq.Tree(sourceCodeStrInUtf8)
         
         self.pat.apply(t)
         lines = self.fmt.format(t).split('\n')
@@ -464,7 +464,7 @@ def getpreprocessor():
     return CppPreprocessor()
 
 if __name__ == '__main__':
-    cnv = easytorq.ICUConverter()
+    cnv = libeasytorq.ICUConverter()
     cnv.setencoding("char")
     
     f = file(sys.argv[1], "rb")

@@ -15,7 +15,7 @@ public class CCFinderX {
 	public native boolean isProcessAlive(int processId);
 	
 	static {
-		System.loadLibrary("_CCFinderXLib"); //$NON-NLS-1$
+		System.loadLibrary("ccfinderx"); //$NON-NLS-1$
 	}
 	
 	public static CCFinderX theInstance = new CCFinderX();

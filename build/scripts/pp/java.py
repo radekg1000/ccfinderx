@@ -344,9 +344,9 @@ TEXT scan= (r_if | r_switch) insert(c_cond) | (r_for | r_while) insert(c_loop)
     | (id | method_like) insert(c_func) (param scan ^)
     | (def_block scan ^) | (block scan ^) | (param scan ^) | (index scan ^) | (simple_statement scan ^);
 """ % (locals())
-        self.pat = easytorq.Pattern(patternStr)
+        self.pat = libeasytorq.Pattern(patternStr)
         
-        fmt = easytorq.CngFormatter()
+        fmt = libeasytorq.CngFormatter()
         
         # parameter by default
         fmt.addreplace('id', 'id|%s')
@@ -408,7 +408,7 @@ TEXT scan= (r_if | r_switch) insert(c_cond) | (r_for | r_while) insert(c_loop)
         if self.pat == None:
             self.setoptions(None)
         
-        t = easytorq.Tree(sourceCodeStrInUtf8)
+        t = libeasytorq.Tree(sourceCodeStrInUtf8)
         self.pat.apply(t)
         s = self.fmt.format(t)
         return s
@@ -417,7 +417,7 @@ def getpreprocessor():
     return JavaPreprocessor()
 
 if __name__ == '__main__':
-    cnv = easytorq.ICUConverter()
+    cnv = libeasytorq.ICUConverter()
     cnv.setencoding("char")
     
     f = file(sys.argv[1], "rb")

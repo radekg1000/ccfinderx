@@ -1,6 +1,7 @@
 #if ! defined __BITVECTOR_H__
 #define __BITVECTOR_H__
 
+#include <cstdlib>
 #include <vector>
 
 class bitvector {

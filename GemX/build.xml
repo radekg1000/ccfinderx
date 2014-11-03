@@ -47,9 +47,6 @@
         <copy todir="${build.dir}/res">
              <fileset dir="res" includes="messages.properties"/>
         </copy>
-        <copy todir="${build.dir}/jars">
-             <fileset dir="jars" includes="*.jar"/>
-        </copy>
 
         <jar destfile="gemxlib.jar"
              basedir="${build.dir}">
@@ -63,13 +60,23 @@
                     jars/icu4j-localespi-4_0_1.jar"/>
             </manifest>
         </jar>
+
+        <copy todir="../build">
+             <fileset dir="." includes="gemxlib.jar"/>
+        </copy>
+        <copy todir="../build/jars">
+             <fileset dir="jars" includes="*.jar"/>
+        </copy>
+
     </target>
 
     <target name="clean" description="Clean output directories">
-        <delete includeemptydirs="true">
-            <fileset dir="${build.dir}">
-                <include name="**/*"/>
-            </fileset>
-        </delete>
+        <delete dir="${build.dir}"/>
+    </target>
+
+    <target name="maintainer-clean" description="Clean all produced files" depends="clean">
+        <delete file="gemxlib.jar"/>
+        <delete file="../build/gemxlib.jar"/>
+        <delete dir="../build/jars"/>
     </target>
 </project>

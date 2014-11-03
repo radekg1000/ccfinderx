@@ -1,4 +1,4 @@
-// pyeasytorq.cpp : DLL ƒAƒvƒŠƒP[ƒVƒ‡ƒ“‚ÌƒGƒ“ƒgƒŠ ƒ|ƒCƒ“ƒg‚ğ’è‹`‚µ‚Ü‚·B
+// pyeasytorq.cpp : DLL ÂƒAÂƒvÂƒÂŠÂƒPÂ[ÂƒVÂƒÂ‡ÂƒÂ“Â‚ÃŒÂƒGÂƒÂ“ÂƒgÂƒÂŠ Âƒ|ÂƒCÂƒÂ“ÂƒgÂ‚Ã°Â’Ã¨Â‹`Â‚ÂµÂ‚ÃœÂ‚Â·ÂB
 //
 
 #include <cassert>
@@ -754,7 +754,7 @@ static PyMethodDef module_methods[] = {
 #define PyMODINIT_FUNC void
 #endif
 PyMODINIT_FUNC
-initeasytorq(void) 
+initlibeasytorq(void) 
 {
     PyObject* m;
 
@@ -770,7 +770,7 @@ initeasytorq(void)
 	if (PyType_Ready(&ICUConverterType) < 0)
 		return;
 
-    m = Py_InitModule3("easytorq", module_methods,
+    m = Py_InitModule3("libeasytorq", module_methods,
                        "easytorq module.");
 
     if (m == NULL)

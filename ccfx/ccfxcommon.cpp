@@ -646,7 +646,7 @@ int read_script_table_i(std::vector<std::pair<std::string/* ext */, std::string/
 
 	std:: vector<std:: string> lines;
 	if (! get_raw_lines(prepScriptDescriptionFile, &lines)) {
-		std:: cerr << "error: can't read a script setting file" << std:: endl;
+		std:: cerr << "error: can't read a script setting file (" << prepScriptDescriptionFile << ")" << std:: endl;
 		return 2;
 	}
 

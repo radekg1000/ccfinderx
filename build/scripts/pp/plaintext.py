@@ -83,9 +83,9 @@ class PlaintextPreprocessor(pp.Base):
 
 TEXT scan= (null <- space) | (word <- +chars);
 """
-        self.pat = easytorq.Pattern(patternStr)
+        self.pat = libeasytorq.Pattern(patternStr)
         
-        fmt = easytorq.CngFormatter()
+        fmt = libeasytorq.CngFormatter()
         fmt.addreplace('punct', 't/%s')
         fmt.addreplace('word', 't/%s')
         self.fmt = fmt
@@ -100,7 +100,7 @@ TEXT scan= (null <- space) | (word <- +chars);
         if self.pat == None:
             self.setoptions(None)
         
-        t = easytorq.Tree(sourceCodeStrInUtf8)
+        t = libeasytorq.Tree(sourceCodeStrInUtf8)
         self.pat.apply(t)
         s = self.fmt.format(t)
         return s
@@ -109,7 +109,7 @@ def getpreprocessor():
     return PlaintextPreprocessor()
 
 if __name__ == '__main__':
-    cnv = easytorq.ICUConverter()
+    cnv = libeasytorq.ICUConverter()
     cnv.setencoding("char")
     
     f = file(sys.argv[1], "rb")

@@ -976,9 +976,9 @@ TEXT scan= (r_if | r_evaluate) insert(c_cond)
 
 TEXT scan= program_block <- xcep(r_end_program | class_block | eof) any r_end_program ?word period;
 """
-        self.pat = easytorq.Pattern(patternStr)
+        self.pat = libeasytorq.Pattern(patternStr)
         
-        fmt = easytorq.CngFormatter()
+        fmt = libeasytorq.CngFormatter()
         
         # parameter by default
         fmt.addreplace('word', 'word|%s')
@@ -1009,7 +1009,7 @@ TEXT scan= program_block <- xcep(r_end_program | class_block | eof) any r_end_pr
         if self.pat == None:
             self.setoptions(None)
         
-        t = easytorq.Tree(sourceCodeStrInUtf8)
+        t = libeasytorq.Tree(sourceCodeStrInUtf8)
         self.pat.apply(t)
         s = self.fmt.format(t)
         return s
@@ -1018,7 +1018,7 @@ def getpreprocessor():
     return CobolPreprocessor()
 
 if __name__ == '__main__':
-    cnv = easytorq.ICUConverter()
+    cnv = libeasytorq.ICUConverter()
     cnv.setencoding("char")
     
     f = file(sys.argv[1], "rb")

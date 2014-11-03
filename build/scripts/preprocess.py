@@ -51,7 +51,7 @@ def os_path_split(pathstr, cnv):
 if platform.architecture() == ('32bit', 'WindowsPE'):
     import win32getshortname
     
-    __converter_file_funcs = easytorq.ICUConverter()
+    __converter_file_funcs = libeasytorq.ICUConverter()
     __converter_file_funcs.setencoding("char")
     
     def __shorten(filepath):
@@ -280,7 +280,7 @@ class FileReader(threading.Thread):
 
 class __theMain(object):
     def __init__(self, mlu):
-        syscnv = easytorq.ICUConverter()
+        syscnv = libeasytorq.ICUConverter()
         syscnv.setencoding("char")
         self.__syscnv = syscnv
         
@@ -543,7 +543,7 @@ Options
             elif k == '-n':
                 prepDirs.append(v)
         
-        cnv = easytorq.ICUConverter()
+        cnv = libeasytorq.ICUConverter()
         if encodingName:
             cnv.setencoding(encodingName)
         
