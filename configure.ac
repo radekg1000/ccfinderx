@@ -87,6 +87,12 @@ done
 # Check for python version
 AX_PYTHON_DEVEL([>= '2.7.0'])
 
+# Check for presence of ant to compile java packages
+AC_CHECK_PROG(ANT, ant, ant, no)
+if test "$ANT" = "no"; then
+	AC_MSG_ERROR([ant is not installed.])
+fi
+
 
 AC_CONFIG_FILES([Makefile])
 AC_OUTPUT

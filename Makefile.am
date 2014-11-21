@@ -205,3 +205,25 @@ libeasytorq_la_CPPFLAGS = \
 libeasytorq_la_LDFLAGS = \
     $(global_linker_flags) \
     $(libraries_linker_flags)
+
+
+#
+#Ant related files
+ANT_BUILD_FILE = @top_srcdir@/GemX/build.xml
+
+all : gemx
+
+gemx :
+	CURRENT_DIR=`pwd`
+	cd @top_srcdir@/GemX
+	ant -f $(ANT_BUILD_FILE)
+	cd $(CURRENT_DIR)
+
+clean-local : gemx-clean
+
+gemx-clean :
+	CURRENT_DIR=`pwd`
+	cd @top_srcdir@/GemX
+	pwd
+	ant -f $(ANT_BUILD_FILE) clean
+	cd $(CURRENT_DIR)
