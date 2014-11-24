@@ -26,12 +26,20 @@ private:
 	std::queue<ElementType> body;
 private:
 	typedef boost::mutex::scoped_lock lock;
+
 public:
 	ThreadQueue(size_t limitSize_)
-		: body(), limitSize(limitSize_)
+		:
+        boost::noncopyable(),
+        mt(),
+        waitingEmpty(),
+        waitingElement(),
+        limitSize(limitSize_),
+        body()
 	{
 		assert(limitSize >= 1);
 	}
+
 	void push(const ElementType &element)
 	{
 		lock lk(mt);

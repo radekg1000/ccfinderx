@@ -201,7 +201,21 @@ private:
 	MinMax<double> rnrMinMax;
 public:
 	FileMetricsCalculator(PreprocessedFileReader *pScannotner, rawclonepair::RawClonePairFileAccessor *pAccessor, const std::string &postfix)
-		: output(), pOutput(NULL), optionEachItem(false), optionSummary(false), MetricsCalculator(pScannotner, pAccessor, postfix)
+		:
+        MetricsCalculator(pScannotner, pAccessor, postfix),
+        fileName(),
+        output(),
+        pOutput(NULL),
+        optionEachItem(false),
+        optionSummary(false),
+        fileMetricTotals(),
+        lengthMinMax(),
+        countClonesMinMax(),
+        nbrMinMax(),
+        rsaMinMax(),
+        rsiMinMax(),
+        cvrMinMax(),
+        rnrMinMax()
 	{
 	}
 public:
@@ -496,7 +510,15 @@ private:
 	std::string tempFileName;
 public:
 	CloneMetricsCalculator(PreprocessedFileReader *pScannotner, rawclonepair::RawClonePairFileAccessor *pAccessor, const std::string &postfix)
-		: pOutput(NULL), optionEachItem(false), optionSummary(false), pTemp(NULL), MetricsCalculator(pScannotner, pAccessor, postfix)
+		:
+        MetricsCalculator(pScannotner, pAccessor, postfix),
+        output(),
+        pOutput(NULL),
+        fileIDs(),
+        optionEachItem(false),
+        optionSummary(false),
+        pTemp(NULL),
+        tempFileName()
 	{
 	}
 public:
@@ -888,21 +910,34 @@ private:
 	metrics::MinMax<long> slocMinMax;
 	metrics::MinMax<long> clocMinMax;
 	metrics::MinMax<double> cvrlMinMax;
+
 public:
 	LinebasedMetricsCalculator(PreprocessedFileReader *pScannotner, rawclonepair::RawClonePairFileAccessor *pAccessor, const std::string &postfix)
-		: pOutput(NULL), optionEachItem(false), optionSummary(false), MetricsCalculator(pScannotner, pAccessor, postfix)
+		:
+        MetricsCalculator(pScannotner, pAccessor, postfix),
+        output(),
+        pOutput(NULL),
+        fileIDs(),
+        optionEachItem(false),
+        optionSummary(false),
+        lineMetricTotals(),
+        locMinMax(),
+        slocMinMax(),
+        clocMinMax(),
+        cvrlMinMax()
 	{
 	}
-public:
+
 	void setOptionEachItem(bool value)
 	{
 		optionEachItem = value;
 	}
+
 	void setOptionSummary(bool value)
 	{
 		optionSummary = value;
 	}
-public:
+
 	virtual void open(const std::string &fileName_) // called before file scannotning
 	{
 		fileName = fileName_;

@@ -778,8 +778,21 @@ protected:
 
 public:
 	Main()
-		: pRawCharEncoder(), pGeneratedEncoder(), 
-		pInputFileReader(),
+		:
+        scriptFile(),
+        inputFiles(),
+        debugOption(),
+        printOption(),
+        optionNodeFormats(),
+        outputFile(),
+        eachFileFormat(),
+        nodeNamesBinData(),
+        printFormat(PF_NORMAL),
+        pRawCharEncoder(),
+        pGeneratedEncoder(),
+        cutoffValue(0),
+        optionNSpecified(false),
+        optionPXSpecified(false),
 		usageFormatStr( 
 			"Torq ver. %s (c) 2009-2010 AIST" "\n"
 			"Usage: torq [option...] script input..." "\n"
@@ -797,7 +810,8 @@ public:
 			"  -p Nns: print options." "\n"
 			"  -p x[Nn]: print in XML-like format and the options." "\n"
 			"  -t number: interpreter cutoff value (10000)." "\n"
-		)
+		),
+		pInputFileReader()
 	{
 		EncodedFileReader *pefr = new EncodedFileReader();
 		pefr->setEncoding("utf8");

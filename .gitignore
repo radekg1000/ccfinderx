@@ -29,6 +29,7 @@ autom4te.cache/*
 *.aux
 *.dvi
 *.~*
+*.pyc
 ar-lib
 config.h
 config.h.in
@@ -48,4 +49,7 @@ stamp-h1
 ltmain.sh
 .deps
 
-build/ccfinderx
+build/*
+build/scripts/*
+build/scripts/pp/*
+GemX/build/*
