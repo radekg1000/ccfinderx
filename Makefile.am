@@ -22,7 +22,6 @@ global_compiler_flags = \
     -Wno-type-limits \
     -Wno-parentheses \
     -Wno-unused-but-set-variable \
-    -Wno-format \
     -DUNICODE \
     $(ICU_CXXFLAGS) \
     $(OPENMP_CFLAGS) \

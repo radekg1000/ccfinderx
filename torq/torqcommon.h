@@ -4,6 +4,7 @@
 #include <cassert>
 #include <cstdio>
 #include <string>
+#include <inttypes.h>
 
 #include <map>
 #include "../common/hash_map_includer.h"
@@ -75,10 +76,12 @@ public:
 		}
 		return r;
 	}
+
 	static std:: string encode(const std:: vector<MYWCHAR_T> &text, bool explicitHTML)
 	{
 		return encode(text, 0, text.size(), explicitHTML);
 	}
+
 	static void decode(std:: vector<MYWCHAR_T> *pResult, const std:: string &text, boost::int32_t begin, boost::int32_t end)
 	{
 		assert(begin >= 0 && begin <= text.size());
@@ -100,7 +103,11 @@ public:
 						}
 						if (j < end && text[j] == ';') {
 							MYWCHAR_T x;
+#ifdef __linux__
+							sscanf(text.substr(i + 3, j - (i + 3)).c_str(), "%" PRIx32, &x);
+#else
 							sscanf(text.substr(i + 3, j - (i + 3)).c_str(), "%lx", &x);
+#endif
 							r.push_back(x);
 							i = j;
 						}
@@ -117,7 +124,11 @@ public:
 						}
 						if (j < end && text[j] == ';') {
 							MYWCHAR_T d;
+#ifdef __linux__
+							sscanf(text.substr(i + 3, j - (i + 3)).c_str(), "%" PRId32, &d);
+#else
 							sscanf(text.substr(i + 3, j - (i + 3)).c_str(), "%ld", &d);
+#endif
 							r.push_back(d);
 							i = j;
 						}
