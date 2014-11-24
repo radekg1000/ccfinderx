@@ -20,7 +20,6 @@ global_compiler_flags = \
     -Wno-unused-variable \
     -Wno-unused-value \
     -Wno-type-limits \
-    -Wno-missing-field-initializers \
     -Wno-parentheses \
     -Wno-switch \
     -Wno-reorder \

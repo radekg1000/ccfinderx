@@ -1,4 +1,4 @@
-// pyeasytorq.cpp : DLL AvP[VÌGg |Cgðè`µÜ·B
+// pyeasytorq.cpp : DLL
 //
 
 #include <cassert>
@@ -76,7 +76,7 @@ Tree_init(Tree *self, PyObject *args, PyObject *kwds)
 }
 
 static PyMethodDef Tree_methods[] = {
-    { NULL }  /* Sentinel */
+    { NULL, NULL, 0, NULL }  /* Sentinel */
 };
 
 static PyTypeObject TreeType = {
@@ -119,6 +119,15 @@ static PyTypeObject TreeType = {
     (initproc)Tree_init,      /* tp_init */
     0,                         /* tp_alloc */
     Tree_new,                 /* tp_new */
+    0, /* tp_free */
+    0, /* tp_is_gc */
+    0, /* tp_bases */
+    0, /* tp_mro */
+    0, /* tp_cache */
+    0, /* tp_subclasses */
+    0, /* tp_weaklist */
+    0, /* tp_del */
+    0  /* tp_version_tag */
 };
 
 /* Pattern */
@@ -221,7 +230,7 @@ Pattern_apply(Pattern *self, PyObject *args)
 static PyMethodDef Pattern_methods[] = {
 	{ "setcutoffvalue", (PyCFunction)Pattern_setcutoffvalue, METH_VARARGS, "set cutoff value to pattern." },
 	{ "apply", (PyCFunction)Pattern_apply, METH_VARARGS, "apply the pattern to an argument tree." },
-    { NULL }  /* Sentinel */
+    { NULL, NULL, 0, NULL }  /* Sentinel */
 };
 
 static PyTypeObject PatternType = {
@@ -264,6 +273,15 @@ static PyTypeObject PatternType = {
     (initproc)Pattern_init,      /* tp_init */
     0,                         /* tp_alloc */
     Pattern_new,                 /* tp_new */
+    0, /* tp_free */
+    0, /* tp_is_gc */
+    0, /* tp_bases */
+    0, /* tp_mro */
+    0, /* tp_cache */
+    0, /* tp_subclasses */
+    0, /* tp_weaklist */
+    0, /* tp_del */
+    0  /* tp_version_tag */
 };
 
 /* CngFormatter */
@@ -438,7 +456,7 @@ static PyMethodDef CngFormatter_methods[] = {
 	{ "addreplace", (PyCFunction)CngFormatter_addNodeReplace, METH_VARARGS, "set node format replace." },
 	{ "addformat", (PyCFunction)CngFormatter_addNodeFormat, METH_VARARGS, "set node format." },
 	{ "format", (PyCFunction)CngFormatter_format, METH_VARARGS, "format an argument tree." },
-    { NULL }  /* Sentinel */
+    { NULL, NULL, 0, NULL }  /* Sentinel */
 };
 
 static PyTypeObject CngFormatterType = {
@@ -481,6 +499,15 @@ static PyTypeObject CngFormatterType = {
     (initproc)CngFormatter_init,      /* tp_init */
     0,                         /* tp_alloc */
     CngFormatter_new,                 /* tp_new */
+    0, /* tp_free */
+    0, /* tp_is_gc */
+    0, /* tp_bases */
+    0, /* tp_mro */
+    0, /* tp_cache */
+    0, /* tp_subclasses */
+    0, /* tp_weaklist */
+    0, /* tp_del */
+    0  /* tp_version_tag */
 };
 
 /* ICUConverter */
@@ -676,14 +703,14 @@ static PyMethodDef ICUConverter_methods[] = {
 	{ "geticuversion", (PyCFunction)ICUConverter_getICUVersion, METH_VARARGS, "get version of ICU." },
 	{ "decode", (PyCFunction)ICUConverter_decode, METH_VARARGS, "convert from encoded string to utf8 string." },
 	{ "encode", (PyCFunction)ICUConverter_encode, METH_VARARGS, "convert from utf8 string to encoded string." },
-    { NULL }  /* Sentinel */
+    { NULL, NULL, 0, NULL }  /* Sentinel */
 };
 
 static PyTypeObject ICUConverterType = {
     PyObject_HEAD_INIT(NULL)
     0,                         /*ob_size*/
-    "easytorq.ICUConverter",             /*tp_name*/
-    sizeof(ICUConverter),             /*tp_basicsize*/
+    "easytorq.ICUConverter",   /*tp_name*/
+    sizeof(ICUConverter),      /*tp_basicsize*/
     0,                         /*tp_itemsize*/
     (destructor)ICUConverter_dealloc, /*tp_dealloc*/
     0,                         /*tp_print*/
@@ -708,8 +735,8 @@ static PyTypeObject ICUConverterType = {
     0,		               /* tp_weaklistoffset */
     0,		               /* tp_iter */
     0,		               /* tp_iternext */
-    ICUConverter_methods,             /* tp_methods */
-    0,             /* tp_members */
+    ICUConverter_methods,      /* tp_methods */
+    0,                         /* tp_members */
     0,                         /* tp_getset */
     0,                         /* tp_base */
     0,                         /* tp_dict */
@@ -719,6 +746,15 @@ static PyTypeObject ICUConverterType = {
     (initproc)ICUConverter_init,      /* tp_init */
     0,                         /* tp_alloc */
     ICUConverter_new,                 /* tp_new */
+    0, /* tp_free */
+    0, /* tp_is_gc */
+    0, /* tp_bases */
+    0, /* tp_mro */
+    0, /* tp_cache */
+    0, /* tp_subclasses */
+    0, /* tp_weaklist */
+    0, /* tp_del */
+    0  /* tp_version_tag */
 };
 
 
