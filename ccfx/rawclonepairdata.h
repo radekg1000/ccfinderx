@@ -35,80 +35,12 @@
 #error must define WSTRING_CONVERSION_SUPPORT
 #endif
 
-namespace {
-	bool read_line(std::string *pLine, FILE *pFile)
-	{
-		std::string line;
-		boost::array<char, 1024> buf;
-		while (true) {
-			if (fgets(&buf[0], buf.size(), pFile) == NULL) {
-				return false; // eof
-			}
-			boost::array<char, 1024>::iterator p = std::find(buf.begin(), buf.end(), '\n');
-			if (p != buf.end()) {
-				line.append(buf.begin(), p);
-				(*pLine).swap(line);
-				return true;
-			}
-			else {
-				p = std::find(buf.begin(), buf.end(), '\0');
-				assert(p != buf.end());
-				line.append(buf.begin(), p);
-			}
-		}
-	}
-	bool is_ascii_nocontrol(const std::string &line)
-	{
-		for (size_t i = 0; i < line.length(); ++i) {
-			int ch = line[i];
-			if (! (0x20 <= ch && ch <= 0x7f)) {
-				return false;
-			}
-		}
-		return true;
-	}
-	bool is_utf8_nocontrol(const std::string &line)
-	{
-		size_t pos = 0;
-		while (pos < line.length()) {
-			size_t nextPos = nextCharUTF8String(line, pos);
-			if (nextPos > pos) {
-				if (nextPos - pos == 1) {
-					int ch = line[pos];
-					if (ch < 0x20 || ch == 0x7f) {
-						return false;
-					}
-				}
-			}
-			else {
-				assert(false);
-				return false;
-			}
-			pos = nextPos;
-		}
-		return true;
-	}
-	bool is_name(const std::string &str)
-	{
-		std::string::size_type p = 0;
-		if (p == str.length()) {
-			return false;
-		}
-		char ch = str[p];
-		if (! (ch == '_' || 'a' <= ch && ch <= 'z' || 'A' <= ch && ch <= 'Z')) {
-			return false;
-		}
-		++p;
-		while (p != str.length()) {
-			ch = str[p];
-			if (! (ch == '_' || 'a' <= ch && ch <= 'z' || 'A' <= ch && ch <= 'Z' || '0' <= ch && ch <= '9')) {
-				return false;
-			}
-			++p;
-		}
-		return true;
-	}
-};
+
+bool read_line(std::string *pLine, FILE *pFile);
+bool is_ascii_nocontrol(const std::string &line);
+bool is_utf8_nocontrol(const std::string &line);
+bool is_name(const std::string &str);
+
 
 namespace rawclonepair {
 
