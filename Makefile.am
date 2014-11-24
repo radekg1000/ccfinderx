@@ -206,6 +206,11 @@ libeasytorq_la_LDFLAGS = \
     $(global_linker_flags) \
     $(libraries_linker_flags)
 
+all : libeasytorq.la copy_libeasytorq_to_script_dir
+
+copy_libeasytorq_to_script_dir :
+	cp @top_srcdir@/build/.libs/libeasytorq.so @top_srcdir@/build/scripts
+
 
 #
 #Ant related files
