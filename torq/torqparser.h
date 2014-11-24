@@ -1257,6 +1257,8 @@ public:
 		case NC_GeneratedTokenPattern:   return "GeneratedTokenPattern";
 		case NC_RecursePattern:   return "RecursePattern";
 		case NC_InsertPattern:    return "InsertPattern";
+        default:
+            break;
 		}
 		assert(false);
 		return "";
@@ -1695,6 +1697,9 @@ public:
 					trace.push_back(item);
 				}
 				break;
+
+            default:
+                break;
 			}
 		}
 		return trace;

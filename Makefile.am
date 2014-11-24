@@ -21,7 +21,6 @@ global_compiler_flags = \
     -Wno-unused-value \
     -Wno-type-limits \
     -Wno-parentheses \
-    -Wno-switch \
     -Wno-reorder \
     -Wno-unused-but-set-variable \
     -Wno-format \
