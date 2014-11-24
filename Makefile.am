@@ -15,8 +15,18 @@ global_compiler_flags = \
     -Wextra \
     -g -O0 \
     -fno-default-inline \
-    -Wno-write-strings \
-    -Wno-deprecated-declarations \
+    -Wno-sign-compare \
+    -Wno-unused-parameter \
+    -Wno-unused-variable \
+    -Wno-unused-value \
+    -Wno-type-limits \
+    -Wno-missing-field-initializers \
+    -Wno-parentheses \
+    -Wno-switch \
+    -Wno-reorder \
+    -Wno-unused-but-set-variable \
+    -Wno-format \
+    -Wno-unused-function \
     -DUNICODE \
     $(ICU_CXXFLAGS) \
     $(OPENMP_CFLAGS) \
