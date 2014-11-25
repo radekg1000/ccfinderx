@@ -994,8 +994,14 @@ public:
 		}
 
 		boost::int32_t pos = pos0;
-		if (pos < tokens.size() 
-					&& (is_xcep && tokens[pos].classification == TOKEN::XCEP || ! is_xcep && tokens[pos].classification == TOKEN::PREQ)) {
+		if (
+            (pos < tokens.size()) &&
+            (
+                (is_xcep && (tokens[pos].classification == TOKEN::XCEP)) ||
+                (! is_xcep && (tokens[pos].classification == TOKEN::PREQ))
+            )
+            )
+        {
 			++pos;
 			if (pos < tokens.size() && tokens[pos].classification == TOKEN::LPAREN) {
 				++pos;

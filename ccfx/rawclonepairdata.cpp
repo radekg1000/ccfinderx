@@ -64,18 +64,36 @@ bool is_name(const std::string &str)
     if (p == str.length()) {
         return false;
     }
+
     char ch = str[p];
-    if (! (ch == '_' || 'a' <= ch && ch <= 'z' || 'A' <= ch && ch <= 'Z')) {
+    if (!
+        (
+            (ch == '_') ||
+            (('a' <= ch) && (ch <= 'z')) ||
+            (('A' <= ch) && (ch <= 'Z'))
+        )
+        )
+    {
         return false;
     }
+
     ++p;
     while (p != str.length()) {
         ch = str[p];
-        if (! (ch == '_' || 'a' <= ch && ch <= 'z' || 'A' <= ch && ch <= 'Z' || '0' <= ch && ch <= '9')) {
+        if (!
+            (
+                (ch == '_') ||
+                (('a' <= ch) && (ch <= 'z')) ||
+                (('A' <= ch) && (ch <= 'Z')) ||
+                (('0' <= ch) && (ch <= '9'))
+            )
+            )
+        {
             return false;
         }
         ++p;
     }
+
     return true;
 }
 

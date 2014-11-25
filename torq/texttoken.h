@@ -736,7 +736,11 @@ private:
 					}
 					else {
 						output << g->code;
-						if (g->code != 0 || g->code == 0 && (data.options & RecurseNull) != 0) {
+						if (
+                            (g->code != 0) ||
+                            ((g->code == 0) && ((data.options & RecurseNull) != 0))
+                            )
+                        {
 							write(&output, data.bra);
 							write(&output, data.separator);
 							const TokenSequence &value = g->value;
@@ -809,10 +813,16 @@ private:
 					else {
 						output << "<" << code << ">" << std:: endl;
 					}
-					if (code != 0 || code == 0 && (data.options & RecurseNull) != 0) {
+
+					if (
+                        (code != 0) ||
+                        ((code == 0) && ((data.options & RecurseNull) != 0))
+                    )
+                    {
 						const TokenSequence &value = g->value;
 						printXml_i(value, data);
 					}
+
 					if (0 <= code && code < data.pNodeNames->size()) {
 						output << "</" << (*data.pNodeNames)[code] << ">" << std:: endl;
 					}

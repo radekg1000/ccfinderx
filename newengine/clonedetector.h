@@ -468,7 +468,11 @@ public:
 				}
 				break;
 			case mode_cross:
-				if (posA >= barrior && posB >= barrior || posA < barrior && posB < barrior) {
+				if (
+                    ((posA >= barrior) && (posB >= barrior)) ||
+                    ((posA < barrior) && (posB < barrior))
+                    )
+                {
 					return;
 				}
 				break;

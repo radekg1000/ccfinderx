@@ -163,10 +163,23 @@ private:
 			boost::int32_t si = pos;
 
 			MYWCHAR_T ch = str[si];
-			if ('a' <= ch && ch <= 'z' || 'A' <= ch && ch <= 'Z' || ch == '_') {
+			if (
+                (('a' <= ch) && (ch <= 'z')) ||
+                (('A' <= ch) && (ch <= 'Z')) ||
+                (ch == '_')
+                )
+            {
 				++si;
-				while (si < str.size() 
-						&& ('a' <= (ch = str[si]) && ch <= 'z' || 'A' <= ch && ch <= 'Z' || ch == '_' || '0' <= ch && ch <= '9')) {
+				while (
+                    (si < str.size()) &&
+                    (
+                        (('a' <= (ch = str[si])) && (ch <= 'z')) ||
+                        (('A' <= ch) && (ch <= 'Z')) ||
+                        (ch == '_') ||
+                        (('0' <= ch) && (ch <= '9'))
+                    )
+                    )
+                {
 					++si;
 				}
 				TOKEN token;

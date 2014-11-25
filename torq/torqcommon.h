@@ -98,7 +98,15 @@ public:
 					if (i + 2 < end && text[i + 2] == 'x') {
 						size_t j = i + 3;
 						char d;
-						while (j < end && ('a' <= (d = text[j]) && d <= 'f' || 'A' <= d && d <= 'F' || '0' <= d && d <= '9')) {
+						while (
+                            (j < end) &&
+                            (
+                                (('a' <= (d = text[j])) && (d <= 'f')) ||
+                                (('A' <= d) && (d <= 'F')) ||
+                                (('0' <= d) && (d <= '9'))
+                            )
+                            )
+                        {
 							++j;
 						}
 						if (j < end && text[j] == ';') {
@@ -141,7 +149,15 @@ public:
 				else {
 					size_t j = i + 1;
 					char d;
-					while (j < end && ('a' <= (d = text[j]) && d <= 'z' || 'A' <= d && d <= 'Z' || '0' <= d && d <= '9')) {
+					while (
+                        (j < end) &&
+                        (
+                            (('a' <= (d = text[j])) && (d <= 'z')) ||
+                            (('A' <= d) && (d <= 'Z')) ||
+                            (('0' <= d) && (d <= '9'))
+                        )
+                        )
+                    {
 						++j;
 					}
 					if (j < end && text[j] == ';') {
@@ -193,14 +209,30 @@ public:
 							size_t j = i + 4;
 							std:: string buf;
 							MYWCHAR_T d;
-							while (j < end && ('a' <= (d = text[j]) && d <= 'f' || 'A' <= d && d <= 'F' || '0' <= d && d <= '9')) {
+							while (
+                                (j < end) &&
+                                (
+                                    (('a' <= (d = text[j])) && (d <= 'f')) ||
+                                    (('A' <= d) && (d <= 'F')) ||
+                                    (('0' <= d) && (d <= '9'))
+                                )
+                                )
+                            {
 								buf += (char)d;
 								++j;
 							}
 							if (j < end && text[j] == '-') {
 								++j;
 								std:: string buf2;
-								while (j < end && ('a' <= (d = text[j]) && d <= 'f' || 'A' <= d && d <= 'F' || '0' <= d && d <= '9')) {
+								while (
+                                    (j < end) &&
+                                    (
+                                        (('a' <= (d = text[j])) && (d <= 'f')) ||
+                                        (('A' <= d) && (d <= 'F')) ||
+                                        (('0' <= d) && (d <= '9'))
+                                    )
+                                    )
+                                {
 									buf2 += (char)d;
 									++j;
 								}
@@ -227,7 +259,15 @@ public:
 							size_t j = i + 3;
 							std:: string buf;
 							MYWCHAR_T d;
-							while (j < end && ('a' <= (d = text[j]) && d <= 'f' || 'A' <= d && d <= 'F' || '0' <= d && d <= '9')) {
+							while (
+                                (j < end) &&
+                                (
+                                    (('a' <= (d = text[j])) && (d <= 'f')) ||
+                                    (('A' <= d) && (d <= 'F')) ||
+                                    (('0' <= d) && (d <= '9'))
+                                )
+                                )
+                            {
 								buf += (char)d;
 								++j;
 							}
@@ -253,6 +293,7 @@ public:
 								buf += (char)d;
 								++j;
 							}
+
 							if (j < end && text[j] == '-') {
 								++j;
 								std:: string buf2;
@@ -260,6 +301,7 @@ public:
 									buf2 += (char)d;
 									++j;
 								}
+
 								if (j + 1 < end && text[j] == ')' && text[j + 1] == ';') {
 									j += 2;
 									char *p;
@@ -287,6 +329,7 @@ public:
 								buf += (char)d;
 								++j;
 							}
+
 							if (j < end && text[j] == ';') {
 								char *p;
 								MYWCHAR_T d = strtoul(buf.c_str(), &p, 10);
@@ -306,7 +349,15 @@ public:
 					std:: string buf;
 					buf += "&";
 					MYWCHAR_T d;
-					while (j < end && ('a' <= (d = text[j]) && d <= 'z' || 'A' <= d && d <= 'Z' || '0' <= d && d <= '9')) {
+					while (
+                        (j < end) &&
+                        (
+                            (('a' <= (d = text[j])) && (d <= 'z')) ||
+                            (('A' <= d) && (d <= 'Z')) ||
+                            (('0' <= d) && (d <= '9'))
+                        )
+                        )
+                    {
 						buf += (char)d;
 						++j;
 					}
@@ -411,18 +462,24 @@ public:
 	int min0;
 	int min1;
 	int alphabet;
+
 public:
 	Version(int maj_, int min0_, int min1_, int alphabet_)
 	{
-		assert(0 <= maj_ && maj_ < 256);
+		assert((0 <= maj_) && (maj_ < 256));
 		assert(0 <= min0 && min0 < 256);
 		assert(0 <= min1 && min1 < 256);
-		assert(alphabet_ == 0 || 'a' <= alphabet_ && alphabet_ <= 'z' || 'A' <= alphabet_ && alphabet_ <= 'Z');
+		assert(
+            (alphabet_ == 0) ||
+            (('a' <= alphabet_) && (alphabet_ <= 'z')) ||
+            (('A' <= alphabet_) && (alphabet_ <= 'Z'))
+            );
 		maj = maj_;
 		min0 = min0_;
 		min1 = min1_;
 		alphabet = alphabet_;
 	}
+
 	Version(int maj_, int min0_, int min1_)
 	{
 		assert(0 <= maj_ && maj_ < 256);
@@ -433,14 +490,17 @@ public:
 		min1 = min1_;
 		alphabet = 0;
 	}
+
 	Version()
 		: maj(0), min0(0), min1(0), alphabet(0)
 	{
 	}
+
 	Version(const Version &right)
 		: maj(right.maj), min0(right.min0), min1(right.min1), alphabet(right.alphabet)
 	{
 	}
+
 	void swap(Version &right)
 	{
 		std:: swap(this->maj, right.maj);
@@ -448,6 +508,7 @@ public:
 		std:: swap(this->min1, right.min1);
 		std:: swap(this->alphabet, right.alphabet);
 	}
+
 	std:: string toString() const
 	{
 		if (alphabet != 0) {
@@ -457,19 +518,27 @@ public:
 			return (boost::format("%d.%d.%d") % maj % min0 % min1).str();
 		}
 	}
+
 	bool scan(const std:: string &str)
 	{
 		Version v;
 		char c;
 		int r = sscanf(str.c_str(), "%d.%d.%d%c", &v.maj, &v.min0, &v.min1, &c);
 		v.alphabet = (int)c;
-		if (r == 4 && 0 <= v.maj && v.maj < 256 
-				&& 0 <= v.min0 && v.min0 < 256 
-				&& 0 <= v.min1 && v.min1 < 256
-				&& ('a' <= v.alphabet && v.alphabet <= 'z' || 'A' <= v.alphabet && v.alphabet <= 'Z')) {
+		if (
+            (r == 4) && (0 <= v.maj) && (v.maj < 256) &&
+				(0 <= v.min0) && (v.min0 < 256) &&
+				(0 <= v.min1) && (v.min1 < 256) &&
+				(
+                    (('a' <= v.alphabet) && (v.alphabet <= 'z')) ||
+                    (('A' <= v.alphabet) && (v.alphabet <= 'Z'))
+                )
+            )
+        {
 			*this = v;
 			return true;
 		}
+
 		v.alphabet = 0;
 		r = sscanf(str.c_str(), "%d.%d.%d", &v.maj, &v.min0, &v.min1);
 		if (0 <= v.maj && v.maj < 256 
@@ -480,6 +549,7 @@ public:
 		}
 		return false;
 	}
+
 	void write(binary_t *pBlock) const
 	{
 		binary_t &block = *pBlock;
@@ -488,6 +558,7 @@ public:
 		block[2] = (unsigned char)min1;
 		block[3] = (unsigned char)alphabet;
 	}
+
 	bool read(const binary_t &block)
 	{
 		Version v;
@@ -495,10 +566,17 @@ public:
 		v.min0 = (int)block[1];
 		v.min1 = (int)block[2];
 		v.alphabet = (int)block[3];
-		if (0 <= v.maj && v.maj < 256 
-				&& 0 <= v.min0 && v.min0 < 256 
-				&& 0 <= v.min1 && v.min1 < 256
-				&& (v.alphabet == 0 || 'a' <= v.alphabet && v.alphabet <= 'z' || 'A' <= v.alphabet && v.alphabet <= 'Z')) {
+		if (
+            (0 <= v.maj) && (v.maj < 256) &&
+				(0 <= v.min0) && (v.min0 < 256) &&
+				(0 <= v.min1) && (v.min1 < 256) &&
+				(
+                    (v.alphabet == 0) ||
+                    (('a' <= v.alphabet) && (v.alphabet <= 'z')) ||
+                    (('A' <= v.alphabet) && (v.alphabet <= 'Z'))
+                )
+            )
+        {
 			*this = v;
 			return true;
 		}

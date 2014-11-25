@@ -304,7 +304,16 @@ bool scan_option_node_format(const std:: vector<MYWCHAR_T> &f, size_t beginPos, 
 
 	std:: vector<MYWCHAR_T>::const_iterator i = iBegin;
 	MYWCHAR_T ch;
-	while (i != iEnd && ((ch = *i) == '_' || 'a' <= ch && ch <= 'z' || 'A' <= ch && ch <= 'Z' || '0' <= ch && ch <= '9')) {
+	while (
+        (i != iEnd) &&
+        (
+            ((ch = *i) == '_') ||
+            (('a' <= ch) && (ch <= 'z')) ||
+            (('A' <= ch) && (ch <= 'Z')) ||
+            (('0' <= ch) && (ch <= '9'))
+        )
+        )
+    {
 		++i;
 	}
 	if (i == iEnd) {

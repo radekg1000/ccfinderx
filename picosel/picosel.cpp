@@ -171,8 +171,8 @@ private:
 	std:: string selectCol;
 	
 	std:: vector<Condition> conditions;
-	std:: string orderByAsc; // ¸‡
-	std:: string orderByDesc; // ~‡
+	std:: string orderByAsc; // ÂÂ¸ÂÂ‡
+	std:: string orderByDesc; // Â~ÂÂ‡
 
 	long long binaryOutputFactor;
 
@@ -407,7 +407,11 @@ private:
 	int main_i(const std::vector<std::string> &argv)
 	{
 		int argc = argv.size();
-		if (argc == 1 || argc == 2 && argv[1] == "-h") {
+		if (
+            (argc == 1) ||
+            ((argc == 2) && (argv[1] == "-h"))
+            )
+        {
 			std:: cout << "Picosel ver. 1.5 (C) 2009-2010 AIST" "\n"
 				"Usage 1: picosel OPTION from inputfile select column where EXPRESSION" "\n"
 				"Usage 2: picosel OPTION from inputfile select column order by column" "\n"
@@ -536,7 +540,15 @@ private:
 			std:: string s = columnNames[i];
 			int j = 0;
 			int ch;
-			while (j < s.length() && ('a' <= (ch = s[j]) && ch <= 'z' || 'A' <= ch && ch <= 'Z' || ch == '_')) {
+			while (
+                (j < s.length()) &&
+                (
+                    (('a' <= (ch = s[j])) && (ch <= 'z')) ||
+                    (('A' <= ch) && (ch <= 'Z')) ||
+                    (ch == '_')
+                )
+                )
+            {
 				++j;
 			}
 			if (j == 0) {

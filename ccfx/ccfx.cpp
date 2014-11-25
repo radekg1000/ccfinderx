@@ -2621,11 +2621,20 @@ int expand_command_file(std::vector<std::string> *pArgvec)
 					size_t k = 1;
 					while (k < line.size()) {
 						int ch = line[k];
-						if (ch == ' ' || ch== '\t') {
+						if ((ch == ' ') || (ch== '\t')) {
 							pOptionLineValues = std::pair<std::string, std::string>(line.substr(0, k), line.substr(k + 1));
 							break; // while k
 						}
-						if (! ('a' <= ch && ch <= 'z' || 'A' <= ch && ch <= 'Z' || ch == '_' || ch == '-')) {
+
+						if (!
+                            (
+                                (('a' <= ch) && (ch <= 'z')) ||
+                                (('A' <= ch) && (ch <= 'Z')) ||
+                                (ch == '_') ||
+                                (ch == '-')
+                            )
+                            )
+                        {
 							break; // while k
 						}
 						++k;
