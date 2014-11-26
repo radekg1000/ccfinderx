@@ -26,6 +26,7 @@
 #include "../common/filestructwrapper.h"
 
 #include "ccfxconstants.h"
+#include "../common/common.h"
 
 #if ! defined CODE_CONVERSION_SUPPORT
 #error must define CODE_CONVERSION_SUPPORT
@@ -781,18 +782,33 @@ public:
 
 		return true;
 	}
-public:
+    public:
+
 	class Filter {
 	public:
 		virtual ~Filter() { }
-		virtual bool isValidFileID(int fileID) { return true; }
-		virtual bool isValidCloneID(boost::uint64_t cloneID) { return true; }
+		virtual bool isValidFileID(int UNUSED(fileID))
+        {
+            return true;
+        }
+
+		virtual bool isValidCloneID(boost::uint64_t UNUSED(cloneID))
+        {
+            return true;
+        }
+
 		virtual bool isValidClonePair(const RawFileBeginEnd &left, const RawFileBeginEnd &right, boost::uint64_t cloneID) 
 		{
 			return isValidCloneID(cloneID) && isValidFileID(left.file), isValidFileID(right.file);
 		}
-		virtual void filterOptions(std::vector<std::pair<std::string/* name */, std::string/* value */> > *pOptions) { }
+
+		virtual void filterOptions(
+            std::vector<std::pair<std::string/* name */,
+            std::string/* value */> >* UNUSED(pOptions))
+        {
+        }
 	};
+
 	bool filter(const std:: string &filtered, const std:: string &original, Filter *pFilter)
 	{
 		errorMessage.clear();
@@ -815,7 +831,12 @@ public:
 	class FilterFileByFile {
 	public:
 		virtual ~FilterFileByFile() { }
-		virtual bool isValidFileID(int fileID) { return true; }
+
+		virtual bool isValidFileID(int UNUSED(fileID))
+        {
+            return true;
+        }
+
 		virtual void transformFiles(std:: vector<RawFileData> *pFiles)
 		{
 			std:: vector<RawFileData> filtered;
@@ -828,11 +849,17 @@ public:
 			}
 			(*pFiles).swap(filtered);
 		}
-		virtual bool isValidCloneID(boost::uint64_t cloneID) { return true; }
+
+		virtual bool isValidCloneID(boost::uint64_t UNUSED(cloneID))
+        {
+            return true;
+        }
+
 		virtual bool isValidClonePair(const RawFileBeginEnd &left, const RawFileBeginEnd &right, boost::uint64_t cloneID) 
 		{
 			return isValidCloneID(cloneID) && isValidFileID(left.file), isValidFileID(right.file);
 		}
+
 		virtual void transformPairs(std:: vector<RawClonePair> *pPairs)
 		{
 			std::vector<RawClonePair> filtered;
@@ -846,8 +873,12 @@ public:
 			}
 			(*pPairs).swap(filtered);
 		}
-		virtual void filterOptions(std::vector<std::pair<std::string/* name */, std::string/* value */> > *pOptions) { }
+
+		virtual void filterOptions(std::vector<std::pair<std::string/* name */, std::string/* value */> >* UNUSED(pOptions))
+        {
+        }
 	};
+
 	bool filterFileByFile(const std:: string &filtered, const std:: string &original, FilterFileByFile *pFilter)
 	{
 		errorMessage.clear();
@@ -866,6 +897,7 @@ public:
 
 		return true;
 	}
+
 private:
 	bool copyHeader(const std:: string &output, const std:: string &input)
 	{
@@ -1190,7 +1222,7 @@ private:
 	}
 	
 	template<typename Filter>
-	bool filterFooter_i(const std:: string &output, const std:: string &input, Filter *pFilter)
+	bool filterFooter_i(const std:: string &output, const std:: string &input, Filter* UNUSED(pFilter))
 	{
 		FileStructWrapper pOutput(output, "r+b" F_SEQUENTIAL_ACCESS_OPTIMIZATION);
 		if (! (bool)pOutput) {
@@ -1212,10 +1244,12 @@ private:
 
 		return true;
 	}
+
 	bool filterFooter(const std:: string &output, const std:: string &input, Filter *pFilter)
 	{
 		return filterFooter_i<Filter>(output, input, pFilter);
 	}
+
 	bool filterFooterFileByFile(const std:: string &output, const std:: string &input, FilterFileByFile *pFilter)
 	{
 		return filterFooter_i<FilterFileByFile>(output, input, pFilter);

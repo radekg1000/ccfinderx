@@ -142,29 +142,35 @@ public:
 	{
 		assert(pAccessor_ != NULL);
 	}
+
 	virtual ~MetricsCalculator()
 	{
 		if (isOpen_) {
 			close();
 		}
 	}
+
 public:
 	bool isOpen() const
 	{
 		return isOpen_;
 	}
+
 	PreprocessedFileReader &refScannotner() const
 	{
 		return *pScannotner_;
 	}
+
 	rawclonepair::RawClonePairFileAccessor &refFileAccessor() const
 	{
 		return *pAccessor_;
 	}
+
 	std::string getPostfix() const
 	{
 		return postfix_;
 	}
+
 public:
 	virtual void close() // called after scannotning
 	{
@@ -172,11 +178,13 @@ public:
 			isOpen_ = false;
 		}
 	}
+
 	virtual void open(const std::string &/* fileName */) // called before file scannotning
 	{
 		isOpen_ = true;
 	}
-	virtual void scannotFile(int index) // called for each file
+
+	virtual void scannotFile(int UNUSED(index)) // called for each file
 	{
 	}
 };

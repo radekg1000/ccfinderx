@@ -38,6 +38,8 @@
 #include "../../common/win32util.h"
 #endif
 
+#include "../../common/common.h"
+
 #if 0
 BOOL APIENTRY DllMain( HANDLE hModule, 
                        DWORD  ul_reason_for_call, 
@@ -155,8 +157,10 @@ JNIEXPORT jstring JNICALL Java_ccfinderx_CCFinderX_getCCFinderXPath
 	return result;
 }
 
-JNIEXPORT jint JNICALL Java_ccfinderx_CCFinderX_invokeCCFinderX
-  (JNIEnv *env, jobject caller, jobjectArray args)
+JNIEXPORT jint JNICALL Java_ccfinderx_CCFinderX_invokeCCFinderX(
+    JNIEnv *env,
+    jobject UNUSED(caller),
+    jobjectArray args)
 {
 	jsize length = env->GetArrayLength(args);
 
@@ -177,8 +181,9 @@ JNIEXPORT jint JNICALL Java_ccfinderx_CCFinderX_invokeCCFinderX
 	return exec_ccfx(strs);
 }
 
-JNIEXPORT jintArray JNICALL Java_ccfinderx_CCFinderX_getVersion
-  (JNIEnv *env, jobject caller)
+JNIEXPORT jintArray JNICALL Java_ccfinderx_CCFinderX_getVersion(
+    JNIEnv *env,
+    jobject UNUSED(caller))
 {
 	{
 		std:: vector<std:: string> args;
@@ -386,15 +391,15 @@ JNIEXPORT jbyteArray JNICALL Java_ccfinderx_CCFinderX_openPrepFile
 	return ary;
 }
 
-JNIEXPORT void JNICALL Java_ccfinderx_CCFinderX_clearPrepFileCacheState
-  (JNIEnv *env, jobject)
+JNIEXPORT void JNICALL Java_ccfinderx_CCFinderX_clearPrepFileCacheState(
+    JNIEnv UNUSED(*env), UNUSED(jobject))
 {
 	//preprocessPackLookup.clear(); // 2008/04/02
 }
 
 
-JNIEXPORT jstring JNICALL Java_ccfinderx_CCFinderX_getPythonInterpreterPath
-  (JNIEnv *env, jobject)
+JNIEXPORT jstring JNICALL Java_ccfinderx_CCFinderX_getPythonInterpreterPath(
+    JNIEnv UNUSED(*env), UNUSED(jobject))
 {
 	assert(!! oModuleDir);
 
@@ -454,7 +459,7 @@ boost::optional<std::vector<std::string> > read_lines(const std::string &fileNam
     return boost::optional<std::vector<std::string> >(lines);
 }
 
-bool process_is_alive(int processId)
+bool process_is_alive(int UNUSED(processId))
 {
 
     /* 

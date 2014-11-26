@@ -418,7 +418,7 @@ void print_result_cng(std:: ostream *pOutput,
 
 void print_result_xml(std:: ostream *pOutput, 
 		unsigned long options,
-		const std:: map<std:: vector<MYWCHAR_T>, text::Helper::NodeFormat> &nodeFormats0,
+		const std:: map<std:: vector<MYWCHAR_T>, text::Helper::NodeFormat>& UNUSED(nodeFormats0),
 		const std:: vector<std:: vector<MYWCHAR_T> > &labelStrings,
 		const text::TokenSequence &text)
 {
@@ -831,10 +831,12 @@ public:
 	{
 	}
 private:
-	Main &operator=(const Main &right)
+
+	Main &operator=(const Main& UNUSED(right))
 	{
 		assert(false); // not implemented
 	}
+
 protected:
 	virtual int analyzeCommandlineArgument(const std:: vector<std:: string> &args, size_t *pIndex)
 	{

@@ -6,8 +6,9 @@
 #include <string>
 #include <cassert>
 
-# include <boost/iterator/iterator_facade.hpp>
+#include <boost/iterator/iterator_facade.hpp>
 
+#include "common.h"
 #include "hash_map_includer.h"
 
 #if defined NO_HASH_THINGS
@@ -70,14 +71,17 @@ public:
 			: pBody(right.pBody), curLength(right.curLength), it(right.it)
 		{
 		}
+
 		iterator()
 			: pBody(NULL), curLength(0), it()
 		{
 		}
+
 		iterator(BodyType *pBody_, size_t curLength_, typename BodySliceType::iterator it_)
 			: pBody(pBody_), curLength(curLength_), it(it_)
 		{
 		}
+
 		static iterator beginIterator(BodyType *pBody_)
 		{
 			iterator i;
@@ -95,10 +99,12 @@ public:
 			i.pBody = NULL; // mark of end
 			return i;
 		}
-		static iterator endIterator(BodyType *pBody_)
+
+		static iterator endIterator(BodyType UNUSED(*pBody_))
 		{
 			return iterator();
 		}
+
 	private:
 		void increment()
 		{
@@ -179,10 +185,12 @@ public:
 			i.pBody = NULL; // mark of end
 			return i;
 		}
-		static const_iterator endIterator(const BodyType *pBody_)
+
+		static const_iterator endIterator(const BodyType UNUSED(*pBody_))
 		{
 			return const_iterator();
 		}
+
 	private:
 		void increment()
 		{

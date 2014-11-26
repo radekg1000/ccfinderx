@@ -13,6 +13,7 @@
 #include "../common/utf8support.h" 
 #include "texttoken.h"
 #include "torqparser.h"
+#include "../common/common.h"
 
 class LabelCodeTableBase {
 private:
@@ -277,6 +278,7 @@ protected:
 		result.swap(source);
 		assert(si == siEnd);
 	}
+
 	static void expandMatchSeq(text::TokenSequence *pResult, text::TokenSequence *pSource, size_t *pSourceIndex,
 			std:: vector<MATCH>::const_iterator *pMi, const std:: vector<MATCH>::const_iterator &miEnd)
 	{
@@ -802,7 +804,8 @@ protected:
 			pc = tdata[pc].next;
 		}
 	}
-	void do_AssignStatement(boost::int32_t pc0)
+
+	void do_AssignStatement(boost::int32_t UNUSED(pc0))
 	{
 		assert(false); // not implemented yet
 	}
@@ -819,6 +822,7 @@ protected:
 			++pos;
 		}
 	}
+
 	void extendNullMatchSeq(const text::TokenSequence &text, boost::int32_t *pPos)
 	{
 		boost::int32_t pos0 = *pPos;
@@ -829,6 +833,7 @@ protected:
 		}
 		*pPos = pos;
 	}
+
 	void extend1MatchSeq(size_t bottomSize, const text::TokenSequence &text, boost::int32_t pos)
 	{
 		MATCH *pLastMatch;
@@ -839,6 +844,7 @@ protected:
 			matchSeq.push_back(MATCH::makeCopy1(&text, pos));
 		}
 	}
+
 	void do_ScanEqStatement(boost::int32_t pc0)
 	{
 		const TRACE_ITEM &item0 = tdata[pc0].item;
@@ -1032,7 +1038,11 @@ protected:
 			return npos;
 		}
 	}
-	boost::int32_t do_assertionError(boost::int32_t pc0, const text::TokenSequence &source, boost::int32_t pos0)
+
+	boost::int32_t do_assertionError(
+        boost::int32_t pc0,
+        const text::TokenSequence& UNUSED(source),
+        boost::int32_t UNUSED(pos0))
 	{
 		assert(false);
 		errorPc = pc0;
@@ -1040,6 +1050,7 @@ protected:
 		throw errorData;
 		return -1;
 	}
+
 	boost::int32_t do_Pattern(boost::int32_t pc0, const text::TokenSequence &source, boost::int32_t pos0)
 	{
 		std:: vector<MATCH> * const pMatchSeq = &matchSeq;
@@ -1303,6 +1314,7 @@ protected:
 			}
 		}
 	}
+
 	boost::int32_t do_SequencePattern(boost::int32_t pc0, const text::TokenSequence &source, boost::int32_t pos0)
 	{
 		std:: vector<MATCH> * const pMatchSeq = &matchSeq;
@@ -1468,6 +1480,7 @@ protected:
 			return npos;
 		}
 	}
+
 	boost::int32_t substrEqualWithCharClassRepeated(const text::TokenSequence &source, boost::int32_t pos0, boost::int32_t pc, const std:: pair<size_t, size_t> &underUpper) const
 	{
 		const TokenStringTableItem &ci = tdata[pc].str;
@@ -1505,6 +1518,7 @@ protected:
 		}
 		return -1;
 	}
+
 	boost::int32_t do_XcepPattern(boost::int32_t pc0, const text::TokenSequence &source, boost::int32_t pos0)
 	{
 		std:: vector<MATCH> * const pMatchSeq = &matchSeq;
@@ -1570,11 +1584,13 @@ protected:
 		}
 		return pos0;
 	}
+
 	boost::int32_t do_PreqPattern(boost::int32_t pc0, const text::TokenSequence &source, boost::int32_t pos0)
 	{
 		boost::int32_t pos = do_XcepPattern(pc0, source, pos0);
 		return pos == -1 ? pos0 : -1;
 	}
+
 	boost::int32_t do_LiteralPattern(boost::int32_t pc0, const text::TokenSequence &source, boost::int32_t pos0)
 	{
 		std:: vector<MATCH> * const pMatchSeq = &matchSeq;
@@ -1630,7 +1646,8 @@ protected:
 		}
 		return -1;
 	}
-	boost::int32_t do_RecursePattern(boost::int32_t pc0, const text::TokenSequence &source, boost::int32_t pos0)
+
+	boost::int32_t do_RecursePattern(boost::int32_t UNUSED(pc0), const text::TokenSequence &source, boost::int32_t pos0)
 	{
 		std:: vector<MATCH> * const pMatchSeq = &matchSeq;
 		size_t size0 = pMatchSeq->size();
@@ -1642,7 +1659,8 @@ protected:
 		}
 		return pos;
 	}
-	boost::int32_t do_InsertPattern(boost::int32_t pc0, const text::TokenSequence &source, boost::int32_t pos0)
+
+	boost::int32_t do_InsertPattern(boost::int32_t pc0, const text::TokenSequence& UNUSED(source), boost::int32_t pos0)
 	{
 		std:: vector<MATCH> * const pMatchSeq = &matchSeq;
 #if ! defined NDEBUG

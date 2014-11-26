@@ -309,27 +309,34 @@ public:
 			unitLength = unitLength_;
 		}
 	public:
-		virtual bool rangeCheck(const std:: vector<CloneSetItem> &cloneSet)
+		virtual bool rangeCheck(const std:: vector<CloneSetItem>& UNUSED(cloneSet))
 		{
 			return true;
 		}
-		virtual bool codeCheck(size_t pos, size_t length)
+		virtual bool codeCheck(size_t UNUSED(pos), size_t UNUSED(length))
 		{
 			return true;
 		}
-		virtual void found(const std:: vector<CloneSetItem> &cloneSet, size_t baseLength, boost::uint64_t cloneSetReferenceNumber)
+
+		virtual void found(
+            const std:: vector<CloneSetItem>& UNUSED(cloneSet),
+            size_t UNUSED(baseLength),
+            boost::uint64_t UNUSED(cloneSetReferenceNumber))
 		{
 		}
+
 	protected:
 		const std:: vector<ElemType> &refSeq() const
 		{
 			return *pSeq;
 		}
+
 		size_t getUnitLength() const
 		{
 			return unitLength;
 		}
 	};
+
 	class ClonePairListener {
 	private:
 		const typename std:: vector<ElemType> *pSeq;
@@ -338,46 +345,60 @@ public:
 		virtual ~ClonePairListener()
 		{
 		}
+
 		ClonePairListener()
 			: pSeq(NULL), unitLength(0)
 		{
 		}
+
 		ClonePairListener(const CloneSetListener &right)
 			: pSeq(right.pSeq), unitLength(right.unitLength)
 		{
 		}
+
 	public:
 		virtual void attachSeq(const std:: vector<ElemType> *pSeq_)
 		{
 			pSeq = pSeq_;
 		}
+
 		virtual void setUnitLength(size_t unitLength_)
 		{
 			unitLength = unitLength_;
 		}
+
 	public:
-		virtual bool codeCheck(size_t pos, size_t length)
+		virtual bool codeCheck(size_t UNUSED(pos), size_t UNUSED(length))
 		{
 			return true;
 		}
-		virtual bool rangeCheck(const std:: vector<CloneSetItem> &cloneSet)
+
+		virtual bool rangeCheck(const std:: vector<CloneSetItem>& UNUSED(cloneSet))
 		{
 			return true;
 		}
-		virtual void found(size_t pos1, size_t pos2, size_t baseLength, boost::uint64_t cloneSetReferenceNumber)
+
+		virtual void found(
+            size_t pos1,
+            size_t pos2,
+            size_t UNUSED(baseLength),
+            boost::uint64_t UNUSED(cloneSetReferenceNumber))
 		{
 			assert(pos1 < pos2);
 		}
+
 	protected:
 		const typename std:: vector<ElemType> &refSeq() const
 		{
 			return *pSeq;
 		}
+
 		size_t getUnitLength() const
 		{
 			return unitLength;
 		}
 	};
+
 	class ClonePairListenerWithScope : public ClonePairListener {
 	private:
 		size_t barrior;
@@ -482,12 +503,18 @@ public:
 			}
 			found_scoped(posA, posB, baseLength, cloneSetReferenceNumber);
 		}
+
 	protected:
-		virtual void found_scoped(size_t pos1, size_t pos2, size_t baseLength, boost::uint64_t cloneSetReferenceNumber)
+		virtual void found_scoped(
+            size_t pos1,
+            size_t pos2,
+            size_t UNUSED(baseLength),
+            boost::uint64_t UNUSED(cloneSetReferenceNumber))
 		{
 			assert(pos1 < pos2);
 		}
 	};
+
 private:
 	class ClonePairListenerAdapter : public CloneSetListener {
 	private:
@@ -497,26 +524,31 @@ private:
 			: pListener(pRight)
 		{
 		}
+
 	public:
 		virtual void attachSeq(const typename std:: vector<ElemType> *pSeq_)
 		{
 			CloneSetListener::attachSeq(pSeq_);
 			(*pListener).attachSeq(pSeq_);
 		}
+
 		virtual void setUnitLength(size_t unitLength_)
 		{
 			CloneSetListener::setUnitLength(unitLength_);
 			(*pListener).setUnitLength(unitLength_);
 		}
+
 	public:
 		virtual bool codeCheck(size_t pos, size_t length)
 		{
 			return (*pListener).codeCheck(pos, length);
 		}
+
 		virtual bool rangeCheck(const std:: vector<CloneSetItem> &cloneSet)
 		{
 			return (*pListener).rangeCheck(cloneSet);
 		}
+
 		virtual void found(const std:: vector<CloneSetItem> &cloneSet, size_t baseLength, 
 				boost::uint64_t cloneSetReferenceNumber)
 		{
@@ -548,6 +580,7 @@ private:
 			}
 		}
 	};
+
 private:
 	const typename std:: vector<ElemType> *pSeq;
 	size_t bottomUnitLength;
@@ -954,6 +987,7 @@ private:
 		}
 		return extend;
 	}
+
 	void calc_hash_seq(SequenceHashFunction &hashFunc)
 	{
 		const std::vector<ElemType> &seq = *pSeq;
@@ -1008,8 +1042,14 @@ private:
 			multiple_hash_sequence(hashFunc, pHashSeq, unitLength, multiply, 0, hashSeq.size());
 		}
 	}
-	static void multiple_hash_sequence(SequenceHashFunction &hashFunc, 
-			std:: vector<HashValueType> *pHashSeq, size_t unitLength, size_t multiply, size_t beginPos, size_t endPos)
+
+	static void multiple_hash_sequence(
+        SequenceHashFunction& UNUSED(hashFunc),
+		std:: vector<HashValueType> *pHashSeq,
+        size_t unitLength,
+        size_t multiply,
+        size_t beginPos,
+        size_t endPos)
 	{
 		std:: vector<HashValueType> &hashSeq = *pHashSeq;
 		assert(beginPos < hashSeq.size());
@@ -1037,6 +1077,7 @@ private:
 		}
 		std::fill(hashSeq.begin() + endPos - unitLength * multiply, hashSeq.begin() + endPos, 0);
 	}
+
 	static inline void make_bottom_level_hash_sequence(const std:: vector<ElemType> &seq, SequenceHashFunction &hashFunc, 
 			std:: vector<HashValueType> *pHashSeq, size_t unitLength)
 	{

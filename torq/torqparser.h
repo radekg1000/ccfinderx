@@ -11,263 +11,363 @@
 #include "torqcommon.h"
 #include "torqtokenizer.h"
 
+#include "common.h"
+
+
 class TorqParser {
 public:
 	class Callbacks {
 	public:
-		virtual bool enterStatements(boost::int32_t begin)
+
+		virtual bool enterStatements(boost::int32_t UNUSED(begin))
 		{
 			return true; // success
 		}
-		virtual bool rejectStatements(boost::int32_t begin)
+
+		virtual bool rejectStatements(boost::int32_t UNUSED(begin))
 		{
 			return true; // success
 		}
-		virtual bool acceptStatements(boost::int32_t begin, boost::int32_t end)
+
+		virtual bool acceptStatements(boost::int32_t UNUSED(begin), boost::int32_t UNUSED(end))
 		{
 			return true; // success
 		}
-		virtual bool enterStatement(boost::int32_t begin)
+
+		virtual bool enterStatement(boost::int32_t UNUSED(begin))
 		{
 			return true; // success
 		}
-		virtual bool rejectStatement(boost::int32_t begin)
+
+		virtual bool rejectStatement(boost::int32_t UNUSED(begin))
 		{
 			return true; // success
 		}
-		virtual bool acceptStatement(boost::int32_t begin, boost::int32_t end)
+
+		virtual bool acceptStatement(boost::int32_t UNUSED(begin), boost::int32_t UNUSED(end))
 		{
 			return true; // success
 		}
-		virtual bool enterAssignStatement(boost::int32_t begin)
+
+		virtual bool enterAssignStatement(boost::int32_t UNUSED(begin))
 		{
 			return true; // success
 		}
-		virtual bool rejectAssignStatement(boost::int32_t begin)
+
+		virtual bool rejectAssignStatement(boost::int32_t UNUSED(begin))
 		{
 			return true; // success
 		}
-		virtual bool acceptAssignStatement(boost::int32_t begin, boost::int32_t end, const TOKEN &leftVar)
+
+		virtual bool acceptAssignStatement(
+            boost::int32_t UNUSED(begin),
+            boost::int32_t UNUSED(end),
+            const TOKEN& UNUSED(leftVar))
 		{
 			return true; // success
 		}
-		virtual bool enterScanEqStatement(boost::int32_t begin)
+
+		virtual bool enterScanEqStatement(boost::int32_t UNUSED(begin))
 		{
 			return true; // success
 		}
-		virtual bool rejectScanEqStatement(boost::int32_t begin)
+
+		virtual bool rejectScanEqStatement(boost::int32_t UNUSED(begin))
 		{
 			return true; // success
 		}
-		virtual bool acceptScanEqStatement(boost::int32_t begin, boost::int32_t end, const TOKEN &leftVar)
+
+		virtual bool acceptScanEqStatement(
+            boost::int32_t UNUSED(begin),
+            boost::int32_t UNUSED(end),
+            const TOKEN& UNUSED(leftVar))
 		{
 			return true; // success
 		}
-		virtual bool enterMatchEqStatement(boost::int32_t begin)
+
+		virtual bool enterMatchEqStatement(boost::int32_t UNUSED(begin))
 		{
 			return true; // success
 		}
-		virtual bool rejectMatchEqStatement(boost::int32_t begin)
+
+		virtual bool rejectMatchEqStatement(boost::int32_t UNUSED(begin))
 		{
 			return true; // success
 		}
-		virtual bool acceptMatchEqStatement(boost::int32_t begin, boost::int32_t end, const TOKEN &leftVar)
+
+		virtual bool acceptMatchEqStatement(
+            boost::int32_t UNUSED(begin),
+            boost::int32_t UNUSED(end),
+            const TOKEN& UNUSED(leftVar))
 		{
 			return true; // success
 		}
-		virtual bool enterExpression(boost::int32_t begin)
+
+		virtual bool enterExpression(boost::int32_t UNUSED(begin))
 		{
 			return true; // success
 		}
-		virtual bool rejectExpression(boost::int32_t begin)
+
+		virtual bool rejectExpression(boost::int32_t UNUSED(begin))
 		{
 			return true; // success
 		}
-		virtual bool acceptExpression(boost::int32_t begin, boost::int32_t end, const TOKEN &var)
+
+		virtual bool acceptExpression(
+            boost::int32_t UNUSED(begin),
+            boost::int32_t UNUSED(end),
+            const TOKEN& UNUSED(var))
 		{
 			return true; // success
 		}
-		virtual bool enterPattern(boost::int32_t begin)
+
+		virtual bool enterPattern(boost::int32_t UNUSED(begin))
 		{
 			return true; // success
 		}
-		virtual bool rejectPattern(boost::int32_t begin)
+
+		virtual bool rejectPattern(boost::int32_t UNUSED(begin))
 		{
 			return true; // success
 		}
-		virtual bool acceptPattern(boost::int32_t begin, boost::int32_t end)
+
+		virtual bool acceptPattern(boost::int32_t UNUSED(begin), boost::int32_t UNUSED(end))
 		{
 			return true; // success
 		}
-		virtual bool enterPackPattern(boost::int32_t begin)
+
+		virtual bool enterPackPattern(boost::int32_t UNUSED(begin))
 		{
 			return true; // success
 		}
-		virtual bool rejectPackPattern(boost::int32_t begin)
+
+		virtual bool rejectPackPattern(boost::int32_t UNUSED(begin))
 		{
 			return true; // success
 		}
-		virtual bool acceptPackPattern(boost::int32_t begin, boost::int32_t end, const TOKEN &ope)
+
+		virtual bool acceptPackPattern(
+            boost::int32_t UNUSED(begin),
+            boost::int32_t UNUSED(end),
+            const TOKEN& UNUSED(ope))
 		{
 			return true; // success
 		}
-		virtual bool enterMatchPattern(boost::int32_t begin)
+
+		virtual bool enterMatchPattern(boost::int32_t UNUSED(begin))
 		{
 			return true; // success
 		}
-		virtual bool rejectMatchPattern(boost::int32_t begin)
+
+		virtual bool rejectMatchPattern(boost::int32_t UNUSED(begin))
 		{
 			return true; // success
 		}
-		virtual bool acceptMatchPattern(boost::int32_t begin, boost::int32_t end, const TOKEN &ope)
+
+		virtual bool acceptMatchPattern(
+            boost::int32_t UNUSED(begin),
+            boost::int32_t UNUSED(end),
+            const TOKEN& UNUSED(ope))
 		{
 			return true; // success
 		}
-		virtual bool enterScanPattern(boost::int32_t begin)
+
+		virtual bool enterScanPattern(boost::int32_t UNUSED(begin))
 		{
 			return true; // success
 		}
-		virtual bool rejectScanPattern(boost::int32_t begin)
+
+		virtual bool rejectScanPattern(boost::int32_t UNUSED(begin))
 		{
 			return true; // success
 		}
-		virtual bool acceptScanPattern(boost::int32_t begin, boost::int32_t end, const TOKEN &ope)
+
+		virtual bool acceptScanPattern(
+            boost::int32_t UNUSED(begin),
+            boost::int32_t UNUSED(end),
+            const TOKEN& UNUSED(ope))
 		{
 			return true; // success
 		}
-		virtual bool enterOrPattern(boost::int32_t begin)
+
+		virtual bool enterOrPattern(boost::int32_t UNUSED(begin))
 		{
 			return true; // success
 		}
-		virtual bool rejectOrPattern(boost::int32_t begin)
+
+		virtual bool rejectOrPattern(boost::int32_t UNUSED(begin))
 		{
 			return true; // success
 		}
-		virtual bool acceptOrPattern(boost::int32_t begin, boost::int32_t end)
+
+		virtual bool acceptOrPattern(boost::int32_t UNUSED(begin), boost::int32_t UNUSED(end))
 		{
 			return true; // success
 		}
-		virtual bool enterSequencePattern(boost::int32_t begin)
+
+		virtual bool enterSequencePattern(boost::int32_t UNUSED(begin))
 		{
 			return true; // success
 		}
-		virtual bool rejectSequencePattern(boost::int32_t begin)
+
+		virtual bool rejectSequencePattern(boost::int32_t UNUSED(begin))
 		{
 			return true; // success
 		}
-		virtual bool acceptSequencePattern(boost::int32_t begin, boost::int32_t end)
+
+		virtual bool acceptSequencePattern(boost::int32_t UNUSED(begin), boost::int32_t UNUSED(end))
 		{
 			return true; // success
 		}
-		virtual bool enterRepeatPattern(boost::int32_t begin)
+
+		virtual bool enterRepeatPattern(boost::int32_t UNUSED(begin))
 		{
 			return true; // success
 		}
-		virtual bool rejectRepeatPattern(boost::int32_t begin)
+
+		virtual bool rejectRepeatPattern(boost::int32_t UNUSED(begin))
 		{
 			return true; // success
 		}
-		virtual bool acceptRepeatPattern(boost::int32_t begin, boost::int32_t end, const TOKEN &ope)
+
+		virtual bool acceptRepeatPattern(
+            boost::int32_t UNUSED(begin),
+            boost::int32_t UNUSED(end),
+            const TOKEN& UNUSED(ope))
 		{
 			return true; // success
 		}
-		virtual bool acceptRepeatPattern(boost::int32_t begin, boost::int32_t end)
+
+		virtual bool acceptRepeatPattern(boost::int32_t UNUSED(begin), boost::int32_t UNUSED(end))
 		{
 			return true; // success
 		}
-		virtual bool enterAtomPattern(boost::int32_t begin)
+
+		virtual bool enterAtomPattern(boost::int32_t UNUSED(begin))
 		{
 			return true; // success
 		}
-		virtual bool rejectAtomPattern(boost::int32_t begin)
+
+		virtual bool rejectAtomPattern(boost::int32_t UNUSED(begin))
 		{
 			return true; // success
 		}
-		virtual bool acceptAtomPattern(boost::int32_t begin, boost::int32_t end)
+
+		virtual bool acceptAtomPattern(boost::int32_t UNUSED(begin), boost::int32_t UNUSED(end))
 		{
 			return true; // success
 		}
-		virtual bool enterParenPattern(boost::int32_t begin)
+
+		virtual bool enterParenPattern(boost::int32_t UNUSED(begin))
 		{
 			return true; // success
 		}
-		virtual bool rejectParenPattern(boost::int32_t begin)
+
+		virtual bool rejectParenPattern(boost::int32_t UNUSED(begin))
 		{
 			return true; // success
 		}
-		virtual bool acceptParenPattern(boost::int32_t begin, boost::int32_t end)
+
+		virtual bool acceptParenPattern(boost::int32_t UNUSED(begin), boost::int32_t UNUSED(end))
 		{
 			return true; // success
 		}
-		virtual bool enterXcepPattern(boost::int32_t begin)
+
+		virtual bool enterXcepPattern(boost::int32_t UNUSED(begin))
 		{
 			return true; // success
 		}
-		virtual bool rejectXcepPattern(boost::int32_t begin)
+
+		virtual bool rejectXcepPattern(boost::int32_t UNUSED(begin))
 		{
 			return true; // success
 		}
-		virtual bool acceptXcepPattern(boost::int32_t begin, boost::int32_t end)
+
+		virtual bool acceptXcepPattern(boost::int32_t UNUSED(begin), boost::int32_t UNUSED(end))
 		{
 			return true; // success
 		}
-		virtual bool enterPreqPattern(boost::int32_t begin)
+
+		virtual bool enterPreqPattern(boost::int32_t UNUSED(begin))
 		{
 			return true; // success
 		}
-		virtual bool rejectPreqPattern(boost::int32_t begin)
+
+		virtual bool rejectPreqPattern(boost::int32_t UNUSED(begin))
 		{
 			return true; // success
 		}
-		virtual bool acceptPreqPattern(boost::int32_t begin, boost::int32_t end)
+
+		virtual bool acceptPreqPattern(boost::int32_t UNUSED(begin), boost::int32_t UNUSED(end))
 		{
 			return true; // success
 		}
-		virtual bool enterLiteralPattern(boost::int32_t begin)
+
+		virtual bool enterLiteralPattern(boost::int32_t UNUSED(begin))
 		{
 			return true; // success
 		}
-		virtual bool rejectLiteralPattern(boost::int32_t begin)
+
+		virtual bool rejectLiteralPattern(boost::int32_t UNUSED(begin))
 		{
 			return true; // success
 		}
-		virtual bool acceptLiteralPattern(boost::int32_t begin, boost::int32_t end, const TOKEN &literal)
+
+		virtual bool acceptLiteralPattern(
+            boost::int32_t UNUSED(begin),
+            boost::int32_t UNUSED(end),
+            const TOKEN& UNUSED(literal))
 		{
 			return true; // success
 		}
-		virtual bool enterGeneratedTokenPattern(boost::int32_t begin)
+
+		virtual bool enterGeneratedTokenPattern(boost::int32_t UNUSED(begin))
 		{
 			return true; // success
 		}
-		virtual bool rejectGeneratedTokenPattern(boost::int32_t begin)
+
+		virtual bool rejectGeneratedTokenPattern(boost::int32_t UNUSED(begin))
 		{
 			return true; // success
 		}
-		virtual bool acceptGeneratedTokenPattern(boost::int32_t begin, boost::int32_t end, const TOKEN &generatedToken)
+
+		virtual bool acceptGeneratedTokenPattern(
+            boost::int32_t UNUSED(begin),
+            boost::int32_t UNUSED(end),
+            const TOKEN& UNUSED(generatedToken))
 		{
 			return true; // success
 		}
-		virtual bool enterInsertPattern(boost::int32_t begin)
+
+		virtual bool enterInsertPattern(boost::int32_t UNUSED(begin))
 		{
 			return true; // success
 		}
-		virtual bool rejectInsertPattern(boost::int32_t begin)
+
+		virtual bool rejectInsertPattern(boost::int32_t UNUSED(begin))
 		{
 			return true; // success
 		}
-		virtual bool acceptInsertPattern(boost::int32_t begin, boost::int32_t end, const TOKEN &generatedToken)
+
+		virtual bool acceptInsertPattern(
+            boost::int32_t UNUSED(begin),
+            boost::int32_t UNUSED(end),
+            const TOKEN& UNUSED(generatedToken))
 		{
 			return true; // success
 		}
-		virtual bool enterRecursePattern(boost::int32_t begin)
+
+		virtual bool enterRecursePattern(boost::int32_t UNUSED(begin))
 		{
 			return true; // success
 		}
-		virtual bool rejectRecursePattern(boost::int32_t begin)
+
+		virtual bool rejectRecursePattern(boost::int32_t UNUSED(begin))
 		{
 			return true; // success
 		}
-		virtual bool acceptRecursePattern(boost::int32_t begin, boost::int32_t end)
+
+		virtual bool acceptRecursePattern(boost::int32_t UNUSED(begin), boost::int32_t UNUSED(end))
 		{
 			return true; // success
 		}
@@ -278,24 +378,29 @@ public:
 		ACTION_ERROR,
 		UNEXPECTED_EOF,
 	};
+
 private:
 	std:: vector<TOKEN> tokens;
 	boost::int32_t errorPos;
 	ParseErrorCode errorCode;
 	TorqParser::Callbacks *pCallback;
+
 public:
 	virtual ~TorqParser()
 	{
 	}
+
 public:
 	TorqParser()
 		: tokens(), errorPos(-1), errorCode(NUL), pCallback(NULL)
 	{
 	}
+
 	void setTokens(const std:: vector<TOKEN> &tokens_)
 	{
 		tokens = tokens_;
 	}
+
 	bool parse(TorqParser::Callbacks *pCallback_)
 	{
 		TorqParser::Callbacks dummyCallback;
@@ -328,10 +433,12 @@ public:
 		}
 		return true;
 	}
+
 	boost::int32_t getErrorPos() const
 	{
 		return errorPos;
 	}
+
 public:
 	boost::int32_t parseUsrBinTorq(boost::int32_t pos0)
 	{
@@ -343,6 +450,7 @@ public:
 			return pos;
 		}
 	}
+
 	boost::int32_t parseStatements(boost::int32_t pos0)
 	{
 		if (! pCallback->enterStatements(pos0)) {
@@ -368,6 +476,7 @@ public:
 		}
 		return pos; // match
 	}
+
 	boost::int32_t parseStatement(boost::int32_t pos0)
 	{
 		if (! pCallback->enterStatement(pos0)) {
@@ -417,6 +526,7 @@ public:
 			}
 		}
 	}
+
 	boost::int32_t parseAssignStatement(boost::int32_t pos0)
 	{
 		if (! pCallback->enterAssignStatement(pos0)) {
@@ -452,6 +562,7 @@ public:
 		}
 		return -1; // unmatch
 	}
+
 	boost::int32_t parseScanEqStatement(boost::int32_t pos0)
 	{
 		if (! pCallback->enterScanEqStatement(pos0)) {
@@ -488,6 +599,7 @@ public:
 		}
 		return -1; // umatch
 	}
+
 	boost::int32_t parseMatchEqStatement(boost::int32_t pos0)
 	{
 		if (! pCallback->enterMatchEqStatement(pos0)) {
@@ -523,6 +635,7 @@ public:
 		}
 		return -1; // umatch
 	}
+
 	boost::int32_t parseExpression(boost::int32_t pos0)
 	{
 		if (! pCallback->enterExpression(pos0)) {
@@ -545,6 +658,7 @@ public:
 		}
 		return -1; // unmatch
 	}
+
 	boost::int32_t parsePattern(boost::int32_t pos0)
 	{
 		if (! pCallback->enterPattern(pos0)) {
@@ -588,6 +702,7 @@ public:
 		}
 		return -1; // unmatch
 	}
+
 	boost::int32_t parsePackPattern(boost::int32_t pos0) 
 	{
 		if (! pCallback->enterPackPattern(pos0)) {
@@ -626,6 +741,7 @@ public:
 		}
 		return -1; // umatch
 	}
+
 	boost::int32_t parseMatchPattern(boost::int32_t pos0) 
 	{
 		if (! pCallback->enterMatchPattern(pos0)) {
@@ -664,6 +780,7 @@ public:
 		}
 		return -1; // umatch
 	}
+
 	boost::int32_t parseScanPattern(boost::int32_t pos0) 
 	{
 		if (! pCallback->enterScanPattern(pos0)) {
@@ -702,6 +819,7 @@ public:
 		}
 		return -1; // umatch
 	}
+
 	boost::int32_t parseOrPattern(boost::int32_t pos0) 
 	{
 		if (! pCallback->enterOrPattern(pos0)) {
@@ -741,6 +859,7 @@ public:
 		}
 		return -1; // umatch
 	}
+
 	boost::int32_t parseSequencePattern(boost::int32_t pos0)
 	{
 		if (! pCallback->enterSequencePattern(pos0)) {
@@ -778,6 +897,7 @@ public:
 		}
 		return -1; // unmatch
 	}
+
 	boost::int32_t parseRepeatPattern(boost::int32_t pos0) 
 	{
 		if (! pCallback->enterRepeatPattern(pos0)) {
@@ -827,6 +947,7 @@ public:
 		}
 		return -1; // umatch
 	}
+
 	boost::int32_t parseAtomPattern(boost::int32_t pos0) 
 	{
 		if (! pCallback->enterAtomPattern(pos0)) {
@@ -931,12 +1052,14 @@ public:
 			}
 		}
 	}
+
 	boost::int32_t parseParenPattern(boost::int32_t pos0) 
 	{
 		if (! pCallback->enterParenPattern(pos0)) {
 			errorPos = pos0;
 			return pos0; // error
 		}
+
 		boost::int32_t pos = pos0;
 		if (pos < tokens.size() && tokens[pos].classification == TOKEN::LPAREN) {
 			++pos;
@@ -970,14 +1093,17 @@ public:
 		}
 		return -1; // umatch
 	}
+
 	boost::int32_t parseXcepPattern(boost::int32_t pos0)
 	{
 		return parse_xcep_or_preq_pattern(pos0, true);
 	}
+
 	boost::int32_t parsePreqPattern(boost::int32_t pos0)
 	{
 		return parse_xcep_or_preq_pattern(pos0, false);
 	}
+
 	boost::int32_t parse_xcep_or_preq_pattern(boost::int32_t pos0, bool is_xcep)
 	{
 		if (is_xcep) {
@@ -1100,7 +1226,8 @@ public:
 		}
 		return -1; // umatch
 	}
-	boost::int32_t parseLiteralPattern(boost::int32_t pos0, bool insideXcep)
+
+	boost::int32_t parseLiteralPattern(boost::int32_t pos0, bool UNUSED(insideXcep))
 	{
 		if (! pCallback->enterLiteralPattern(pos0)) {
 			errorPos = pos0;
@@ -1122,6 +1249,7 @@ public:
 		}
 		return -1; // unmatch
 	}
+
 	boost::int32_t parseGeneratedTokenPattern(boost::int32_t pos0)
 	{
 		if (! pCallback->enterGeneratedTokenPattern(pos0)) {
@@ -1144,6 +1272,7 @@ public:
 		}
 		return -1; // unmatch
 	}
+
 	boost::int32_t parseInsertPattern(boost::int32_t pos0)
 	{
 		if (! pCallback->enterInsertPattern(pos0)) {
@@ -1187,6 +1316,7 @@ public:
 		}
 		return -1; // unmatch
 	}
+
 	boost::int32_t parseRecursePattern(boost::int32_t pos0)
 	{
 		if (! pCallback->enterRecursePattern(pos0)) {

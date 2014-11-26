@@ -50,7 +50,10 @@ Tree_dealloc(Tree *self)
 }
 
 static PyObject *
-Tree_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
+Tree_new(
+    PyTypeObject *type,
+    PyObject* UNUSED(args),
+    PyObject* UNUSED(kwds))
 {
     Tree *self = (Tree *)type->tp_alloc(type, 0);
     if (self != NULL) {
@@ -61,7 +64,7 @@ Tree_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
 }
 
 static int
-Tree_init(Tree *self, PyObject *args, PyObject *kwds)
+Tree_init(Tree *self, PyObject *args, PyObject* UNUSED(kwds))
 {
 	assert(self != NULL);
 
@@ -150,7 +153,7 @@ Pattern_dealloc(Pattern* self)
 }
 
 static PyObject *
-Pattern_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
+Pattern_new(PyTypeObject *type, PyObject* UNUSED(args), PyObject* UNUSED(kwds))
 {
     Pattern *self = (Pattern *)type->tp_alloc(type, 0);
     if (self != NULL) {
@@ -161,7 +164,7 @@ Pattern_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
 }
 
 static int
-Pattern_init(Pattern *self, PyObject *args, PyObject *kwds)
+Pattern_init(Pattern *self, PyObject *args, PyObject* UNUSED(kwds))
 {
 	assert(self != NULL);
 
@@ -304,7 +307,7 @@ CngFormatter_dealloc(CngFormatter* self)
 }
 
 static PyObject *
-CngFormatter_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
+CngFormatter_new(PyTypeObject *type, PyObject* UNUSED(args), PyObject* UNUSED(kwds))
 {
     CngFormatter *self = (CngFormatter *)type->tp_alloc(type, 0);
     if (self != NULL) {
@@ -315,7 +318,7 @@ CngFormatter_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
 }
 
 static int
-CngFormatter_init(CngFormatter *self, PyObject *args, PyObject *kwds)
+CngFormatter_init(CngFormatter *self, PyObject *args, PyObject* UNUSED(kwds))
 {
 	assert(self != NULL);
 
@@ -530,7 +533,7 @@ ICUConverter_dealloc(ICUConverter *self)
 }
 
 static PyObject *
-ICUConverter_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
+ICUConverter_new(PyTypeObject *type, PyObject* UNUSED(args), PyObject* UNUSED(kwds))
 {
     ICUConverter *self = (ICUConverter *)type->tp_alloc(type, 0);
     if (self != NULL) {
@@ -541,7 +544,7 @@ ICUConverter_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
 }
 
 static int
-ICUConverter_init(ICUConverter *self, PyObject *args, PyObject *kwds)
+ICUConverter_init(ICUConverter *self, PyObject *args, PyObject* UNUSED(kwds))
 {
 	assert(self != NULL);
 
@@ -761,7 +764,7 @@ static PyTypeObject ICUConverterType = {
 /* module methods */
 
 static PyObject *
-easytorq_version(PyObject *self, PyObject *args)
+easytorq_version(PyObject* UNUSED(self), PyObject *args)
 {
 	if (! PyArg_ParseTuple(args, "")) {
 		return NULL;
@@ -770,7 +773,7 @@ easytorq_version(PyObject *self, PyObject *args)
 }
 
 static PyObject *
-easytorq_credits(PyObject *self, PyObject *args)
+easytorq_credits(PyObject* UNUSED(self), PyObject *args)
 {
 	static const char *str = "easytorq (C) 2009-2010 AIST";
 

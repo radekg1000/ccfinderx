@@ -495,14 +495,17 @@ private:
 			: base(*pBase), countOfRemovedClonePairs(0)
 		{
 		}
-		bool isValidFileID(int fileID)
+
+		bool isValidFileID(int UNUSED(fileID))
 		{
 			return true; // will not do filtering by fileID
 		}
-		bool isValidCloneID(boost::uint64_t cloneID) 
+
+		bool isValidCloneID(boost::uint64_t UNUSED(cloneID))
 		{
 			return true; // will not do filtering by cloneID
 		}
+
 		void transformPairs(std:: vector<rawclonepair::RawClonePair> *pPairs)
 		{
 			std:: vector<rawclonepair::RawClonePair> &pairs = *pPairs;
@@ -654,14 +657,17 @@ private:
 		{
 			scannotner.setRawReader(rawReader_);
 		}
-		bool isValidFileID(int fileID)
+
+		bool isValidFileID(int UNUSED(fileID))
 		{
 			return true; // will not do filtering by fileID
 		}
-		bool isValidCloneID(boost::uint64_t cloneID) 
+
+		bool isValidCloneID(boost::uint64_t UNUSED(cloneID))
 		{
 			return true; // will not do filtering by cloneID
 		}
+
 		void transformPairs(std:: vector<rawclonepair::RawClonePair> *pPairs)
 		{
 			assert(2 <= base.shapingLevel && base.shapingLevel <= 3);
@@ -898,14 +904,17 @@ private:
 			: base(*pBase)
 		{
 		}
-		bool isValidFileID(int fileID)
+
+		bool isValidFileID(int UNUSED(fileID))
 		{
 			return true; // will not do filtering by fileID
 		}
-		bool isValidCloneID(boost::uint64_t cloneID) 
+
+		bool isValidCloneID(boost::uint64_t UNUSED(cloneID))
 		{
 			return true; // will not do filtering by cloneID
 		}
+
 		void transformPairs(std:: vector<rawclonepair::RawClonePair> *pPairs)
 		{
 			std:: vector<rawclonepair::RawClonePair> &pairs = *pPairs;
@@ -963,11 +972,13 @@ private:
 			return countOfRemovedClonePairs;
 		}
 	public:
-		bool isValidFileID(int fileID)
+
+		bool isValidFileID(int UNUSED(fileID))
 		{
 			return true; // will not do filtering by fileID
 		}
-		bool isValidCloneID(boost::uint64_t cloneID) 
+
+		bool isValidCloneID(boost::uint64_t UNUSED(cloneID))
 		{
 			return true; // will not do filtering by cloneID
 		}
@@ -1304,6 +1315,7 @@ private:
 			}
 		}
 	};
+
 	class Trimmer : public rawclonepair::RawClonePairFileTransformer::FilterFileByFile
 	{
 	private:
@@ -1315,24 +1327,29 @@ private:
 			: countOfRemovedClonePairs(0)
 		{
 		}
+
 	public:
 		long long getCountOfRemovedClonePairs() const
 		{
 			return countOfRemovedClonePairs;
 		}
+
 		void attachTrimmerTable(const HASH_MAP<boost::uint64_t, TrimDown> *pTrimmerTable_)
 		{
 			pTrimmerTable = pTrimmerTable_;
 		}
-	public:
-		bool isValidFileID(int fileID)
+public:
+
+		bool isValidFileID(int UNUSED(fileID))
 		{
 			return true; // will not do filtering by fileID
 		}
-		bool isValidCloneID(boost::uint64_t cloneID) 
+
+		bool isValidCloneID(boost::uint64_t UNUSED(cloneID))
 		{
 			return true; // will not do filtering by cloneID
 		}
+
 		void transformPairs(std:: vector<rawclonepair::RawClonePair> *pPairs)
 		{
 			std:: vector<rawclonepair::RawClonePair> &pairs = *pPairs; // must be sorted

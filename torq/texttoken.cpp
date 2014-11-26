@@ -3,6 +3,8 @@
 #include <boost/pool/object_pool.hpp>
 
 #include "texttoken.h"
+#include "../common/common.h"
+
 
 const boost::int32_t/* code */ text::GeneratedToken::cNULL = 0;
 
@@ -139,7 +141,7 @@ public:
 	}
 };
 
-RawCharToken *RawCharToken::create(MYWCHAR_T code_, boost::int32_t pos_)
+RawCharToken *RawCharToken::create(MYWCHAR_T code_, boost::int32_t UNUSED(pos_))
 {
 #if defined USE_BOOST_POOL
 	UnpooledRawCharToken *p = UnpooledRawCharToken::ThePool.construct();

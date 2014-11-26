@@ -462,12 +462,18 @@ enum { DETECT_WITHIN_FILE = 1 << 0, DETECT_BETWEEN_FILES = 1 << 1, DETECT_BETWEE
 
 namespace {
 
-bool clone_matches_w_range_wfg(int leftFileIndex, int rightFileIndex, const std::vector<int> *pFileIndexToGroupIDTable)
+bool clone_matches_w_range_wfg(
+    int UNUSED(leftFileIndex),
+    int UNUSED(rightFileIndex),
+    const std::vector<int>* UNUSED(pFileIndexToGroupIDTable))
 {
 	return false;
 }
 
-bool clone_matches_w_range_Wfg(int leftFileIndex, int rightFileIndex, const std::vector<int> *pFileIndexToGroupIDTable)
+bool clone_matches_w_range_Wfg(
+    int leftFileIndex,
+    int rightFileIndex,
+    const std::vector<int>* UNUSED(pFileIndexToGroupIDTable))
 {
 	return leftFileIndex == rightFileIndex;
 }
@@ -520,12 +526,18 @@ bool clone_matches_w_range_WfG(int leftFileIndex, int rightFileIndex, const std:
 	}
 }
 
-bool clone_matches_w_range_wFG(int leftFileIndex, int rightFileIndex, const std::vector<int> *pFileIndexToGroupIDTable)
+bool clone_matches_w_range_wFG(
+    int leftFileIndex,
+    int rightFileIndex,
+    const std::vector<int>* UNUSED(pFileIndexToGroupIDTable))
 {
 	return leftFileIndex != rightFileIndex;
 }
 
-bool clone_matches_w_range_WFG(int leftFileIndex, int rightFileIndex, const std::vector<int> *pFileIndexToGroupIDTable)
+bool clone_matches_w_range_WFG(
+    int UNUSED(leftFileIndex),
+    int UNUSED(rightFileIndex),
+    const std::vector<int>* UNUSED(pFileIndexToGroupIDTable))
 {
 	return true;
 }

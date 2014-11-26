@@ -40,6 +40,7 @@
 #endif
 
 #include "unportable.h"
+#include "common.h"
 
 #if ! defined _MSC_VER
 
@@ -553,7 +554,7 @@ void find_named_directories_i(std:: vector<std:: string> *pFiles, const std:: se
 
 #elif defined __GNUC__
 
-// 注意！：ディレクトリがソースファイルより前に来るようにはなってない
+// ﾂ陳債暗督！ﾂ：ﾂデﾂィﾂδ個クﾂトﾂδ環つｪﾂソﾂーﾂスﾂフﾂァﾂイﾂδ仰づｦﾂづｨﾂ前ﾂづ可猟按づｩﾂづｦﾂつ､ﾂづ可づ債づ按づ�ﾂづ�ﾂづ按つ｢
 
 void find_files_i(std:: vector<std:: string> *pFiles, const std:: set<std:: string> &extensions,
 		const std:: string &currentDir)
@@ -711,7 +712,7 @@ bool find_named_directories(std:: vector<std:: string> *pFiles, const std:: set<
 
 #if defined LITTLE_ENDIAN
 
-void flip_endian(void *pIntegerValue, size_t sizeOfIntegerType)
+void flip_endian(void* UNUSED(pIntegerValue), size_t UNUSED(sizeOfIntegerType))
 {
 }
 

@@ -16,7 +16,6 @@ global_compiler_flags = \
     -g -O0 \
     -fno-default-inline \
     -Wno-sign-compare \
-    -Wno-unused-parameter \
     -Wno-unused-variable \
     -Wno-unused-value \
     -Wno-type-limits \

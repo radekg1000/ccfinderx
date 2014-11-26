@@ -14,6 +14,7 @@
 
 #include "unportable.h"
 #include "ffuncrenamer.h"
+#include "common.h"
 
 namespace onfile {
 
@@ -31,10 +32,12 @@ public:
 		: pFile(NULL), bitCount(0)
 	{
 	}
-	DynamicBitSet &operator=(const DynamicBitSet &right)
+
+	DynamicBitSet &operator=(const DynamicBitSet& UNUSED(right))
 	{
 		assert(false);
 	}
+
 public:
 	bool create(const std:: string &filePath_, bool canBeTemporaryFile)
 	{
@@ -43,6 +46,8 @@ public:
 		if (canBeTemporaryFile) {
 			flag += F_TEMPORARY_FILE_OPTIMIZATION;
 		}
+#else
+        canBeTemporaryFile; //to avoid unused parameter warning
 #endif
 
 		pFile = ::fopen(filePath_.c_str(), flag.c_str());
@@ -54,6 +59,7 @@ public:
 
 		return true;
 	}
+
 	void close()
 	{
 		if (pFile != NULL) {
@@ -62,18 +68,22 @@ public:
 			filePath.clear();
 		}
 	}
+
 	std:: string getFilePath() const
 	{
 		return filePath;
 	}
+
 	unsigned long long size() const
 	{
 		return bitCount;
 	}
+
 	bool empty() const
 	{
 		return bitCount == 0;
 	}
+
 	void resize(unsigned long long newSize)
 	{
 		assert(pFile != NULL);
@@ -92,6 +102,7 @@ public:
 			bitCount = newSize;
 		}
 	}
+
 	bool test(unsigned long long index) const
 	{
 		assert(pFile != NULL);
@@ -107,6 +118,7 @@ public:
 		}
 		return false;
 	}
+
 	DynamicBitSet &set(unsigned long long index, bool value = true)
 	{
 		assert(pFile != NULL);
@@ -129,6 +141,7 @@ public:
 		}
 		return *this;
 	}
+
 	DynamicBitSet &setRange(unsigned long long begin, unsigned long long end, bool value = true)
 	{
 		assert(pFile != NULL);
@@ -407,19 +420,23 @@ private:
 		FILE *pFile;
 		unsigned long long rest;
 		ItemType curData;
+
 	public:
 		FRD(FILE *pFile_, unsigned long long rest_)
 			: pFile(pFile_), rest(rest_), curData()
 		{
 		}
+
 		FRD(const FRD &right)
 			: pFile(right.pFile), rest(right.rest), curData(right.curData)
 		{
 		}
+
 		FRD()
 			: pFile(NULL), rest(0), curData()
 		{
 		}
+
 		void swap(FRD &right)
 		{
 			std:: swap(pFile, right.pFile);
@@ -427,8 +444,13 @@ private:
 			std:: swap(curData, right.curData);
 		}
 	};
+
 	template<typename ItemTypeLess>
-	bool mergeBlocks(const std:: string &output, const std:: string &input, boost::int64_t beginPos, unsigned long long itemCount,
+	bool mergeBlocks(
+        const std:: string &output,
+        const std:: string &input,
+        boost::int64_t beginPos,
+        unsigned long long UNUSED(itemCount),
 		const ItemTypeLess itemComparator)
 	{
 		FILE *pOutput = fopen(output.c_str(), "w+b");
@@ -686,8 +708,9 @@ public:
 	{
 		assert(false);
 	}
+
 public:
-	bool create(const std:: string &filePath_, bool canBeTemporaryFile)
+	bool create(const std:: string &filePath_, bool UNUSED(canBeTemporaryFile))
 	{
 		std::string flag = "w+b";
 #if defined _MSC_VER
