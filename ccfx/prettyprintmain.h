@@ -75,9 +75,7 @@ public:
 			return 0;
 		}
 
-		int fileID;
 		bool fileIDSpecified = false;
-		boost::uint64_t cloneID;
 		bool cloneIDSpecified = false;
 		enum { FLF_FilePath = 1 << 0, FLF_FileID = 1 << 1, FLF_Remark = 1 << 2 };
 		int optionFileListFields = 0;
@@ -107,7 +105,7 @@ public:
 					}
 					std:: string argi2 = argv[i + 1];
 					try {
-						fileID = boost::lexical_cast<int>(argi2);
+						boost::lexical_cast<int>(argi2);
 					}
 					catch (boost::bad_lexical_cast &) {
 						std:: cerr << "error: invalid -f argument" << std:: endl;
@@ -126,7 +124,7 @@ public:
 					}
 					std:: string argi2 = argv[i + 1];
 					try {
-						cloneID = boost::lexical_cast<boost::uint64_t>(argi2);
+						boost::lexical_cast<boost::uint64_t>(argi2);
 					}
 					catch (boost::bad_lexical_cast &) {
 						std:: cerr << "error: invalid -c argument" << std:: endl;

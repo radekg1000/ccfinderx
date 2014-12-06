@@ -19,7 +19,6 @@ global_compiler_flags = \
     -Wno-unused-variable \
     -Wno-unused-value \
     -Wno-type-limits \
-    -Wno-unused-but-set-variable \
     -DUNICODE \
     $(ICU_CXXFLAGS) \
     $(OPENMP_CFLAGS) \

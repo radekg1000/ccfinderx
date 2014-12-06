@@ -707,11 +707,10 @@ private:
 
 			const int shift_by_first_zero = 1;
 
-			size_t minimumLength = 0;
 			std::vector<std::string> minLenValue = base.accessor.getOptionValues("b");
 			if (! minLenValue.empty()) {
 				try {
-					minimumLength = boost::lexical_cast<int, std::string>(minLenValue.back());	
+					boost::lexical_cast<int, std::string>(minLenValue.back());
 				}
 				catch(boost::bad_lexical_cast &) {
 					// do nothing
