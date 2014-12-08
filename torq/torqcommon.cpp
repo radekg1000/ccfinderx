@@ -13,14 +13,14 @@ bool common::substrEqual(const std:: vector<MYWCHAR_T> &str, boost::int32_t pos,
 	if (! (pos + token.length() <= str.size())) {
 		return false;
 	}
-	
+
 	for (size_t i = 0; i < token.length(); ++i) {
 		if (str[pos + i] != (MYWCHAR_T)(token[i])) {
 			return false;
 		}
 	}
 
-	return true;	
+	return true;
 }
 
 boost::int32_t/* pos */ common::substrFind(const std:: vector<MYWCHAR_T> &str, boost::int32_t pos, const std:: string &token)
@@ -113,7 +113,7 @@ HASH_MAP<MYWCHAR_T, std:: string> makeCodeToStrTableExplicit()
 	return ctbl;
 }
 
-}; // namespace
+} // namespace
 
 const std:: map<std:: string, MYWCHAR_T> common::EscapeSequenceHelper::strToCodeTable(makeStrToCodeTable());
 const HASH_MAP<MYWCHAR_T, std:: string> common::EscapeSequenceHelper::codeToStrTable(makeCodeToStrTable());

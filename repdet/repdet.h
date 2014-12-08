@@ -18,12 +18,12 @@ public:
 	/*
 	beginEnd shows the begining index and the ending index of the repetition.
 	unit shows the length of the repeating sub-sequence.
-	
-	For example, from "x123123y", we can find a Repetition(1, 7, 3), 
+
+	For example, from "x123123y", we can find a Repetition(1, 7, 3),
 	that is, beginEnd.first = 1, beginEnd.second = 7, and unit = 3.
-	
+
 	The length of the repetition can be calcluated by (beginEnd.secondo - beginEnd.first).
-	Also, the position of the first appearance of the repeating sub-sequence  
+	Also, the position of the first appearance of the repeating sub-sequence
 	starts at beginEnd.first and ends at (beginEnd.first + unit).
 
 	In the above example, the length of the repetition is 7 - 1 = 6,
@@ -130,7 +130,7 @@ private:
 		return true;
 	}
 #if 0
-	static void find_repetitions_brute(std:: map<std:: pair<size_t/* begin */, size_t/* end */>, Repetition> *pReps, 
+	static void find_repetitions_brute(std:: map<std:: pair<size_t/* begin */, size_t/* end */>, Repetition> *pReps,
 			const typename std:: vector<Elem> &data, size_t begin, size_t end, size_t upperLimit)
 	{
 		assert(0 <= begin && begin <= end && end <= data.size());
@@ -161,7 +161,7 @@ private:
 		}
 	}
 #endif
-	static void find_repetitions_skipvec(MapRepposRepitition *pReps, 
+	static void find_repetitions_skipvec(MapRepposRepitition *pReps,
 			const typename std:: vector<Elem> &data, size_t begin, size_t end, size_t upperLimit)
 	{
 		assert(0 <= begin && begin <= end && end <= data.size());
@@ -242,7 +242,7 @@ private:
 			}
 		}
 	}
-	static void find_repetitions_skipvec(std::vector</* begin index */ std::vector<Repetition> > *pReps, 
+	static void find_repetitions_skipvec(std::vector</* begin index */ std::vector<Repetition> > *pReps,
 			const typename std:: vector<Elem> &data, size_t begin, size_t end, size_t upperLimit)
 	{
 		assert(0 <= begin && begin <= end && end <= data.size());
@@ -307,7 +307,7 @@ private:
 				}
 				if (unit > 1) {
 					size_t p = pos;
-					
+
 					while (p + unit * 2 <= end && match(data, p, p + unit, unit)) {
 						p += unit;
 					}
@@ -344,12 +344,12 @@ private:
 		}
 	};
 public:
-	void findRepetitions(MapRepposRepitition *pReps, 
+	void findRepetitions(MapRepposRepitition *pReps,
 			const typename std:: vector<Elem> &data, size_t upperLimit /* special value 0 means +infinity */) const
 	{
 		find_repetitions_skipvec(pReps, data, 0, data.size(), upperLimit);
 	}
-	void findRepetitions(std:: vector<Repetition> *pReps, 
+	void findRepetitions(std:: vector<Repetition> *pReps,
 			const typename std:: vector<Elem> &data, size_t upperLimit /* special value 0 means +infinity */) const
 	{
 		MapRepposRepitition repm;
@@ -361,15 +361,15 @@ public:
 		}
 		std::sort((*pReps).begin(), (*pReps).end(), RepetitionComparatorByBeginEnd());
 	}
-	void findRepetitions(MapRepposRepitition *pReps, 
-			const std:: vector<Elem> &data, size_t begin, size_t end, 
+	void findRepetitions(MapRepposRepitition *pReps,
+			const std:: vector<Elem> &data, size_t begin, size_t end,
 			size_t upperLimit /* special value 0 means +infinity */) const
 	{
 		find_repetitions_skipvec(pReps, data, begin, end, upperLimit);
 	}
-	void findRepetitions(std:: vector<Repetition> *pReps, 
-			const std:: vector<Elem> &data, 
-			size_t begin, size_t end, 
+	void findRepetitions(std:: vector<Repetition> *pReps,
+			const std:: vector<Elem> &data,
+			size_t begin, size_t end,
 			size_t upperLimit /* special value 0 means +infinity */) const
 	{
 		MapRepposRepitition repm;
@@ -383,6 +383,6 @@ public:
 	}
 };
 
-}; // namespace repdet
+} // namespace repdet
 
 #endif // REPDET_H

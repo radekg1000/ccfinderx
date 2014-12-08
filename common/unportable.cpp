@@ -8,8 +8,8 @@
 #include <vector>
 #include <algorithm>
 
-#include <sys/types.h> 
-#include <sys/stat.h> 
+#include <sys/types.h>
+#include <sys/stat.h>
 
 #include <boost/format.hpp>
 #include <boost/optional.hpp>
@@ -17,7 +17,7 @@
 #if defined _MSC_VER
 
 #include <windows.h>
-#define WIN32_LEAN_AND_MEAN 
+#define WIN32_LEAN_AND_MEAN
 #include <io.h> // _findfirst
 #include <direct.h> // _chdir
 #include <shlobj.h> // SHGetSpecialFolderPathA
@@ -61,7 +61,7 @@ bool splitpath(const std:: string &path, std:: string *pDir, std:: string *pFnam
 	char extStr[_MAX_EXT];
 
 	_splitpath(path.c_str(), driveStr, dirStr, fnameStr, extStr);
-	
+
 	std:: string dir = (const char *)driveStr;
 	dir += (const char *)dirStr;
 	std:: string fname = (const char *)fnameStr;
@@ -101,7 +101,7 @@ bool splitpath(const std:: string &path, std:: string *pDir, std:: string *pFnam
 		dirStr = &buf[sectionSize * 1];
 		fnameStr = &buf[sectionSize * 2];
 		extStr = &buf[sectionSize * 3];
-		errno_t err = _splitpath_s(path.c_str(), 
+		errno_t err = _splitpath_s(path.c_str(),
 			driveStr, sectionSize - 1,
 			dirStr, sectionSize - 1,
 			fnameStr, sectionSize - 1,
@@ -154,7 +154,7 @@ bool splitpath(const std:: string &path, std:: string *pDir, std:: string *pFnam
 		*pDir = p != std:: string::npos ? path.substr(0, p + 1) : "";
 	}
 	std:: string fileName = p != std:: string::npos ? path.substr(p + 1) : path;
-	
+
 	size_t q = fileName.rfind('.');
 	if (q != std:: string::npos) {
 		if (pFname != NULL) {
@@ -163,7 +163,7 @@ bool splitpath(const std:: string &path, std:: string *pDir, std:: string *pFnam
 		if (pExt != NULL) {
 			*pExt = fileName.substr(q);
 		}
-	}	
+	}
 	else {
 		if (pFname != NULL) {
 			*pFname = fileName;
@@ -562,11 +562,11 @@ void find_files_i(std:: vector<std:: string> *pFiles, const std:: set<std:: stri
 	DIR *dp;
 	struct dirent *dir;
 	struct stat fi;
-	
+
 	if ((dp = opendir(currentDir.c_str())) == NULL) {
 		assert(("fail to open directory", false)); // 2007/11/22
 	}
-	
+
 	while ((dir = readdir(dp)) != NULL) {
 		if (dir->d_ino == 0) {
 			continue;
@@ -597,7 +597,7 @@ void find_files_i(std:: vector<std:: string> *pFiles, const std:: set<std:: stri
 			}
 		}
 	}
-	
+
 	closedir(dp); // 2007/11/22
 }
 
@@ -607,11 +607,11 @@ void find_named_directories_i(std:: vector<std:: string> *pFiles, const std:: se
 	DIR *dp;
 	struct dirent *dir;
 	struct stat fi;
-	
+
 	if ((dp = opendir(currentDir.c_str())) == NULL) {
 		assert(("fail to open directory", false)); // 2007/11/22
 	}
-	
+
 	while ((dir = readdir(dp)) != NULL) {
 		if (dir->d_ino == 0) {
 			continue;
@@ -634,15 +634,15 @@ void find_named_directories_i(std:: vector<std:: string> *pFiles, const std:: se
 			}
 		}
 	}
-	
+
 	closedir(dp);
 }
 
 #endif
 
-}; // namespace
+} // namespace
 
-bool find_files(std:: vector<std:: string> *pFiles, const std:: set<std:: string> &extensions, 
+bool find_files(std:: vector<std:: string> *pFiles, const std:: set<std:: string> &extensions,
 		const std:: string &directory)
 {
 	(*pFiles).clear();
@@ -676,7 +676,7 @@ bool find_files(std:: vector<std:: string> *pFiles, const std:: set<std:: string
 	return true;
 }
 
-bool find_named_directories(std:: vector<std:: string> *pFiles, const std:: set<std:: string> &names, 
+bool find_named_directories(std:: vector<std:: string> *pFiles, const std:: set<std:: string> &names,
 		const std:: string &directory)
 {
 	(*pFiles).clear();
@@ -859,7 +859,7 @@ bool path_is_file(const std::string &path)
 	if (stat(path.c_str(), &fileStatus) != 0) {
 		return false; // error (maybe file doesn't exist
 	}
-	
+
 	return (fileStatus.st_mode & S_IFMT) == S_IFREG;
 }
 

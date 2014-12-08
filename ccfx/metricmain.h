@@ -283,11 +283,11 @@ public:
 			if (values[0] != 0) {
 				std::string s = (
 #if defined REQUIRE_RNR
-						boost::format("%d\t%d\t%d\t%d\t%g\t%g\t%g\t%g" "\n") 
+						boost::format("%d\t%d\t%d\t%d\t%g\t%g\t%g\t%g" "\n")
 #else
-						boost::format("%d\t%d\t%d\t%d\t%g\t%g\t%g" "\n") 
+						boost::format("%d\t%d\t%d\t%d\t%g\t%g\t%g" "\n")
 #endif
-						% fileID 
+						% fileID
 						% (int)values[0] % (int)values[1] % (int)values[2]
 						% (values[3] / (double)values[0]) % (values[4] / (double)values[0]) % (values[5] / (double)values[0])
 #if defined REQUIRE_RNR
@@ -336,9 +336,9 @@ public:
 		if (optionSummary) {
 			std::string s = (
 #if defined REQUIRE_RNR
-					boost::format("ave.\t%g\t%g\t%g\t%g\t%g\t%g\t%g" "\n") 
+					boost::format("ave.\t%g\t%g\t%g\t%g\t%g\t%g\t%g" "\n")
 #else
-					boost::format("ave.\t%g\t%g\t%g\t%g\t%g\t%g" "\n") 
+					boost::format("ave.\t%g\t%g\t%g\t%g\t%g\t%g" "\n")
 #endif
 					% (fileIDs.size() != 0 ? fileMetricTotals[0] / (double)fileIDs.size() : 0.0)
 					% (fileIDs.size() != 0 ? fileMetricTotals[1] / (double)fileIDs.size() : 0.0)
@@ -353,12 +353,12 @@ public:
 			FWRITEBYTES(s.data(), s.length(), pOutput);
 			s = (
 #if defined REQUIRE_RNR
-					boost::format("min.\t%d\t%d\t%d\t%g\t%g\t%g\t%g" "\n") 
+					boost::format("min.\t%d\t%d\t%d\t%g\t%g\t%g\t%g" "\n")
 #else
-					boost::format("min.\t%d\t%d\t%d\t%g\t%g\t%g" "\n") 
+					boost::format("min.\t%d\t%d\t%d\t%g\t%g\t%g" "\n")
 #endif
 					% lengthMinMax.min % countClonesMinMax.min % nbrMinMax.min
-					% rsaMinMax.min % rsiMinMax.min % cvrMinMax.min 
+					% rsaMinMax.min % rsiMinMax.min % cvrMinMax.min
 #if defined REQUIRE_RNR
 					% rnrMinMax.min
 #endif
@@ -366,12 +366,12 @@ public:
 			FWRITEBYTES(s.data(), s.length(), pOutput);
 			s = (
 #if defined REQUIRE_RNR
-					boost::format("max.\t%d\t%d\t%d\t%g\t%g\t%g\t%g" "\n") 
+					boost::format("max.\t%d\t%d\t%d\t%g\t%g\t%g\t%g" "\n")
 #else
-					boost::format("max.\t%d\t%d\t%d\t%g\t%g\t%g" "\n") 
+					boost::format("max.\t%d\t%d\t%d\t%g\t%g\t%g" "\n")
 #endif
 					% lengthMinMax.max % countClonesMinMax.max % nbrMinMax.max
-					% rsaMinMax.max % rsiMinMax.max % cvrMinMax.max 
+					% rsaMinMax.max % rsiMinMax.max % cvrMinMax.max
 #if defined REQUIRE_RNR
 					% rnrMinMax.max
 #endif
@@ -397,7 +397,7 @@ private:
 		rawclonepair::RawClonePairFileAccessor &acc = refFileAccessor();
 
 		boost::array<long, 7> &values = *pValues; // length, #clones, NBR, RSA*LEN, RSI*LEN, CVR*LEN, (#if defined REQUIRE_RNR, then, RNR*LEN)
-		
+
 		// LEN
 		size_t len;
 		std:: string fileName;
@@ -440,7 +440,7 @@ private:
 					}
 				}
 			}
-			
+
 			boost::dynamic_bitset<> tokensCoveredByAny = tokensCoveredByOthers | tokensCoveredBySelf;
 			values[0] = len;
 			values[1] = cloneClassIDs.size();
@@ -448,7 +448,7 @@ private:
 			values[3] = tokensCoveredByOthers.count();
 			values[4] = tokensCoveredBySelf.count();
 			values[5] = tokensCoveredByAny.count();
-		} 
+		}
 		else {
 			std:: fill(values.begin(), values.begin() + 6, 0);
 		}
@@ -579,7 +579,7 @@ public:
 
 		std:: vector<rawclonepair::RawClonePair> clonePairs;
 		acc.getRawClonePairsOfFile(fileID, &clonePairs);
-		
+
 		std:: vector<ccfx_token_t> seq;
 		boost::dynamic_bitset<> tokensRepeated;
 		for (size_t j = 0; j < clonePairs.size(); ++j) {
@@ -601,7 +601,7 @@ public:
 				const int shift_by_first_zero = 1; // this shift caused by PreprocessedFileReader::readFileget, which is callded via PreprocessedSequenceOfFile
 
 				const rawclonepair::RawFileBeginEnd &rfbe = clonePairs[j].left;
-				
+
 				// calc rnr
 				{
 					size_t seqSize = seq.size();
@@ -629,11 +629,11 @@ public:
 					tokensRepeated.clear();
 					tokensRepeated.resize(seq.size(), false);
 					if (tailOverlap) {
-						repdet::RepetitionDetector<ccfx_token_t>().findRepetitions(&reps, seq, 
+						repdet::RepetitionDetector<ccfx_token_t>().findRepetitions(&reps, seq,
 							rfbe.begin + shift_by_first_zero, rfbe.end - overlappedSize + shift_by_first_zero, 0);
 					}
 					else {
-						repdet::RepetitionDetector<ccfx_token_t>().findRepetitions(&reps, seq, 
+						repdet::RepetitionDetector<ccfx_token_t>().findRepetitions(&reps, seq,
 							rfbe.begin + shift_by_first_zero + overlappedSize, rfbe.end + shift_by_first_zero, 0);
 					}
 					for (std:: vector<repdet::Repetition>::const_iterator i = reps.begin(); i != reps.end(); ++i) {
@@ -683,7 +683,7 @@ public:
 		std:: fill(cloneMetricTotals.begin(), cloneMetricTotals.end(), 0);
 
 		fputs("CID" "\t" "LEN" "\t" "POP" "\t" "NIF" "\t" "RAD" "\t" "RNR" "\t" "TKS" "\t" "LOOP" "\t" "COND" "\t" "McCabe" "\n", pOutput);
-		
+
 		boost::uint64_t cidCount = 0;
 		boost::uint64_t cid;
 		if (acc.getFirstCloneSetID(&cid)) {
@@ -709,7 +709,7 @@ public:
 					len = f0.end - f0.begin;
 
 					pop = codeFragments.size();
-					
+
 					nif = 0;
 					rad = 0;
 					{
@@ -763,7 +763,7 @@ public:
 							}
 						}
 					}
-					
+
 					FSEEK64(pTemp, cid * sizeof(RNRTKS), SEEK_SET);
 					RNRTKS rnrtks;
 					FREAD(&rnrtks, sizeof(RNRTKS), 1, pTemp);
@@ -782,10 +782,10 @@ public:
 						cyclomatic = 0;
 					}
 					if (optionEachItem) {
-						std::string s = (boost::format("%ld\t%d\t%d\t%d\t%d\t%g\t%d\t%d\t%d\t%d" "\n") 
-								% (boost::uint64_t)cid 
-								% (int)len 
-								% (int)pop 
+						std::string s = (boost::format("%ld\t%d\t%d\t%d\t%d\t%g\t%d\t%d\t%d\t%d" "\n")
+								% (boost::uint64_t)cid
+								% (int)len
+								% (int)pop
 								% (int)nif
 								% (int)rad
 								% (len != 0 ? (rnr / (double)len) : 0.0)
@@ -820,7 +820,7 @@ public:
 		}
 		if (optionSummary) {
 			if (cidCount > 0) {
-				std::string s = (boost::format("ave.\t%g\t%g\t%g\t%g\t%g\t%g\t%g\t%g\t%g" "\n") 
+				std::string s = (boost::format("ave.\t%g\t%g\t%g\t%g\t%g\t%g\t%g\t%g\t%g" "\n")
 						% (cloneMetricTotals[0] / (double)cidCount)
 						% (cloneMetricTotals[1] / (double)cidCount)
 						% (cloneMetricTotals[2] / (double)cidCount)
@@ -832,12 +832,12 @@ public:
 						% (cloneMetricTotals[8] / (double)cidCount)
 						).str();
 				FWRITEBYTES(s.data(), s.length(), pOutput);
-				s = (boost::format("min.\t%d\t%d\t%d\t%d\t%g\t%d\t%d\t%d\t%d" "\n") 
+				s = (boost::format("min.\t%d\t%d\t%d\t%d\t%g\t%d\t%d\t%d\t%d" "\n")
 						% lenMinMax.min % popMinMax.min % nifMinMax.min % radMinMax.min % rnrMinMax.min
 						% tksMinMax.min % loopMinMax.min % condMinMax.min % cyclomaticMinMax.min
 						).str();
 				FWRITEBYTES(s.data(), s.length(), pOutput);
-				s = (boost::format("max.\t%d\t%d\t%d\t%d\t%g\t%d\t%d\t%d\t%d" "\n") 
+				s = (boost::format("max.\t%d\t%d\t%d\t%d\t%g\t%d\t%d\t%d\t%d" "\n")
 						% lenMinMax.max % popMinMax.max % nifMinMax.max % radMinMax.max % rnrMinMax.max
 						% tksMinMax.max % loopMinMax.max % condMinMax.max % cyclomaticMinMax.max
 						).str();
@@ -965,7 +965,7 @@ public:
 		MetricsCalculator::open(fileName_);
 
 		std::fill(lineMetricTotals.begin(), lineMetricTotals.end(), 0);
-		
+
 		fputs("FID" "\t" "LOC" "\t" "SLOC" "\t" "CLOC" "\t" "CVRL" "\n", pOutput);
 	}
 	virtual void scannotFile(int index)
@@ -976,8 +976,8 @@ public:
 		calc_wordcount(fileID, &lineMetrics);
 		double cvrl = lineMetrics[1] != 0 ? lineMetrics[2] / (double)lineMetrics[1] : 0.0;
 		if (optionEachItem) {
-			std::string s = (boost::format("%d\t%d\t%d\t%d\t%g" "\n") 
-					% fileID 
+			std::string s = (boost::format("%d\t%d\t%d\t%d\t%g" "\n")
+					% fileID
 					% (int)lineMetrics[0]
 					% (int)lineMetrics[1]
 					% (int)lineMetrics[2]
@@ -1064,7 +1064,7 @@ private:
 	}
 };
 
-}; // namespace metrics
+} // namespace metrics
 
 class MetricMain {
 private:
@@ -1097,11 +1097,11 @@ private:
 	}
 
 public:
-	int main(const std::vector<std::string> &argv) 
+	int main(const std::vector<std::string> &argv)
 	{
 		assert(argv.size() >= 2);
 		if (argv.size() == 2 || argv[2] == "-h" || argv[2] == "--help") {
-			std:: cout << 
+			std:: cout <<
 				"Usage: ccfx M in.ccfxd [-c [-o out]] [-f [-o out]] [-w [-o out]] [-p FIELDS]" "\n"
 				"  Calculates clone metrics and/or file metrics from a clone data file." "\n"
 				"Options" "\n"
@@ -1262,7 +1262,7 @@ public:
 			std:: cerr << "error: no metric to be calculated" << std:: endl;
 			return 1;
 		}
-		
+
 		threadFunction.applyToSystem();
 
 		size_t numOfMetricsOutputForStdout = 0;
@@ -1288,14 +1288,14 @@ public:
 			return 1;
 		}
 	}
-	
-	int do_calculation(const std:: string &inputFile, 
+
+	int do_calculation(const std:: string &inputFile,
 			const std::string &cloneMetricOutputFile, const std::string &fileMetricOutputFile, const std::string &wordcountOutputFile)
 	{
 		PreprocessedFileRawReader rawReader;
 
-		if (! acc.open(inputFile, 
-				rawclonepair::RawClonePairFileAccessor::CLONEDATA 
+		if (! acc.open(inputFile,
+				rawclonepair::RawClonePairFileAccessor::CLONEDATA
 				| rawclonepair::RawClonePairFileAccessor::FILEDATA)) {
 			std:: cerr << "error: " << acc.getErrorMessage() << std:: endl;
 			return 1;
@@ -1362,7 +1362,7 @@ public:
 				wmc.scannotFile(i);
 			}
 		}
-		
+
 		if (fileMetricRequired) {
 			fmc.close();
 		}

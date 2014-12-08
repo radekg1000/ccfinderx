@@ -127,7 +127,7 @@ size_t fwrite_RawClonePair(const RawClonePair *ary, size_t count, FILE *pOutput)
 		flip_endian(data.right.end);
 		size_t c = FWRITE(&data, sizeof(RawClonePair), 1, pOutput);
 		if (c == 0) {
-			break; 
+			break;
 		}
 		++successfullyWrittenCount;
 	}
@@ -141,7 +141,7 @@ size_t fread_RawClonePair(RawClonePair *ary, size_t count, FILE *pInput)
 		RawClonePair &data = ary[i];
 		size_t c = FREAD(&data, sizeof(RawClonePair), 1, pInput);
 		if (c == 0) {
-			break; 
+			break;
 		}
 		flip_endian(data.left.file);
 		flip_endian(data.left.begin);
@@ -156,4 +156,4 @@ size_t fread_RawClonePair(RawClonePair *ary, size_t count, FILE *pInput)
 
 #endif
 
-}; // namespace rawclonepair
+} // namespace rawclonepair

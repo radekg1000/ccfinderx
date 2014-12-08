@@ -11,7 +11,7 @@ namespace {
 
 void encode_i(std::string *pOutput, const char buf3[3])
 {
-	static const char table[64 + 1] = 
+	static const char table[64 + 1] =
 		"ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 		"abcdefghijklmnopqrstuvwxyz"
 		"0123456789+/";
@@ -36,7 +36,7 @@ void decode_i(std::vector<char> *pBuffer, boost::uint32_t bits)
 	}
 }
 
-}; // namespace
+} // namespace
 
 void Base64Encoder::encode(std::string *pOutput, const char *buffer, size_t buffer_size)
 {
@@ -73,7 +73,7 @@ void Base64Encoder::encode(std::string *pOutput, const char *buffer, size_t buff
 
 bool Base64Encoder::decode(std::vector<char> *pBuffer, const std::string &input)
 {
-	static const char table[64 + 1] = 
+	static const char table[64 + 1] =
 		"ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 		"abcdefghijklmnopqrstuvwxyz"
 		"0123456789+/";

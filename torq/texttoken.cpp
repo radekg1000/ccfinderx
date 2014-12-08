@@ -25,7 +25,7 @@ std:: vector<std:: pair<std:: vector<MYWCHAR_T>/* name */, text::GeneratedToken 
 	return tokens;
 }
 
-}; // namespace
+} // namespace
 
 const std:: vector<std:: pair<std:: vector<MYWCHAR_T>/* name */, text::GeneratedToken *> > text::GeneratedToken::SpecialTokens
 		 = make_special_tokens();
@@ -63,7 +63,7 @@ public:
 
 		return false;
 	}
-	virtual boost::optional<MYWCHAR_T> getRawCharCode() const 
+	virtual boost::optional<MYWCHAR_T> getRawCharCode() const
 	{
 		return boost::optional<MYWCHAR_T>(code);
 	}
@@ -154,7 +154,7 @@ RawCharToken *RawCharToken::create(MYWCHAR_T code_, boost::int32_t UNUSED(pos_))
 
 #endif // CHECK_POS_CONTINUOUS
 
-}; // namespace
+} // namespace
 
 #if defined USE_BOOST_POOL
 boost::object_pool<text::UnpooledRawCharToken> text::UnpooledRawCharToken::ThePool;

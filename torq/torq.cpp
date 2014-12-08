@@ -62,7 +62,7 @@ HANDLE openCompressedFileForWrite(const std::string &fileName)
 		HANDLE hFile = CreateFile (
 			fileName.c_str(),
 			GENERIC_READ | GENERIC_WRITE,
-			FILE_SHARE_READ, 
+			FILE_SHARE_READ,
 			0,
 			OPEN_EXISTING,
 			FILE_FLAG_BACKUP_SEMANTICS,
@@ -103,24 +103,24 @@ bool get_raw_lines(const std:: string &file_path, std:: vector<std:: string> *pL
 	if (! input.is_open()) {
 		return false;
 	}
-	
+
 	input.seekg(0, std:: ios::end);
 	size_t inputSize = input.tellg();
 	input.seekg(0, std:: ios::beg);
-	
+
 	std:: vector<char> buf;
 	buf.resize(inputSize);
 	input.read(&buf[0], inputSize);
 	input.close();
-	
+
 	size_t i = 0;
-	
+
 	// remove BOM
-	if (buf.size() >= 3 
+	if (buf.size() >= 3
 			&& ((unsigned char)buf[0]) == 0xef && ((unsigned char)buf[1]) == 0xbb && ((unsigned char)buf[2]) == 0xbf) {
 		i += 3;
 	}
-	
+
 	while (i < buf.size()) {
 		size_t p = i;
 		int ch;
@@ -149,14 +149,14 @@ bool get_raw_lines(const std:: string &file_path, std:: vector<std:: string> *pL
 		}
 	}
 
-	return true; 
+	return true;
 }
 
 std:: pair<boost::int32_t/* row */, boost::int32_t /* col */> posToRowCol(const std:: vector<MYWCHAR_T> &script, boost::int32_t pos)
 {
 	boost::int32_t lineNumber = 1;
 	boost::int32_t columnNumber = 1;
-	boost::int32_t p = 0; 
+	boost::int32_t p = 0;
 	while (p < pos) {
 		if (script[p] == '\r' || script[p] == '\n') {
 			++lineNumber;
@@ -185,24 +185,24 @@ bool read(std:: vector<MYWCHAR_T> *pSeq, const std:: string &scriptFile)
 	if (! input.is_open()) {
 		return false;
 	}
-	
+
 	input.seekg(0, std:: ios::end);
 	size_t inputSize = input.tellg();
 	input.seekg(0, std:: ios::beg);
-	
+
 	std:: vector<char> buf;
 	buf.resize(inputSize);
 	input.read(&buf[0], inputSize);
 	input.close();
 
 	size_t i = 0;
-	
+
 	// remove BOM
-	if (buf.size() >= 3 
+	if (buf.size() >= 3
 			&& ((unsigned char)buf[0]) == 0xef && ((unsigned char)buf[1]) == 0xbb && ((unsigned char)buf[2]) == 0xbf) {
 		i += 3;
 	}
-	
+
 	toWStringV(&seq, &buf[i], buf.size() - i);
 
 	return true;
@@ -241,11 +241,11 @@ public:
 			errorMessage = "fail to open file '" + fileName + "'";
 			return false;
 		}
-		
+
 		input.seekg(0, std:: ios::end);
 		size_t inputSize = input.tellg();
 		input.seekg(0, std:: ios::beg);
-		
+
 		std:: vector<char> buf;
 		buf.resize(inputSize);
 		input.read(&buf[0], inputSize);
@@ -298,7 +298,7 @@ bool scan_option_node_format(const std:: vector<MYWCHAR_T> &f, size_t beginPos, 
 							 std:: vector<MYWCHAR_T> *pLabel, text::Helper::NodeFormat *pOpenClose)
 {
 	text::Helper::NodeFormat openClose;
-	
+
 	const std:: vector<MYWCHAR_T>::const_iterator iBegin = f.begin() + beginPos;
 	const std:: vector<MYWCHAR_T>::const_iterator iEnd = f.begin() + endPos;
 
@@ -387,12 +387,12 @@ bool scan_option_node_format(const std:: vector<MYWCHAR_T> &f, size_t beginPos, 
 
 bool scan_option_node_format(const std:: string &f, std:: vector<MYWCHAR_T> *pLabel, text::Helper::NodeFormat *pOpenClose)
 {
-	std:: vector<MYWCHAR_T> line; 
+	std:: vector<MYWCHAR_T> line;
 	common::EscapeSequenceHelper::decode(&line, f);
 	return scan_option_node_format(line, 0, line.size(), pLabel, pOpenClose);
 }
 
-void print_result_cng(std:: ostream *pOutput, 
+void print_result_cng(std:: ostream *pOutput,
 		const std:: map<std:: vector<MYWCHAR_T>, text::Helper::NodeFormat> &nodeFormats0,
 		const std:: vector<std:: vector<MYWCHAR_T> > &labelStrings,
 		const text::TokenSequence &text)
@@ -416,7 +416,7 @@ void print_result_cng(std:: ostream *pOutput,
 	text::Helper::printCng(pOutput, text, nodeFormats);
 }
 
-void print_result_xml(std:: ostream *pOutput, 
+void print_result_xml(std:: ostream *pOutput,
 		unsigned long options,
 		const std:: map<std:: vector<MYWCHAR_T>, text::Helper::NodeFormat>& UNUSED(nodeFormats0),
 		const std:: vector<std:: vector<MYWCHAR_T> > &labelStrings,
@@ -427,7 +427,7 @@ void print_result_xml(std:: ostream *pOutput,
 	text::Helper::printXml(pOutput, text, strRaw, options, labelStrings);
 }
 
-std:: vector<MYWCHAR_T> replace(const std:: vector<MYWCHAR_T> &str, 
+std:: vector<MYWCHAR_T> replace(const std:: vector<MYWCHAR_T> &str,
 		const std:: vector<MYWCHAR_T> &from, const std:: vector<MYWCHAR_T> &to)
 {
 	assert(from.size() > 0);
@@ -500,7 +500,7 @@ std:: vector<MYWCHAR_T> staticExpandSpecials(const std:: vector<MYWCHAR_T> &str)
 	return r;
 }
 
-void print_result(std:: ostream *pOutput, 
+void print_result(std:: ostream *pOutput,
 		unsigned long options,
 		const std:: map<std:: vector<MYWCHAR_T>, text::Helper::NodeFormat> &nodeFormats0,
 		const std:: vector<std:: vector<MYWCHAR_T> > &labelStrings,
@@ -509,7 +509,7 @@ void print_result(std:: ostream *pOutput,
 {
 	HASH_MAP<boost::int32_t/* code */, text::Helper::NodeFormat> nodeFormats;
 	assert(labelStrings.size() >= 1);
-	
+
 	std:: vector<MYWCHAR_T> nullLabel;
 	std:: vector<MYWCHAR_T> percentT;
 	common::EscapeSequenceHelper::decode(&percentT, "%t");
@@ -655,8 +655,8 @@ void extract_option_lines(const std:: vector<MYWCHAR_T> &script, std:: map<boost
 	(*pOptionLines).swap(optionLines);
 }
 
-bool parse_script(const std:: vector<MYWCHAR_T> &script, std:: vector<TRACE_ITEM> *pTrace, 
-	std:: map<std:: vector<MYWCHAR_T>, text::Helper::NodeFormat> *pNodeFormatsInScript, 
+bool parse_script(const std:: vector<MYWCHAR_T> &script, std:: vector<TRACE_ITEM> *pTrace,
+	std:: map<std:: vector<MYWCHAR_T>, text::Helper::NodeFormat> *pNodeFormatsInScript,
 	std:: string *pErrorMessage, const std:: string &debugOption)
 {
 	assert(pTrace != NULL);
@@ -673,7 +673,7 @@ bool parse_script(const std:: vector<MYWCHAR_T> &script, std:: vector<TRACE_ITEM
 		static const std:: string strNodeformat = "--nodeformat";
 		const std:: vector<MYWCHAR_T> &line = i->second;
 		MYWCHAR_T c;
-		if (common::substrEqual(line, 0, strNodeformat) && strNodeformat.length() < line.size() 
+		if (common::substrEqual(line, 0, strNodeformat) && strNodeformat.length() < line.size()
 				&& ((c = line[strNodeformat.length()]) == ' ' || c == '\t')) {
 			size_t pos = strNodeformat.length();
 			while (pos < line.size() && ((c = line[pos]) == ' ' || c == '\t')) {
@@ -723,7 +723,7 @@ bool parse_script(const std:: vector<MYWCHAR_T> &script, std:: vector<TRACE_ITEM
 		exit(0);
 		return false; // dummy
 	}
-	
+
 	// parse the script
 	TorqParserTracer tracer;
 	TorqParser parser;
@@ -802,7 +802,7 @@ public:
         cutoffValue(0),
         optionNSpecified(false),
         optionPXSpecified(false),
-		usageFormatStr( 
+		usageFormatStr(
 			"Torq ver. %s (c) 2009-2010 AIST" "\n"
 			"Usage: torq [option...] script input..." "\n"
 			"Option" "\n"
@@ -811,7 +811,7 @@ public:
 			"  -c r:encoding: specify text output encoding (-c r:html)." "\n"
 			"  -c t:encoding: specify token output encoding (-c t:utf8)." "\n"
 			"  -d n: output a list of node names." "\n"
-			"  -e fileformat: create an output for each input." "\n" 
+			"  -e fileformat: create an output for each input." "\n"
 			"  -n name,opening,closing: specify a format of the token." "\n"
 			"  -n name=replacingstring: specify a replacing string of the token." "\n"
 			"  -n name:{flatten|none|terminate}: specify a format of the token." "\n"
@@ -1030,7 +1030,7 @@ private:
 		optionNSpecified = false;
 		optionPXSpecified = false;
 		cutoffValue = 10000;
-		
+
 		// analyze command-line arguments
 		if (args.size() == 1) {
 			std:: cout << (boost::format(usageFormatStr) % appVersion.toString()).str();
@@ -1047,7 +1047,7 @@ private:
 			std:: cerr << "error: no script file is specified" << std:: endl;
 			return 1;
 		}
-		
+
 		return 0; // no error
 	}
 	void do_output_i(std:: ostream *pOutput, const text::TokenSequence &text,
@@ -1058,8 +1058,8 @@ private:
 		{
 			bool notExpandNull = printOption.find('n') != std:: string::npos;
 			bool notPrintNull = printOption.find('N') != std:: string::npos;
-			options = 
-					(notExpandNull ? 0 : text::Helper::RecurseNull) |  
+			options =
+					(notExpandNull ? 0 : text::Helper::RecurseNull) |
 					(notPrintNull ? text::Helper::SkipNull : 0);
 			std:: vector<MYWCHAR_T> eol;
 			common::EscapeSequenceHelper::decode(&eol, "eol");
@@ -1155,7 +1155,7 @@ public:
 		if (r != 0) {
 			return r;
 		}
-		
+
 		if (debugOption == "0") {
 			std:: cout << "sizeof(text::RawCharToken) = " << sizeof(text::RawCharToken) << std:: endl;
 			return 0;
@@ -1181,7 +1181,7 @@ public:
 			}
 			nodeFormats[label].swap(openClose);
 		}
-		
+
 		// read the script from file
 		std:: vector<MYWCHAR_T> script;
 		if (! read(&script, scriptFile)) {
@@ -1197,8 +1197,8 @@ public:
 			std:: cerr << "error: " << errorMessage << std:: endl;
 			return 1;
 		}
-		
-		// merge node formats from script and from command-line 
+
+		// merge node formats from script and from command-line
 		{
 			for (std:: map<std:: vector<MYWCHAR_T>, text::Helper::NodeFormat>::iterator i = nodeFormatsInScript.begin();
 					i != nodeFormatsInScript.end(); ++i) {
@@ -1301,7 +1301,7 @@ public:
 				if (r != 0) {
 					return r;
 				}
-				
+
 				seq.resize(0);
 				text.resize(0);
 			}
@@ -1347,7 +1347,7 @@ public:
 };
 class ParseError : public RuntimeError {
 public:
-	ParseError(const std::string &causeStr) 
+	ParseError(const std::string &causeStr)
 		: RuntimeError(causeStr)
 	{
 	}
@@ -1407,7 +1407,7 @@ public:
 		if (! nodeFormatsInScript.empty()) {
 			throw ParseError("node format in script is not implemented");
 		}
-		
+
 		// prepare interpreter
 		interp.setProgram(trace, script);
 		std:: vector<std:: vector<MYWCHAR_T> > nodeNames = interp.getLabelStrings();
@@ -1535,5 +1535,5 @@ public:
 	}
 };
 
-};
+}
 

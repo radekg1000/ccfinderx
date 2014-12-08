@@ -103,5 +103,35 @@ AC_CHECK_FILE(/usr/share/java/icu4j.jar,
     ]
 )
 
+#Check for presence of swt.jar
+AC_CHECK_FILE(/usr/share/java/swt.jar,
+    [ ],
+    [AC_MSG_ERROR([
+		swt.jar must bee installed on your system.
+
+		Please install libswt-gtk-3-java development package.])
+    ]
+)
+
+#Check for presence of swt.jar
+AC_CHECK_FILE(/usr/share/java/trove.jar,
+    [ ],
+    [AC_MSG_ERROR([
+		trove.jar must bee installed on your system.
+
+		Please install libtrove-java development package.])
+    ]
+)
+
+#Check for presence of swt-cairo-gtk.so
+AC_CHECK_FILE(/usr/lib/jni/libswt-cairo-gtk-3836.so,
+    [ ],
+    [AC_MSG_ERROR([
+    libswt-cairo-gtk-3836.so  must bee installed on your system.
+
+		Please install libswt-cairo-gtk-3-jni development package.])
+    ]
+)
+
 AC_CONFIG_FILES([Makefile])
 AC_OUTPUT

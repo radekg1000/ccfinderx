@@ -21,7 +21,7 @@ std:: pair<boost::int32_t/* row */, boost::int32_t /* col */> posToRowCol(const 
 {
 	boost::int32_t lineNumber = 1;
 	boost::int32_t columnNumber = 1;
-	boost::int32_t p = 0; 
+	boost::int32_t p = 0;
 	while (p < pos) {
 		if (script[p] == '\r' || script[p] == '\n') {
 			++lineNumber;
@@ -41,8 +41,8 @@ std:: pair<boost::int32_t/* row */, boost::int32_t /* col */> posToRowCol(const 
 	return std:: pair<boost::int32_t, boost::int32_t>(lineNumber, columnNumber);
 }
 
-bool parse_script(const std:: vector<MYWCHAR_T> &script, std:: vector<TRACE_ITEM> *pTrace, 
-	std:: map<std:: vector<MYWCHAR_T>, text::Helper::NodeFormat> *pNodeFormatsInScript, 
+bool parse_script(const std:: vector<MYWCHAR_T> &script, std:: vector<TRACE_ITEM> *pTrace,
+	std:: map<std:: vector<MYWCHAR_T>, text::Helper::NodeFormat> *pNodeFormatsInScript,
 	std:: string *pErrorMessage)
 {
 	assert(pTrace != NULL);
@@ -69,7 +69,7 @@ bool parse_script(const std:: vector<MYWCHAR_T> &script, std:: vector<TRACE_ITEM
 		return false;
 	}
 	std:: vector<TOKEN> tokens = tokenizer.getTokens();
-	
+
 	// parse the script
 	TorqParserTracer tracer;
 	TorqParser parser;
@@ -102,7 +102,7 @@ bool parse_script(const std:: vector<MYWCHAR_T> &script, std:: vector<TRACE_ITEM
 	return true;
 }
 
-};
+}
 
 namespace easytorq {
 
@@ -141,7 +141,7 @@ Pattern::Pattern(const std::string &patternStr)
 	if (! nodeFormatsInScript.empty()) {
 		throw ParseError("node format in script is not implemented");
 	}
-	
+
 	// prepare interpreter
 	interp.setProgram(trace, script);
 	common::EscapeSequenceHelper::decode(&varName, "TEXT");
@@ -260,7 +260,7 @@ std::string CngFormatter::format(const Tree &tree) const
 	return output.str();
 }
 
-};
+}
 
 #include <iostream>
 

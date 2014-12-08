@@ -56,7 +56,7 @@ public:
 	}
 };
 
-/* 
+/*
 This class is very similar to boost::ptr_vector<boost::nullable<Token> >.
 The reason why this class exists is that boost::ptr_vector<boost::nullable<Token> >::replace() does not accept NULL value,
 possbly bug.
@@ -173,7 +173,7 @@ public:
 		if (body.size() != right.body.size()) {
 			return false;
 		}
-		
+
 		for (size_t i = 0; i < body.size(); ++i) {
 			const Token *pL = body[i];
 			const Token *pR = right.body[i];
@@ -289,7 +289,7 @@ public:
 			return false;
 		}
 	}
-	virtual boost::optional<MYWCHAR_T> getRawCharCode() const 
+	virtual boost::optional<MYWCHAR_T> getRawCharCode() const
 	{
 		return boost::optional<MYWCHAR_T>();
 	}
@@ -308,7 +308,7 @@ public:
 	{
 		TokenSequence seq;
 		seq.reserve(originalSeq.size());
-		size_t i = 0; 
+		size_t i = 0;
 		while (i < originalSeq.size()) {
 			MYWCHAR_T ch = originalSeq[i];
 			switch (ch) {
@@ -369,7 +369,7 @@ public:
 		if (convertEOF && originalSeq.size() >= 1 && originalSeq.back() != '\x1a'/* eof */) {
 			seq.attachBack(text::GeneratedToken::SpecialTokens[2/* eof */].second->dup());
 		}
-		
+
 		(*pSeq).swap(seq);
 	}
 public:
@@ -447,7 +447,7 @@ private:
 		std:: string ket;
 	};
 public:
-	static void print(std:: ostream *pOutput, const TokenSequence &text, const std:: vector<MYWCHAR_T> &separator0,	
+	static void print(std:: ostream *pOutput, const TokenSequence &text, const std:: vector<MYWCHAR_T> &separator0,
 			unsigned long options, const common::Encoder *pRawCharEncoder0)
 	{
 		PrintData data;
@@ -486,9 +486,9 @@ public:
 			delete data.pRawCharEncoder;
 		}
 	}
-	static void print(std:: ostream *pOutput, const TokenSequence &text, 
-			const NodeFormat &rawTextFormat, const std:: vector<MYWCHAR_T> &separator, unsigned long options, 
-			const HASH_MAP<boost::int32_t/* code */, NodeFormat> &nodeFormats, 
+	static void print(std:: ostream *pOutput, const TokenSequence &text,
+			const NodeFormat &rawTextFormat, const std:: vector<MYWCHAR_T> &separator, unsigned long options,
+			const HASH_MAP<boost::int32_t/* code */, NodeFormat> &nodeFormats,
 			const common::Encoder *pRawCharEncoder0, const common::Encoder *pGeneratedEncoder0)
 	{
 		PrintData data;
@@ -496,7 +496,7 @@ public:
 		data.options = options;
 		data.pRawCharEncoder = pRawCharEncoder0 != NULL ? pRawCharEncoder0 : new common::HTMLEncoder();
 		const common::Encoder *pGeneratedEncoder = pGeneratedEncoder0 != NULL ? pGeneratedEncoder0 : new common::UTF8NEncoder();
-		
+
 		boost::int32_t maxCode = 0;
 		{
 			for (HASH_MAP<boost::int32_t/* code */, NodeFormat>::const_iterator i = nodeFormats.begin(); i != nodeFormats.end(); ++i) {
@@ -520,7 +520,7 @@ public:
 		}
 
 		data.pNodeFormats = &encodedNodeFormats;
-		
+
 		data.separator = pGeneratedEncoder->encode(separator);
 		data.rawOpenClose.nodeType = rawTextFormat.nodeType;
 		data.rawOpenClose.opening = pGeneratedEncoder->encode(rawTextFormat.opening);
@@ -546,14 +546,14 @@ public:
 		//		break;
 		//	}
 		//}
-		
+
 		data.bra = "[";
 		data.ket = "]";
-		
+
 		std:: pair<size_t/* row */, size_t/* col */> rowCol(1, 1);
 		size_t index = 0;
 		print_i(&rowCol, &index, text, data);
-		
+
 		if (pRawCharEncoder0 == NULL) {
 			delete data.pRawCharEncoder;
 		}
@@ -566,7 +566,7 @@ private:
 	{
 		(*pOutput).write(str.data(), str.length());
 	}
-	static std:: string expandSpecials(const std:: string &format, 
+	static std:: string expandSpecials(const std:: string &format,
 			const std:: pair<size_t/* row */, size_t/* col */> &rowCol, size_t index)
 	{
 		std:: string s;
@@ -623,7 +623,7 @@ private:
 
 		return s;
 	}
-	static void print_i(std:: pair<size_t/* row */, size_t/* col */> *pRowCol, size_t *pIndex, 
+	static void print_i(std:: pair<size_t/* row */, size_t/* col */> *pRowCol, size_t *pIndex,
 			const TokenSequence &text, const PrintData &data)
 	{
 		std:: pair<size_t/* row */, size_t/* col */> &rowCol = *pRowCol;
@@ -631,7 +631,7 @@ private:
 
 		std:: ostream &output = *data.pOutput;
 
-		size_t i = 0; 
+		size_t i = 0;
 		while (i < text.size()) {
 			const text::Token *pToken = text.refAt(i);
 			if (pToken == NULL) {
@@ -764,7 +764,7 @@ private:
 	static void printXml_i(const TokenSequence &text, const PrintDataXml &data)
 	{
 		std:: ostream &output = *data.pOutput;
-		size_t i = 0; 
+		size_t i = 0;
 		while (i < text.size()) {
 			const text::Token *p = text.refAt(i);
 			if (p == NULL) {
@@ -776,14 +776,14 @@ private:
 			if (r) {
 				MYWCHAR_T ch = *r;
 				if (ch == '\r') {
-					output << "<" << data.rawTokenTagName << ">" 
-							<< common::EscapeSequenceHelper::encode(ch, true) 
+					output << "<" << data.rawTokenTagName << ">"
+							<< common::EscapeSequenceHelper::encode(ch, true)
 							<< "</" << data.rawTokenTagName << ">" << std:: endl;
 					++i;
 				}
 				else if (ch == '\n') {
-					output << "<" << data.rawTokenTagName << ">" 
-							<< common::EscapeSequenceHelper::encode(ch, true) 
+					output << "<" << data.rawTokenTagName << ">"
+							<< common::EscapeSequenceHelper::encode(ch, true)
 							<< "</" << data.rawTokenTagName << ">" << std:: endl;
 					++i;
 				}
@@ -835,14 +835,14 @@ private:
 		}
 	}
 public:
-	static void printXml(std:: ostream *pOutput, const TokenSequence &text, const std:: vector<MYWCHAR_T> &rawTokenTagName, 
+	static void printXml(std:: ostream *pOutput, const TokenSequence &text, const std:: vector<MYWCHAR_T> &rawTokenTagName,
 			unsigned long options, const std:: vector<std:: vector<MYWCHAR_T> > &nodeNames)
 	{
 		PrintDataXml data;
 		data.pOutput = pOutput;
 		data.options = options;
 		data.rawTokenTagName = common::EscapeSequenceHelper::encode(rawTokenTagName, false);
-		
+
 		std:: vector<std:: string> encodedNodeNames;
 		encodedNodeNames.reserve(nodeNames.size());
 		for (size_t i = 0; i < nodeNames.size(); ++i) {
@@ -872,7 +872,7 @@ public:
 				const NodeFormat &n = i->second;
 				NodeFormatI encoded(
 						n.nodeType,
-						common::EscapeSequenceHelper::encode(n.opening, false), 
+						common::EscapeSequenceHelper::encode(n.opening, false),
 						common::EscapeSequenceHelper::encode(n.closing, false));
 				encodedNodeFormats[i->first].first = true;
 				encodedNodeFormats[i->first].second.swap(encoded);
@@ -890,7 +890,7 @@ private:
 		std:: ostream &output = *pOutput;
 		std:: pair<size_t/* row */, size_t/* col */> &rowCol = *pRowCol;
 		size_t &index = *pIndex;
-		size_t i = 0; 
+		size_t i = 0;
 		while (i < text.size()) {
 			const text::Token *p = text.refAt(i);
 			if (p == NULL) {
@@ -963,13 +963,13 @@ private:
 						case text::Helper::NF_EXPANDED:
 							{
 								if (! openClose.opening.empty()) {
-									output << (boost::format("%x.%x.%x\t+0\t") % rowCol.first % rowCol.second % index) 
+									output << (boost::format("%x.%x.%x\t+0\t") % rowCol.first % rowCol.second % index)
 											<< openClose.opening << std:: endl;
 								}
 								const TokenSequence &value = g->value;
 								printCng_i(pOutput, &rowCol, &index, value, encodedNodeFormats);
 								if (! openClose.closing.empty()) {
-									output << (boost::format("%x.%x.%x\t+0\t") % rowCol.first % rowCol.second % index) 
+									output << (boost::format("%x.%x.%x\t+0\t") % rowCol.first % rowCol.second % index)
 											<< openClose.closing << std:: endl;
 								}
 							}
@@ -1031,15 +1031,15 @@ private:
 		}
 	}
 	static void print_i_silent(
-			std:: pair<size_t/* row */, size_t/* col */> *pRowCol, 
+			std:: pair<size_t/* row */, size_t/* col */> *pRowCol,
 			size_t *pIndex,
 			const TokenSequence &text)
 	{
 		print_i_silent(pRowCol, NULL, pIndex, NULL, text);
 	}
 	static void print_i_silent(
-			std:: pair<size_t/* row */, size_t/* col */> *pRowCol, 
-			std:: pair<size_t/* row */, size_t/* col */> *pRowColLastNonNull, 
+			std:: pair<size_t/* row */, size_t/* col */> *pRowCol,
+			std:: pair<size_t/* row */, size_t/* col */> *pRowColLastNonNull,
 			size_t *pIndex, size_t *pIndexLastNonNull,
 			const TokenSequence &text)
 	{
@@ -1047,7 +1047,7 @@ private:
 		assert(pIndex != NULL);
 		std:: pair<size_t/* row */, size_t/* col */> &rowCol = *pRowCol;
 		size_t &index = *pIndex;
-		size_t i = 0; 
+		size_t i = 0;
 		while (i < text.size()) {
 			const text::Token *p = text.refAt(i);
 			if (p == NULL) {
@@ -1103,14 +1103,14 @@ private:
 			}
 		}
 	}
-	static void print_i_leaftext(std:: pair<size_t/* row */, size_t/* col */> *pRowCol, size_t *pIndex, 
-			const TokenSequence &text, const PrintData &data)	
+	static void print_i_leaftext(std:: pair<size_t/* row */, size_t/* col */> *pRowCol, size_t *pIndex,
+			const TokenSequence &text, const PrintData &data)
 	{
 		std:: pair<size_t/* row */, size_t/* col */> &rowCol = *pRowCol;
 		size_t &index = *pIndex;
 		std:: ostream &output = *data.pOutput;
 
-		size_t i = 0; 
+		size_t i = 0;
 		while (i < text.size()) {
 			const text::Token *p = text.refAt(i);
 			if (p == NULL) {
@@ -1166,7 +1166,7 @@ private:
 	{
 		std:: ostream &output = *pOutput;
 
-		size_t i = 0; 
+		size_t i = 0;
 		while (i < text.size()) {
 			const text::Token *p = text.refAt(i);
 			if (p == NULL) {
@@ -1211,6 +1211,6 @@ private:
 	}
 };
 
-}; // namespace
+} // namespace
 
 #endif // Token_H

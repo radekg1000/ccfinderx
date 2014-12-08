@@ -109,7 +109,7 @@ public:
 				"Usage: ccfx Q OPTIONS in.ccfxd [-o outputfile] PATTERNS..." "\n"
 				"  Output clone IDs that match one of patterns." "\n"
 				"Pattern" "\n"
-				"  -t TOKEN[,TOKEN]: including all the tokens" "\n" 
+				"  -t TOKEN[,TOKEN]: including all the tokens" "\n"
 				//"Option" "\n"
 				//"  -n dir: specify directory where preprocessed files are created." "\n"
 				;
@@ -176,7 +176,7 @@ public:
 		return do_calculation(inputFile, outputFile);
 	}
 private:
-	static bool compileRequireTokenPatterns(std:: vector<std:: vector<ccfx_token_t> > *pCompiled, 
+	static bool compileRequireTokenPatterns(std:: vector<std:: vector<ccfx_token_t> > *pCompiled,
 			const std:: vector<std:: vector<std:: string> > &patterns, const PreprocessedFileReader &scanner)
 	{
 		(*pCompiled).clear();
@@ -205,7 +205,7 @@ private:
 		return allPatternCompiled;
 	}
 
-	static bool requireTokenPatternMatch(const std:: vector<ccfx_token_t> &seq, int begin, int end, 
+	static bool requireTokenPatternMatch(const std:: vector<ccfx_token_t> &seq, int begin, int end,
 			const std:: vector<std:: vector<ccfx_token_t> > &patterns)
 	{
 		assert(0 <= begin && begin <= end && end < seq.size());
@@ -290,7 +290,7 @@ private:
 		for (boost::uint64_t cid = 0; cid <= maxCid; ++cid) {
 			FWRITE(&match, sizeof(Match), 1, tempFile);
 		}
-		
+
 		if (optionVerbose) {
 			std:: cerr << "> matching" << std:: endl;
 		}
@@ -314,7 +314,7 @@ private:
 			*pi = INNER2SYS(*pi);
 		}
 		rawReader.setPreprocessFileDirectories(prepDirs);
-		
+
 		if (fileIDs.size() > 0) {
 			size_t iPrefetched = 0;
 			int fileIDPrefetched = fileIDs[iPrefetched];
@@ -358,7 +358,7 @@ private:
 								}
 							}
 						}
-						
+
 						std:: vector<ccfx_token_t> seq;
 						for (size_t j = 0; j < clonePairs.size(); ++j) {
 							assert(clonePairs[j].left.file == fileID);
@@ -458,7 +458,7 @@ public:
 	}
 };
 
-enum { DETECT_WITHIN_FILE = 1 << 0, DETECT_BETWEEN_FILES = 1 << 1, DETECT_BETWEEN_GROUPS = 1 << 2 }; 
+enum { DETECT_WITHIN_FILE = 1 << 0, DETECT_BETWEEN_FILES = 1 << 1, DETECT_BETWEEN_GROUPS = 1 << 2 };
 
 namespace {
 
@@ -551,7 +551,7 @@ clone_matches_w_range_func_t *CloneMatchesWRangeTable[] = {
 	&clone_matches_w_range_wFG, &clone_matches_w_range_WFG,
 };
 
-}; // namespace (anonymous)
+} // namespace (anonymous)
 
 class CcfxClonePairListener : public CloneDetector<ccfx_token_t, unsigned short>::ClonePairListenerWithScope, private AppVersionChecker {
 private:
@@ -582,7 +582,7 @@ public:
 		: AppVersionChecker(APPVERSION[0], APPVERSION[1]),
 		pInputFiles(NULL), pInputFileLengths(NULL), pFileStartPoss(NULL), pFileIDs(NULL), pFileIndexToGroupIDTable(NULL),
 		targetLength(0), preprocessScript(),
-		outputName(), pOutput(NULL), foundClones(0), inputFileLengthPoss(), 
+		outputName(), pOutput(NULL), foundClones(0), inputFileLengthPoss(),
 		shapingLevel(2), useParameterUnification(true), minimumTokenSetSize(0),
 		detectFrom(DETECT_WITHIN_FILE | DETECT_BETWEEN_FILES | DETECT_BETWEEN_GROUPS),
 		pDetectFromFunc(CloneMatchesWRangeTable[DETECT_WITHIN_FILE | DETECT_BETWEEN_FILES | DETECT_BETWEEN_GROUPS]),
@@ -615,13 +615,13 @@ private:
 	{
 		const std:: string magicNumber = "ccfxraw0";
 		FWRITEBYTES(magicNumber.data(), magicNumber.length(), pOutput);
-		
+
 		for (size_t i = 0; i < version.size(); ++i) {
 			boost::int32_t v = version[i];
 			flip_endian(&v, sizeof(boost::int32_t));
 			FWRITE(&v, sizeof(boost::int32_t), 1, pOutput);
 		}
-		
+
 		const std:: string formatString = "pa:d";
 		assert(formatString.length() == 4);
 		FWRITEBYTES(formatString.data(), formatString.length(), pOutput);
@@ -678,11 +678,11 @@ private:
 			assert(ufn.find('\n') == std:: string::npos);
 			FWRITEBYTES(ufn.data(), ufn.length(), pOutput);
 			FPUTC('\n', pOutput);
-			
+
 			boost::int32_t fileID = (pFileIDs != NULL) ? (*pFileIDs)[i] : i + 1;
 			flip_endian(&fileID, sizeof(boost::int32_t));
 			FWRITE(&fileID, sizeof(boost::int32_t), 1, pOutput);
-			
+
 			if (pInputFileLengths != NULL) {
 				boost::int32_t v = (*pInputFileLengths)[i];
 				flip_endian(&v, sizeof(boost::int32_t));
@@ -845,7 +845,7 @@ public:
 	{
 		if (shapingLevel >= 1 && ! parens.empty()) {
 			assert(posA + length <= refSeq().size());
-			
+
 			shapedFragmentCalculator.setMinlengh(targetLength);
 			boost::optional<shaper::ShapedFragmentPosition> pFragment = shapedFragmentCalculator.findAtLeastOne(refSeq(), posA, posA + length, shaper::HAT_FRAGMENT);
 			if (! pFragment) {
@@ -883,7 +883,7 @@ public:
 		}
 
 		++foundClones;
-		
+
 		const std:: vector<size_t> &fileStartPoss = *pFileStartPoss;
 		if (pFileIDs != NULL) {
 			assert((*pFileIDs).size() == fileStartPoss.size());
@@ -903,8 +903,8 @@ public:
 			size_t posAFileID = fileIndexToFileID(posAFileIndex);
 			size_t posBFileID = fileIndexToFileID(posBFileIndex);
 			RawClonePair pd[2] = {
-				RawClonePair(posAFileID, posA - *posAFile, posA - *posAFile + length, 
-					posBFileID, posB - *posBFile, posB - *posBFile + length, 
+				RawClonePair(posAFileID, posA - *posAFile, posA - *posAFile + length,
+					posBFileID, posB - *posBFile, posB - *posBFile + length,
 					cloneSetReferenceNumber)
 			};
 			pd[1] = pd[0];
@@ -967,7 +967,7 @@ void force_extension_i(std:: string *pFileName, StringFwdIterator begin, StringF
 	t += extension;
 }
 
-}; // namespace
+} // namespace
 
 void force_extension(std:: string *pFileName, const std:: string &extension)
 {
@@ -1052,14 +1052,14 @@ private:
 	size_t multiply;
 	int optionDetectFrom;
 	std::set<std::string> maskRemarks;
-	ThreadFunction threadFunction; 
+	ThreadFunction threadFunction;
 	PreprocessedFileRawReader rawReader;
 	bool optionParameterization;
 	boost::optional<std::string> optionParseErrors;
 	boost::optional<size_t> lengthLimit;
-public: 
-	CloneDetectionMain() : optionVerbose(false), 
-			optionDebugUnsort(false), 
+public:
+	CloneDetectionMain() : optionVerbose(false),
+			optionDebugUnsort(false),
 			optionDebugSortOnly(false),
 			optionOnlyPreprocess(false),
 			optionShapingLevel(2),
@@ -1067,8 +1067,8 @@ public:
 			optionB(50),
 			optionT(12),
 			optionParameterUnification(true),
-			chunkSize(60 * 1024 * 1024), 
-			bottomUnitLength(0), 
+			chunkSize(60 * 1024 * 1024),
+			bottomUnitLength(0),
 			multiply(0),
 			optionDetectFrom(DETECT_WITHIN_FILE | DETECT_BETWEEN_FILES | DETECT_BETWEEN_GROUPS),
 			optionParameterization(true),
@@ -1285,13 +1285,13 @@ private:
 					optionWSpecified = true;
 					if (! (i + 1 < argv.size())) throw SystemError("error: option -w requires an argument", 1);
 					std:: string a = argv[i + 1];
-					boost::array<std:: pair<char, bool>, 3> params = {{ 
-						std:: pair<char, bool>('w', (optionDetectFrom & DETECT_WITHIN_FILE) != 0), 
+					boost::array<std:: pair<char, bool>, 3> params = {{
+						std:: pair<char, bool>('w', (optionDetectFrom & DETECT_WITHIN_FILE) != 0),
 						std:: pair<char, bool>('f', (optionDetectFrom & DETECT_BETWEEN_FILES) != 0),
 						std:: pair<char, bool>('g', (optionDetectFrom & DETECT_BETWEEN_GROUPS) != 0)
 					}};
 					if (! scanPlusMinus(&params[0], params.size(), a)) throw SystemError("error: invalid parameter for option -w", 1);
-					optionDetectFrom = (params[0].second ? DETECT_WITHIN_FILE : 0) 
+					optionDetectFrom = (params[0].second ? DETECT_WITHIN_FILE : 0)
 							| (params[1].second ? DETECT_BETWEEN_FILES : 0)
 							| (params[2].second ? DETECT_BETWEEN_GROUPS : 0);
 					++i;
@@ -1351,7 +1351,7 @@ private:
 				else {
 					int lastFileID = inputFiles.empty() ? 0 : inputFiles.back().fileID;
 					int fileID = lastFileID + 1;
-					inputFiles.push_back(InputFileData(fileID, curGroupID, argi));						
+					inputFiles.push_back(InputFileData(fileID, curGroupID, argi));
 					if (fileID > largestFileID) {
 						largestFileID = fileID;
 					}
@@ -1479,7 +1479,7 @@ private:
 			largestFileID = fileID;
 		}
 	}
-	void readFileList_ac(const std::string &listFileName, int *pLargestFileID, int *pCurGroupID) 
+	void readFileList_ac(const std::string &listFileName, int *pLargestFileID, int *pCurGroupID)
 	{
 		int &largestFileID = *pLargestFileID;
 		int &curGroupID = *pCurGroupID;
@@ -1521,7 +1521,7 @@ private:
 					if (! is_utf8_nocontrol(remStrUtf8)) throw SystemError(boost::format("error: a control character appears in file remark in file list: '%s'") % listFileName, 1);
 					inputFileRemarks[*lastFileID].push_back(remStrUtf8);
 				}
-				else {						
+				else {
 					if (fields.size() == 1) {
 						assert(largestFileID < std::numeric_limits<int>::max());
 						fileID = largestFileID + 1;
@@ -1598,9 +1598,9 @@ private:
 		std:: cerr << "error: can't open a preprocessed file of souce file: '" << fileName << "' (#4)" << std:: endl;
 		return 2;
 	}
-	int fetchPreprocessedFiles(std::vector<ccfx_token_t> *pSeq, std::vector<size_t> *pFileLengths, 
-			int fiStart, size_t countMaxFetched, 
-			const std::vector<size_t> &selectedToInputTable, PreprocessedFileReader *pPreprocessedFileReader, 
+	int fetchPreprocessedFiles(std::vector<ccfx_token_t> *pSeq, std::vector<size_t> *pFileLengths,
+			int fiStart, size_t countMaxFetched,
+			const std::vector<size_t> &selectedToInputTable, PreprocessedFileReader *pPreprocessedFileReader,
 			bool optionParameterUnification, size_t chunkSize) const
 	{
 		std::vector<ccfx_token_t> &seq = *pSeq;
@@ -1632,7 +1632,7 @@ private:
 		lis.setVersion(APPVERSION[0], APPVERSION[1], APPVERSION[2]);
 		lis.setMinimumLength(optionB);
 		lis.setShapingLevel(optionShapingLevel);
-		lis.addOption("j", optionMajoritarianShaper ? "+" : "-"); 
+		lis.addOption("j", optionMajoritarianShaper ? "+" : "-");
 		lis.setUseParameterUnification(optionParameterUnification);
 		lis.setMinimumTokenSetSize(optionT);
 		if (chunkSize % (1024 * 1024) == 0) {
@@ -1727,7 +1727,7 @@ private:
 		cd.setMultiply(multiply);
 		size_t unitLength = cd.getUnitLength();
 		assert(unitLength <= optionB);
-		
+
 		std::vector<size_t> selectedToInputTable;
 		selectedToInputTable.reserve(inputFiles.size() - maskedFiles.size());
 		if (! maskedFiles.empty()) {
@@ -1886,14 +1886,14 @@ private:
 					}
 #pragma omp section
 					{
-						rPrefetch = fetchPreprocessedFiles(&seqPrefetch, &fileLengthsPrefetch, 
-							fiNext, 20, 
-							selectedToInputTable, pPreprocessedFileReader.get(), 
+						rPrefetch = fetchPreprocessedFiles(&seqPrefetch, &fileLengthsPrefetch,
+							fiNext, 20,
+							selectedToInputTable, pPreprocessedFileReader.get(),
 							optionParameterUnification, chunkSize);
 						fiNext += fileLengthsPrefetch.size();
 					}
 				} // end #pragma omp sections
-				
+
 				progress += fileLengthsFetched.size();
 				progressRep.reportProgress(progress);
 				if (processedTokens >= chunkSize) {
@@ -2015,7 +2015,7 @@ private:
 									}
 									seq.insert(seq.end(), seqFetched.begin() + 1, seqFetched.end());
 									assert(seq.size() == prevFileLengthTotal);
-									
+
 									if (giStart == fi) {
 										if (gi == selectedToInputTable.size()) {
 											lis.setAllMode();
@@ -2042,9 +2042,9 @@ private:
 								}
 #pragma omp section
 								if (nextGiPrefetch < selectedToInputTable.size()) {
-									rPrefetch = fetchPreprocessedFiles(&seqPrefetch, &fileLengthsPrefetch, 
-										nextGiPrefetch, 0, 
-										selectedToInputTable, &preprocessedFileReader, 
+									rPrefetch = fetchPreprocessedFiles(&seqPrefetch, &fileLengthsPrefetch,
+										nextGiPrefetch, 0,
+										selectedToInputTable, &preprocessedFileReader,
 										optionParameterUnification, chunkSize);
 									nextGiPrefetch += fileLengthsPrefetch.size();
 								}
@@ -2086,9 +2086,9 @@ private:
 			}
 			lis.attachFileLengths(&inputFileLengths);
 		}
-		
+
 		lis.closeOutputFile();
-		
+
 		boost::uint64_t detectedClones = lis.countClones();
 		if (optionVerbose) {
 			std:: cerr << "> count of detected clone pairs: " << detectedClones << std:: endl;
@@ -2101,9 +2101,9 @@ public:
 	{
 		assert(argv.size() >= 2);
 		if (argv.size() == 2 || argv[2] == "-h" || argv[2] == "--help") {
-			std:: cout << 
+			std:: cout <<
 				"Usage: ccfx D PREPROCESS_SCRIPT OPTIONS inputfiles..." "\n"
-				"  Detects code clones from input files." "\n" 
+				"  Detects code clones from input files." "\n"
 				"  (Use \"ccfx F -p\" to obtain a list of available preprocess scripts.)" "\n"
 				"Option" "\n"
 				"  -b number: minimum length of a clone fragment. (50)" "\n"
@@ -2111,7 +2111,7 @@ public:
 				"  -d directory: finds input files from the directory." "\n"
 				"  -dn dir: shortcut for '-d dir -n dir'" "\n"
 				"  -i listfile: list of input files." "\n"
-				"  -ig fileid,...: makes a file group." "\n" 
+				"  -ig fileid,...: makes a file group." "\n"
 				"  -j-: don't use majoritarian shaper." "\n"
 				"  -k size: chunk size (60M)." "\n"
 				"  -k-: on-memory detection. don't divide the input into chunks." "\n"
@@ -2175,8 +2175,8 @@ public:
 			boost::array<std::string, 3> messageTable = {{ "invalid name", "doesn't exist", "isn't a file" }};
 			for (size_t ifi = 0; ifi < invalidFiles.size(); ++ifi) {
 				const InvalidFileRecord &r = invalidFiles[ifi];
-				std::cerr << (boost::format("  %s: file ID: %d, path: '%s'") 
-						% messageTable[r.second] 
+				std::cerr << (boost::format("  %s: file ID: %d, path: '%s'")
+						% messageTable[r.second]
 						% inputFiles[r.first].fileID
 						% inputFiles[r.first].path) << std::endl;
 			}
@@ -2317,7 +2317,7 @@ public:
 		return 0;
 	}
 private:
-	int markErrorFiles(const std::vector<std::string> &errorFileNames0) 
+	int markErrorFiles(const std::vector<std::string> &errorFileNames0)
 	{
 		assert(!! optionParseErrors);
 		std::vector<std::string> errorFileNames = errorFileNames0;
@@ -2348,7 +2348,7 @@ private:
 			std::vector<std::string>::const_iterator j = std::lower_bound(errorFileNames.begin(), errorFileNames.end(), ifd.path);
 			if (j != errorFileNames.end() && *j == ifd.path) {
 				errorFileIDs.push_back(ifd.fileID);
-			} 
+			}
 		}
 
 		assert(! errorFileIDs.empty());
@@ -2375,7 +2375,7 @@ private:
 			std:: cerr << "warning: the clone data file is unformal one. it use for debug purpose only" << std:: endl;
 			return 0;
 		}
-		
+
 		if (optionVerbose) {
 			std:: cerr << "> sorting" << std:: endl;
 		}
@@ -2495,7 +2495,7 @@ private:
 //
 static const char *splash = "%s ver. %s for %s (C) 2009-2010 AIST\n";
 
-static const char *usage = 
+static const char *usage =
 	"ccfx [MODE] [-h] OTHER_PARAMETERS..." "\n"
 	"Mode" "\n"
 	//"  c: manipulate preprocess cache" "\n"
@@ -2514,7 +2514,7 @@ static const char *usage =
 namespace data_size_check_for_persistence {
    BOOST_STATIC_ASSERT(sizeof(RawClonePair) == 32);
    //BOOST_STATIC_ASSERT(sizeof(long long) == 8);
-}; // namespace
+} // namespace
 
 //bool data_size_check_for_persistence()
 //{

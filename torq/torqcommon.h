@@ -90,7 +90,7 @@ public:
 		(*pResult).clear();
 		std:: vector<MYWCHAR_T> &r = *pResult;
 		//r.reserve(end - begin);
-		size_t i = begin; 
+		size_t i = begin;
 		while (i < end) {
 			char c = text[i];
 			if (c == '&') {
@@ -112,7 +112,7 @@ public:
 						if (j < end && text[j] == ';') {
 							MYWCHAR_T x;
 #ifdef __linux__
-							sscanf(text.substr(i + 3, j - (i + 3)).c_str(), "%" PRIx32, &x);
+							sscanf(text.substr(i + 3, j - (i + 3)).c_str(), "%" PRIx32, (uint32_t*)(&x));
 #else
 							sscanf(text.substr(i + 3, j - (i + 3)).c_str(), "%lx", &x);
 #endif
@@ -198,7 +198,7 @@ public:
 		(*pResult).clear();
 		std:: vector<MYWCHAR_T> &r = *pResult;
 		//r.reserve(end - begin);
-		size_t i = begin; 
+		size_t i = begin;
 		while (i < end) {
 			MYWCHAR_T c = text[i];
 			if (c == '&') {
@@ -541,8 +541,8 @@ public:
 
 		v.alphabet = 0;
 		r = sscanf(str.c_str(), "%d.%d.%d", &v.maj, &v.min0, &v.min1);
-		if (0 <= v.maj && v.maj < 256 
-				&& 0 <= v.min0 && v.min0 < 256 
+		if (0 <= v.maj && v.maj < 256
+				&& 0 <= v.min0 && v.min0 < 256
 				&& 0 <= v.min1 && v.min1 < 256) {
 			*this = v;
 			return true;
@@ -622,6 +622,6 @@ public:
 	}
 };
 
-}; // namespace
+} // namespace
 
 #endif // TORQCOMMON_H

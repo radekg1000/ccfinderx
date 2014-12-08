@@ -186,7 +186,7 @@ private:
 	{
 		return std::find(parens.begin() + parenCount, parens.end(), token) != parens.end();
 	}
-	inline bool isNotParen(const ElemType &token) const 
+	inline bool isNotParen(const ElemType &token) const
 	{
 		return std::find(parens.begin(), parens.end(), token) == parens.end();
 	}
@@ -196,7 +196,7 @@ private:
 		int depth0 = beginPos.first;
 		std:: pair<int, size_t> pos = beginPos;
 		std:: pair<int, size_t> flatEndPos = pos;
-		
+
 		assert(end <= (*pSeq).size());
 		while (pos.second < end) {
 			ElemType token = (*pSeq)[pos.second];
@@ -244,7 +244,7 @@ private:
 				(*pFragments).push_back(fragment);
 			}
 		}
-		
+
 		pos = flatEndPos;
 		while (pos.second < end && isOpenParen((*pSeq)[pos.second])) {
 			++pos.first;
@@ -254,6 +254,6 @@ private:
 	}
 };
 
-}; // namespace
+} // namespace
 
 #endif // SHAPED_FRAGMENT_CALCULATOR_H

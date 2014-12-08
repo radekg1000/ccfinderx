@@ -22,7 +22,7 @@ public:
 
 class ParseError : public RuntimeError {
 public:
-	ParseError(const std::string &causeStr) 
+	ParseError(const std::string &causeStr)
 		: RuntimeError(causeStr)
 	{
 	}
@@ -81,6 +81,6 @@ public:
 	std::string format(const Tree &tree) const;
 };
 
-};
+}
 
 #endif // EASYTORQ_H

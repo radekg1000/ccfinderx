@@ -303,7 +303,7 @@ private:
 			errorMessage = (boost::format("can't create a file '%s'") % output).str();
 			return false;
 		}
-		
+
 		FILE *pInput = fopen(input.c_str(), "rb");
 		if (pInput == NULL) {
 			fclose(pOutput);
@@ -335,7 +335,7 @@ private:
 			errorMessage = (boost::format("can't create a file '%s'") % output).str();
 			return false;
 		}
-		
+
 		FILE *pInput = fopen(input.c_str(), "rb");
 		if (pInput == NULL) {
 			fclose(pOutput);
@@ -355,10 +355,10 @@ private:
 				FPUTC(ch, pOutput);
 			}
 		}
-		
+
 		std:: vector<ItemType> buffer;
 		buffer.resize(blockSize);
-		
+
 		unsigned long long remainCount = itemCount;
 		while (remainCount > 0) {
 			boost::int64_t pos = FTELL64(pInput);
@@ -370,30 +370,30 @@ private:
 			size_t readCount = freadItem(&buffer[0], itemToBeReadCount, pInput);
 			if (readCount != itemToBeReadCount) {
 				errorMessage = "broken file";
-				
+
 				fclose(pInput);
 				fclose(pOutput);
 
 				return false;
 			}
 			assert(readCount == itemToBeReadCount);
-			
+
 			remainCount -= itemToBeReadCount;
-			
+
 			std:: pair<boost::int64_t, unsigned long long> block;
 			block.first = pos;
 			block.second = readCount;
 			blocks.push_back(block);
-			
+
 			if (isStableSort) {
 				std:: stable_sort(buffer.begin(), buffer.begin() + readCount, itemComparator);
 			}
 			else {
 				std:: sort(buffer.begin(), buffer.begin() + readCount, itemComparator);
 			}
-			
+
 			fwriteItem(&buffer[0], readCount, pOutput);
-			
+
 			if (readCount < buffer.size()) {
 				break; // while
 			}
@@ -482,7 +482,7 @@ private:
 				}
 				inputs.push_back(frd);
 			}
-			
+
 			while (true) {
 				for (size_t i = 0; i < inputs.size(); ++i) {
 					if (inputs[i].rest == 0) {
@@ -506,7 +506,7 @@ private:
 						minIndex = i;
 					}
 				}
-				
+
 				FRD &frd = inputs[minIndex];
 				size_t c = fwriteItem(&frd.curData, 1, pOutput);
 				assert(c == 1);
@@ -522,7 +522,7 @@ private:
 		}
 
 		blocks.swap(newBlocks);
-		
+
 		fclose(pOutput);
 		return true;
 	}
@@ -580,13 +580,13 @@ private:
 			unsigned long long *pOutputCount, ItemTypeUniqFunc &itemUniq_)
 	{
 		errorMessage.clear();
-		
+
 		FILE *pOutput = fopen(uniqed.c_str(), "wb");
 		if (pOutput == NULL) {
 			errorMessage = (boost::format("can't create a file '%s'") % uniqed).str();
 			return false;
 		}
-		
+
 		FILE *pInput = fopen(sortedInput.c_str(), "rb");
 		if (pInput == NULL) {
 			fclose(pOutput);
@@ -649,7 +649,7 @@ private:
 					return false;
 				}
 				--remainCount;
-				
+
 				if (itemUniq_(pLeft, pRight)) {
 					// the two values are not merged
 					fwriteItem(pLeft, 1, pOutput);
@@ -664,7 +664,7 @@ private:
 			// here, left is holding a value
 			fwriteItem(pLeft, 1, pOutput);
 			++writeCount;
-			
+
 			if (pOutputCount != NULL) {
 				*pOutputCount = writeCount;
 			}
@@ -825,7 +825,7 @@ public:
 };
 
 
-}; // namespace
+} // namespace
 
 #endif // DATASTRUCTUREONFILE_H
 

@@ -342,7 +342,7 @@ public:
 		if (! printPreprocessScript(pFile)) {
 			return false;
 		}
-		
+
 		switch (version[1]) {
 		case 0:
 		case 1:
@@ -359,7 +359,7 @@ public:
 			assert(false);
 			break;
 		}
-		
+
 		switch (version[1]) {
 		case 0:
 		case 1:
@@ -378,7 +378,7 @@ public:
 		if (! printClonePairs(pFile)) {
 			return false;
 		}
-		
+
 		switch (version[1]) {
 		case 0:
 		case 1:
@@ -546,7 +546,7 @@ private:
 				flip_endian(&len, sizeof(boost::int32_t));
 
 				(*pOutput) << id << "\t" << defaultDecoder.encode(toWStringV(fileName)) << "\t" << len << std:: endl;
-				
+
 				fileName.clear();
 
 				int ch2 = fgetc(pFile);
@@ -738,7 +738,7 @@ public:
 
 		std:: string tempInput = make_temp_file_on_the_same_directory(sorted, "ccfxsorting1", ".tmp");
 		std:: string tempOutput = make_temp_file_on_the_same_directory(sorted, "ccfxsorting2", ".tmp");
-		
+
 		if (maxMemoryUse == 0) {
 			blockSize = (512 * 1024 * 1024 /* 512MB */) / sizeof(RawClonePair);
 		}
@@ -755,7 +755,7 @@ public:
 		if (! copyHeader(tempOutput, unsorted)) {
 			return false;
 		}
-		
+
 		if (! copySortBlocks(tempOutput, unsorted)) { // assign bodyEndPos, outputBodyEndPos, bodySize, blocks
 			return false;
 		}
@@ -797,7 +797,7 @@ public:
             return true;
         }
 
-		virtual bool isValidClonePair(const RawFileBeginEnd &left, const RawFileBeginEnd &right, boost::uint64_t cloneID) 
+		virtual bool isValidClonePair(const RawFileBeginEnd &left, const RawFileBeginEnd &right, boost::uint64_t cloneID)
 		{
 			return isValidCloneID(cloneID) && isValidFileID(left.file), isValidFileID(right.file);
 		}
@@ -816,14 +816,14 @@ public:
 		if (! filterHeader(filtered, original, pFilter)) {
 			return false;
 		}
-		
+
 		if (! filterBody(filtered, original, pFilter)) {
 			return false;
 		}
 
 		if (! filterFooter(filtered, original, pFilter)) {
 			return false;
-		} 
+		}
 
 		return true;
 	}
@@ -855,7 +855,7 @@ public:
             return true;
         }
 
-		virtual bool isValidClonePair(const RawFileBeginEnd &left, const RawFileBeginEnd &right, boost::uint64_t cloneID) 
+		virtual bool isValidClonePair(const RawFileBeginEnd &left, const RawFileBeginEnd &right, boost::uint64_t cloneID)
 		{
 			return isValidCloneID(cloneID) && isValidFileID(left.file), isValidFileID(right.file);
 		}
@@ -886,7 +886,7 @@ public:
 		if (! filterHeaderFileByFile(filtered, original, pFilter)) {
 			return false;
 		}
-		
+
 		if (! filterBodyFileByFile(filtered, original, pFilter)) {
 			return false;
 		}
@@ -919,7 +919,7 @@ private:
 		if (! copyFormat(pOutput, pInput)) {
 			return false;
 		}
-		
+
 		if (! copyOptions_v2(pOutput, pInput)) {
 			return false;
 		}
@@ -935,7 +935,7 @@ private:
 		if (! copyInputFileRemarks(pOutput, pInput)) {
 			return false;
 		}
-		
+
 		bodyStartPos = FTELL64(pInput);
 		outputBodyStartPos = FTELL64(pOutput);
 		assert(bodyStartPos == outputBodyStartPos);
@@ -954,24 +954,24 @@ private:
 			return false;
 		}
 		FSEEK64(pOutput, outputBodyStartPos, SEEK_SET);
-		
+
 		FileStructWrapper pInput(input, "rb" F_SEQUENTIAL_ACCESS_OPTIMIZATION);
 		if (! (bool)pInput) {
 			errorMessage = (boost::format("can't open a file '%s'") % input).str();
 			return false;
 		}
 		FSEEK64(pInput, bodyStartPos, SEEK_SET);
-		
+
 		std:: vector<RawClonePair> buffer;
 		assert(blockSize < std::numeric_limits<size_t>::max());
 		buffer.resize(blockSize);
-		
+
 		bodySize = 0;
 		while (true) {
 			std:: pair<boost::int64_t, unsigned long long> block;
 			block.first = FTELL64(pInput);
 			size_t readCount = fread_RawClonePair(&buffer[0], buffer.size(), pInput);
-			
+
 			bool includingTerminator = readCount > 0 && buffer[readCount - 1] == terminator;
 			if (includingTerminator) {
 				block.second = readCount - 1;
@@ -996,7 +996,7 @@ private:
 		bodyEndPos = bodyStartPos + sizeof(rawclonepair::RawClonePair) * bodySize;
 		outputBodyEndPos = FTELL64(pOutput);
 		assert(bodyEndPos == outputBodyEndPos);
-		
+
 		return true;
 	}
 	bool copyFooter(const std::string &output, const std::string &input)
@@ -1007,7 +1007,7 @@ private:
 			return false;
 		}
 		FSEEK64(pOutput, bodyEndPos, SEEK_SET);
-		
+
 		FileStructWrapper pInput(input, "rb" F_SEQUENTIAL_ACCESS_OPTIMIZATION);
 		if (! (bool)pInput) {
 			errorMessage = (boost::format("can't open a file '%s'") % input).str();
@@ -1077,14 +1077,14 @@ private:
 			return false;
 		}
 		FSEEK64(pOutput, outputBodyStartPos, SEEK_SET);
-		
+
 		FileStructWrapper pInput(input, "rb" F_SEQUENTIAL_ACCESS_OPTIMIZATION);
 		if (! (bool)pInput) {
 			errorMessage = (boost::format("can't open a file '%s'") % input).str();
 			return false;
 		}
 		FSEEK64(pInput, bodyStartPos, SEEK_SET);
-		
+
 		bodySize = 0;
 		while (true) {
 			RawClonePair data;
@@ -1108,7 +1108,7 @@ private:
 		//bodyEndPos = FTELL64(pInput);
 		bodyEndPos = bodyStartPos + sizeof(rawclonepair::RawClonePair) * bodySize;
 		outputBodyEndPos = FTELL64(pOutput);
-		
+
 		return true;
 	}
 	void transform_and_write(ThreadQueue<std::vector<RawClonePair> *> *pQue, FileStructWrapper *ppOutput, FilterFileByFile *pFilter)
@@ -1118,9 +1118,9 @@ private:
 		std::vector<RawClonePair> *pPairs;
 		while ((pPairs = (*pQue).pop()) != NULL) {
 			std::vector<RawClonePair> &pairs = *pPairs;
-			
+
 			(*pFilter).transformPairs(&pairs);
-			
+
 			if (! pairs.empty()) {
 				boost::int32_t leftFile = pairs[0].left.file;
 
@@ -1158,14 +1158,14 @@ private:
 			return false;
 		}
 		FSEEK64(pOutput, outputBodyStartPos, SEEK_SET);
-		
+
 		FileStructWrapper pInput(input, "rb" F_SEQUENTIAL_ACCESS_OPTIMIZATION);
 		if (! (bool)pInput) {
 			errorMessage = (boost::format("can't open a file '%s'") % input).str();
 			return false;
 		}
 		FSEEK64(pInput, bodyStartPos, SEEK_SET);
-		
+
 		ThreadQueue<std::vector<RawClonePair> *> que(10);
 		boost::thread eater(boost::bind(&RawClonePairFileTransformer::transform_and_write, this, &que, &pOutput, pFilter));
 
@@ -1190,7 +1190,7 @@ private:
 				std::vector<RawClonePair> &pairs = *pPairs;
 				pairs.push_back(data);
 				boost::int32_t leftFile = pairs[0].left.file;
-	
+
 				while (true) {
 					size_t readCount = fread_RawClonePair(&data, 1, pInput);
 					if (readCount == 0) {
@@ -1217,10 +1217,10 @@ private:
 		//bodyEndPos = FTELL64(pInput);
 		bodyEndPos = bodyStartPos + sizeof(rawclonepair::RawClonePair) * bodySize;
 		outputBodyEndPos = FTELL64(pOutput);
-		
+
 		return true;
 	}
-	
+
 	template<typename Filter>
 	bool filterFooter_i(const std:: string &output, const std:: string &input, Filter* UNUSED(pFilter))
 	{
@@ -1314,7 +1314,7 @@ private:
 				}
 				inputs.push_back(frd);
 			}
-			
+
 			while (true) {
 				for (size_t i = 0; i < inputs.size(); ++i) {
 					if (inputs[i].rest == 0) {
@@ -1333,7 +1333,7 @@ private:
 						minIndex = i;
 					}
 				}
-				
+
 				FRD &frd = inputs[minIndex];
 				fwrite_RawClonePair(&frd.curData, 1, pOutput);
 				--frd.rest;
@@ -1350,7 +1350,7 @@ private:
 		fwrite_RawClonePair(&terminator, 1, pOutput);
 
 		blocks.swap(newBlocks);
-		
+
 		return true;
 	}
 	bool copyVersion(FILE *pOutput, FILE *pInput)
@@ -1371,12 +1371,12 @@ private:
 
 		{
 			boost::int32_t v[3];
-			
+
 			FREAD(v, sizeof(boost::int32_t), 3, pInput);
 			for (size_t i = 0; i < 3; ++i) {
 				flip_endian(&v[i], sizeof(boost::int32_t));
 			}
-			
+
 			if (! checkVersion(&v[0])) {
 				errorMessage = "version mismatch";
 				return false;
@@ -1424,7 +1424,7 @@ private:
 	//	}
 	//	const std:: string s = "pa:d";
 	//	FWRITEBYTES(s.data(), s.length(), pOutput);
-	//	
+	//
 	//	return true;
 	//}
 	template<typename Filter>
@@ -1596,7 +1596,7 @@ private:
 		return true;
 	}
 
-	bool copyInputFileRemarks(FILE *pOutput, FILE *pInput) 
+	bool copyInputFileRemarks(FILE *pOutput, FILE *pInput)
 	{
 		while (true) {
 			std::string line;
@@ -1627,11 +1627,11 @@ private:
 			return false;
 		}
 		FWRITE(&id, sizeof(boost::int32_t), 1, pOutput);
-		
+
 		return true;
 	}
 
-	bool copyCloneSetRemarks(FILE *pOutput, FILE *pInput) 
+	bool copyCloneSetRemarks(FILE *pOutput, FILE *pInput)
 	{
 		while (true) {
 			std::string line;
@@ -1662,7 +1662,7 @@ private:
 			return false;
 		}
 		FWRITE(&id, sizeof(boost::int64_t), 1, pOutput);
-		
+
 		return true;
 	}
 
@@ -1690,7 +1690,7 @@ private:
 					FWRITE(&len, sizeof(boost::int32_t), 1, pOutput);
 				}
 				buf.clear();
-				
+
 				int ch2 = fgetc(pInput);
 				if (ch2 == '\n') {
 					FPUTC(ch2, pOutput);
@@ -1733,7 +1733,7 @@ private:
 
 				files.push_back(RawFileData(id, len, buf.substr(0, buf.length() - 1)));
 				buf.clear();
-				
+
 				int ch2 = fgetc(pInput);
 				if (ch2 == '\n') {
 					boost::int32_t id;
@@ -1774,16 +1774,16 @@ private:
 	}
 };
 
-//enum { 
-//	OPTION_MINIMUM_CLONE_LENGTH, 
-//	OPTION_SHAPER_LEVEL, 
-//	OPTION_USE_PARAMETER_UNIFICATION, 
+//enum {
+//	OPTION_MINIMUM_CLONE_LENGTH,
+//	OPTION_SHAPER_LEVEL,
+//	OPTION_USE_PARAMETER_UNIFICATION,
 //	OPTION_MINIMUM_TOKEN_SET_SIZE,
 //OPTION_SIZE
 //};
 
 class RawClonePairFileAccessor : private AppVersionChecker {
-private:	
+private:
 	class IDPathLen {
 	public:
 		int id;
@@ -1888,24 +1888,24 @@ public:
 			close();
 			return false;
 		}
-		
+
 		if (! readVersion(pDataFile)) {
 			close();
 			return false;
 		}
-		
+
 		if (! readFormat(pDataFile)) {
 			close();
 			return false;
 		}
-		
+
 		readOptions_v2(pDataFile);
 
 		if (! readPreprocessScript(pDataFile)) {
 			close();
 			return false;
 		}
-		
+
 		if ((requiredData & FILEDATA) != 0) {
 			if (! readInputFiles_v2(pDataFile)) {
 				close();
@@ -1919,7 +1919,7 @@ public:
 			}
 			fileDescriptions.clear();
 		}
-		
+
 		if ((requiredData & FILEREMARK) != 0) {
 			if (! readFileRemarks(pDataFile)) {
 				close();
@@ -1933,7 +1933,7 @@ public:
 			}
 			fileRemarks.clear();
 		}
-		
+
 		if ((requiredData & CLONEDATA) != 0) {
 			if (! readClonePairs(pDataFile)) {
 				close();
@@ -1946,7 +1946,7 @@ public:
 			assert(false);
 			return false;
 		}
-		
+
 		return true;
 	}
 private:
@@ -1978,7 +1978,7 @@ private:
 
 		return true;
 	}
-	bool readFormat(FILE *pDataFile) 
+	bool readFormat(FILE *pDataFile)
 	{
 		std:: vector<char> buf;
 		buf.resize(4);
@@ -2063,14 +2063,14 @@ private:
 					fileDescriptions.resize(id + 1, dummy);
 					++fileCount;
 				}
-				
+
 				IDPathLen &it = fileDescriptions[id];
 				if (it.id != -1) {
 					errorMessage = "FileID confliction";
 					return false;
 				}
 				it = ipl;
-				
+
 				fileName.clear();
 
 				int ch2 = fgetc(pDataFile);
@@ -2164,7 +2164,7 @@ private:
 			}
 
 			boost::uint64_t cloneSetID = pd.reference;
-			
+
 			// inflate file if needed
 			if (! (cloneSetID < cloneSetIDToFileIDSize)) {
 				int value = -1;
@@ -2175,7 +2175,7 @@ private:
 				}
 				assert(cloneSetID < cloneSetIDToFileIDSize);
 			}
-			
+
 			FSEEK64(pCloneSetIDToFileID, cloneSetID * sizeof(int), SEEK_SET);
 			int value = pd.left.file;
 			FWRITE(&value, sizeof(int), 1, pCloneSetIDToFileID);
@@ -2490,6 +2490,6 @@ public:
 	}
 };
 
-}; // namespece rawclonepair
+} // namespece rawclonepair
 
 #endif // RAWCLONEPAIRDATA_H
