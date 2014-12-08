@@ -93,6 +93,15 @@ if test "$ANT" = "no"; then
 	AC_MSG_ERROR([ant is not installed.])
 fi
 
+#Check for presence of icu4j.jar
+AC_CHECK_FILE(/usr/share/java/icu4j.jar,
+    [ ],
+    [AC_MSG_ERROR([
+		icu4j.jar must bee installed on your system.
+
+		Please install libicu4j-java development package.])
+    ]
+)
 
 AC_CONFIG_FILES([Makefile])
 AC_OUTPUT

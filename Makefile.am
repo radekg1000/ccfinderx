@@ -210,7 +210,7 @@ libeasytorq_la_LDFLAGS = \
 
 all : libeasytorq.la copy_libeasytorq_to_script_dir
 
-copy_libeasytorq_to_script_dir :
+copy_libeasytorq_to_script_dir : libeasytorq.la
 	cp @top_srcdir@/build/.libs/libeasytorq.so @top_srcdir@/build/scripts
 
 
