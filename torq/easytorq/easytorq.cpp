@@ -50,7 +50,8 @@ bool parse_script(const std:: vector<MYWCHAR_T> &script, std:: vector<TRACE_ITEM
 	assert(pErrorMessage != NULL);
 
 	std:: vector<TRACE_ITEM> &trace = *pTrace;
-	std:: map<std:: vector<MYWCHAR_T>, text::Helper::NodeFormat> &nodeFormatsInScript = *pNodeFormatsInScript;
+	//std:: map<std:: vector<MYWCHAR_T>, text::Helper::NodeFormat> &nodeFormatsInScript = //unused variable
+    //    *pNodeFormatsInScript;
 
 	// tokenize the script
 	TorqTokenizer tokenizer;

@@ -436,7 +436,7 @@ std:: vector<MYWCHAR_T> replace(const std:: vector<MYWCHAR_T> &str,
 	std:: vector<MYWCHAR_T> r;
 	size_t i = 0;
 	while (i < str.size()) {
-		MYWCHAR_T ch = str[i];
+		//MYWCHAR_T ch = str[i]; //unused variable
 		if (i + from.size() <= str.size()) {
 			bool match = true;
 			for (size_t j = 0; j < from.size(); ++j) {

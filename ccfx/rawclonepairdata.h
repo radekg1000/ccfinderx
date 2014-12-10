@@ -590,7 +590,8 @@ private:
 
 	bool printInputFiles_v2(FILE *pFile)
 	{
-		bool success = printInputFiles(pFile);
+		/*bool success = */ //unused variable
+        printInputFiles(pFile);
 
 		boost::int32_t id;
 		FREAD(&id, sizeof(boost::int32_t), 1, pFile);

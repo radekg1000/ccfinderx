@@ -187,7 +187,8 @@ JNIEXPORT jintArray JNICALL Java_ccfinderx_CCFinderX_getVersion(
 {
 	{
 		std:: vector<std:: string> args;
-		int r = exec_ccfx(args);
+		/*int r = */ //unused variable
+        exec_ccfx(args);
 	}
 
 	jintArray ary = env->NewIntArray(3);

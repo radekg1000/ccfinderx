@@ -76,7 +76,7 @@ private:
 		std::string &buffer = *pBuffer;
 
 		std::getline(*pInput, buffer, '\n');
-		int ch = buffer[buffer.length() - 1];
+		//int ch = buffer[buffer.length() - 1]; //unused variable
 		if (buffer.length() > 0 && buffer[buffer.length() - 1] == '\r') {
 			buffer.resize(buffer.length() - 1);
 		}

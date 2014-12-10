@@ -203,7 +203,7 @@ private:
 			if (str[si] == '\"') {
 				++si;
 				while ((si < (boost::int32_t)str.size()) && (str[si] != '\"')) {
-					MYWCHAR_T ch = str[si];
+					//MYWCHAR_T ch = str[si]; //unused variable
 					if (str[si] < 0x20) { // is a control char
 						return -1;
 					}

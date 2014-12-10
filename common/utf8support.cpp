@@ -482,7 +482,7 @@ size_t nextCharUTF8String(const std:: string &str, size_t index)
 std:: string remapper(const char *str, size_t strLength)
 {
 	const int maxStackAllocSize = 512 * 1024;
-	size_t bufSize = strLength;
+	//size_t bufSize = strLength; //unused variable
 	DECL_ALLOCA_ARRAY(stackBuf, char, strLength <= maxStackAllocSize ? strLength : 0);
 
 	char *buf = stackBuf.size() > 0 ? stackBuf.c_array() : (new char[strLength]);

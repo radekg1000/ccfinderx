@@ -7,7 +7,7 @@
 #include "../common/hash_map_includer.h"
 #include <algorithm>
 #include <limits>
-#include <iterator> 
+#include <iterator>
 
 #include <boost/cstdint.hpp>
 #include <boost/array.hpp>
@@ -76,7 +76,7 @@ private:
 		//		++li;
 		//		++ri;
 		//	}
-		//	
+		//
 		//	if (li < end) {
 		//		if (ri < right.end) {
 		//			ElemType lt = to_compared(seq, li, begin);
@@ -549,11 +549,11 @@ private:
 			return (*pListener).rangeCheck(cloneSet);
 		}
 
-		virtual void found(const std:: vector<CloneSetItem> &cloneSet, size_t baseLength, 
+		virtual void found(const std:: vector<CloneSetItem> &cloneSet, size_t baseLength,
 				boost::uint64_t cloneSetReferenceNumber)
 		{
 			//const typename std:: vector<ElemType> &seq = refSeq();
-			size_t unitLength = getUnitLength();
+			//size_t unitLength = getUnitLength(); //unused variable
 
 			for (size_t csi = 0; csi < cloneSet.size(); ++csi) {
 				const CloneSetItem &cs = cloneSet[csi];
@@ -720,7 +720,7 @@ public:
 
 		(*pListener).attachSeq(&seq);
 		(*pListener).setUnitLength(unitLength);
-		
+
 		if (seq.size() < unitLength) {
 			return;
 		}
@@ -729,7 +729,7 @@ public:
 		{
 			std:: vector<size_t> cloneCounts;
 			cloneCounts.resize((size_t)(std:: numeric_limits<HashValueType>::max()) + 1, 0);
-			size_t pos = 1; 
+			size_t pos = 1;
 			while (pos < seq.size() - unitLength) {
 				HashValueType h = hashSeq[pos];
 				if (h != 0) {
@@ -738,7 +738,7 @@ public:
 					++pos;
 				}
 				else {
-					if (pos + unitLength < hashSeq.size()) { 
+					if (pos + unitLength < hashSeq.size()) {
 						if (pos > unitLength) {
 							assert(hashSeq[pos + unitLength - 1] == 0);
 							pos += unitLength;
@@ -752,9 +752,9 @@ public:
 					}
 				}
 			}
-			
+
 			cloneFragments.resize((size_t)(std:: numeric_limits<HashValueType>::max()) + 1);
-			pos = 1; 
+			pos = 1;
 			while (pos < seq.size() - unitLength) {
 				HashValueType h = hashSeq[pos];
 				if (h != 0) {
@@ -765,7 +765,7 @@ public:
 					++pos;
 				}
 				else {
-					if (pos + unitLength < hashSeq.size()) { 
+					if (pos + unitLength < hashSeq.size()) {
 						if (pos > unitLength) {
 							assert(hashSeq[pos + unitLength - 1] == 0);
 							pos += unitLength;
@@ -780,14 +780,14 @@ public:
 				}
 			}
 		}
-	
+
 		ThreadQueue<std::vector<std::vector<CloneSetData> > *> que(10);
 		boost::thread eater(boost::bind(&CloneDetector::send_clone_set_data_to_listener, this, &que, pListener));
 
 		size_t worker = std::max((size_t)1, (size_t)numThreads);
 		std::vector<size_t> validCis;
 		validCis.reserve(numThreads);
-		size_t ci = 1; 
+		size_t ci = 1;
 		while (ci < cloneFragments.size()) {
 			validCis.clear();
 			while (ci < cloneFragments.size() && validCis.size() < worker) {
@@ -859,7 +859,7 @@ public:
 		hashSeq.clear();
 	}
 private:
-	void find_clone_set_i(std:: vector<size_t/* pos */> *pPoss, size_t begin, size_t end, 
+	void find_clone_set_i(std:: vector<size_t/* pos */> *pPoss, size_t begin, size_t end,
 			size_t baseLength, CloneSetListener *pListener, std::vector<CloneSetData> *pFoundCloneSets)
 	{
 		if (end - begin <= 1) {
@@ -914,7 +914,7 @@ private:
 			j = k;
 		}
 	}
-	void output_clone_set(const std:: vector<size_t/* pos */> &poss, size_t begin, size_t end, size_t baseLength, CloneSetListener *pListener, 
+	void output_clone_set(const std:: vector<size_t/* pos */> &poss, size_t begin, size_t end, size_t baseLength, CloneSetListener *pListener,
 			std::vector<CloneSetData> *pFoundCloneSets)
 	{
 		if (end - begin == 0 || ! (*pListener).codeCheck(poss[begin], baseLength)) {
@@ -941,10 +941,10 @@ private:
 				while (j < q && to_compared(*pSeq, poss[j] + baseLength, poss[j]) == extensioni) {
 					++j;
 				}
-				
+
 				// here, subsequence begining at i, ..., subsequence begining at j - 1 have the same extension
 				assert(j == q || extensioni != to_compared(*pSeq, poss[j] + baseLength, poss[j]));
-				
+
 				cloneSet.resize(cloneSet.size() + 1);
 				CloneSetItem &cs = cloneSet.back();
 				cs.prev = prevp;
@@ -956,7 +956,7 @@ private:
 
 			p = q;
 		}
-		
+
 		if ((*pListener).rangeCheck(cloneSet)) {
 			std::vector<CloneSetData> &foundCloneSets = *pFoundCloneSets;
 			foundCloneSets.resize(foundCloneSets.size() + 1);
@@ -991,10 +991,10 @@ private:
 	void calc_hash_seq(SequenceHashFunction &hashFunc)
 	{
 		const std::vector<ElemType> &seq = *pSeq;
-		
+
 		hashSeq.clear();
 		hashSeq.resize(seq.size(), 0);
-		
+
 		size_t num = bottomUnitLength * multiply;
 		std:: vector<size_t> factors0;
 		factorize(&factors0, num);
@@ -1004,14 +1004,14 @@ private:
 		else {
 			size_t beginPos = 0;
 			assert(seq.size() == 0 || seq.back() == 0);
-	
+
 			while (beginPos < seq.size() - 1) {
 				typename std::vector<ElemType>::const_iterator j = std::find(seq.begin() + beginPos + 1, seq.end(), 0);
 				size_t nextPos = j - seq.begin();
 				assert(seq[nextPos] == 0);
 				size_t endPos = nextPos + 1;
 				assert(endPos <= seq.size());
-				
+
 				size_t blockSize = endPos - beginPos;
 				if (blockSize < num) {
 					// hashSeq[beginPos ... endPos] has been zero-filled already.
@@ -1020,7 +1020,7 @@ private:
 					int fi = factors0.size() - 1;
 					size_t f = factors0[fi];
 					make_bottom_level_hash_sequence(seq, hashFunc, &hashSeq, f, beginPos, endPos);
-					
+
 					size_t curUnitLength = f;
 					while (--fi >= 0) {
 						size_t f = factors0[fi];
@@ -1034,7 +1034,7 @@ private:
 		}
 	}
 private:
-	static inline void multiple_hash_sequence(SequenceHashFunction &hashFunc, 
+	static inline void multiple_hash_sequence(SequenceHashFunction &hashFunc,
 			std:: vector<HashValueType> *pHashSeq, size_t unitLength, size_t multiply)
 	{
 		std:: vector<HashValueType> &hashSeq = *pHashSeq;
@@ -1057,14 +1057,14 @@ private:
 		assert(endPos <= hashSeq.size());
 		assert(hashSeq[endPos - 1] == 0);
 		assert(unitLength >= 1);
-		
+
 		for (int i = beginPos + 1; i < endPos - unitLength * multiply; ++i) {
 			HashValueType value = 0;
 			for (size_t j = 0; j < multiply; ++j) {
 				HashValueType h = hashSeq[i + j * unitLength];
-				/* 
+				/*
 				** when i == endPos - unitLength * multiply - 1 and j == multiply - 1,
-				** i + j * unitLength 
+				** i + j * unitLength
 				**   = endPos - unitLength * multiply - 1 + unitLength * (multiply - 1)
 				**   = endPos - unitLength * multiply - 1 + unitLength * multiply - unitLength
 				**   = endPos - unitLength - 1
@@ -1078,7 +1078,7 @@ private:
 		std::fill(hashSeq.begin() + endPos - unitLength * multiply, hashSeq.begin() + endPos, 0);
 	}
 
-	static inline void make_bottom_level_hash_sequence(const std:: vector<ElemType> &seq, SequenceHashFunction &hashFunc, 
+	static inline void make_bottom_level_hash_sequence(const std:: vector<ElemType> &seq, SequenceHashFunction &hashFunc,
 			std:: vector<HashValueType> *pHashSeq, size_t unitLength)
 	{
 		std:: vector<HashValueType> &hashSeq = *pHashSeq;
@@ -1087,7 +1087,7 @@ private:
 			make_bottom_level_hash_sequence(seq, hashFunc, pHashSeq, unitLength, 0, seq.size());
 		}
 	}
-	static void make_bottom_level_hash_sequence(const std:: vector<ElemType> &seq, SequenceHashFunction &hashFunc, 
+	static void make_bottom_level_hash_sequence(const std:: vector<ElemType> &seq, SequenceHashFunction &hashFunc,
 			std:: vector<HashValueType> *pHashSeq, size_t unitLength, size_t beginPos, size_t endPos)
 	{
 		assert(beginPos < seq.size());
@@ -1138,11 +1138,11 @@ private:
 	//static void fill_zero(const std:: vector<ElemType> &seq, std:: vector<HashValueType> *pHashSeq, size_t unitLength)
 	//{
 	//	assert(seq.size() == (*pHashSeq).size());
-	//	
+	//
 	//	if ((*pHashSeq).size() == 0) {
 	//		return;
 	//	}
-	//	size_t i = (*pHashSeq).size() - 1; 
+	//	size_t i = (*pHashSeq).size() - 1;
 	//	while (true) {
 	//		if (seq[i] == 0) {
 	//			for (size_t j = 0; j < unitLength; ++j) {

@@ -1135,7 +1135,7 @@ private:
 	int analyzeCommandLine(const std::vector<std::string> &argv)
 	{
 		bool optionWSpecified = false;
-		bool optionOSpecified = false;
+		//bool optionOSpecified = false; //unused variable
 
 		int curGroupID = 1;
 
@@ -1833,7 +1833,7 @@ private:
 			std:: cerr << "> detecting identical substrings" << std:: endl;
 		}
 
-		bool niceMode = false;
+		//bool niceMode = false; //unused variable
 		size_t chunks = 0;
 		bool chunkCountingDone = false;
 		size_t progress = 0;
@@ -1940,7 +1940,7 @@ private:
 					preprocessedFileReader.setRawReader(rawReader);
 					preprocessedFileReader.setParameterizationUsage(optionParameterization);
 
-					size_t fiStart = fi;
+					//size_t fiStart = fi; //unused variable
 
 					fileStartPoss.clear();
 					fileIDs.clear();
@@ -2178,7 +2178,7 @@ public:
 		std::vector<InvalidFileRecord> invalidFiles;
 		for (size_t i = 0; i < inputFiles.size(); ++i) {
 			const std::string file = inputFiles[i].path;
-			int fileID = inputFiles[i].fileID;
+			//int fileID = inputFiles[i].fileID; //unused variable
 			if (! is_path_utf8_safe(file)) {
 				invalidFiles.push_back(InvalidFileRecord(i, IF_INVALID_NAME));
 			}
@@ -2231,7 +2231,7 @@ public:
 			if (r != 0) return r;
 		}
 
-		bool normalExecution = ! (optionOnlyPreprocess || optionDebugSortOnly);
+		//bool normalExecution = ! (optionOnlyPreprocess || optionDebugSortOnly); //unused variable
 
 		{
 			std::vector<std::string> fileNames;

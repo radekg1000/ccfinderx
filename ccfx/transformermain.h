@@ -514,8 +514,8 @@ private:
 				return;
 			}
 
-			const rawclonepair::RawClonePair &p0 = pairs[0];
-			boost::int32_t leftFileID = p0.left.file;
+			//const rawclonepair::RawClonePair &p0 = pairs[0]; //unused variable
+			//boost::int32_t leftFileID = p0.left.file; //unused variable
 
 			// determin the smallest clone id for each fragment
 			std::vector<std::pair<boost::uint64_t, boost::uint64_t> > idTrans;
@@ -551,6 +551,7 @@ private:
 					assert(base.cloneIDTransformTable.size() == idTransLast.first + 1);
 				}
 			}
+
 			for (size_t i = 0; i < idTrans.size(); ++i) {
 				const std::pair<boost::uint64_t, boost::uint64_t> &idTransI = idTrans[i];
 				boost::uint64_t fromID = idTransI.first;
@@ -573,7 +574,7 @@ private:
 			countOfRemovedClonePairs += pairs.end() - endPos;
 			pairs.resize(endPos - pairs.begin());
 		}
-	public:
+
 		long long getCountOfRemovedClonePairs() const
 		{
 			return countOfRemovedClonePairs;
@@ -604,7 +605,7 @@ private:
 			pQueIdTrans = new ThreadQueue<std::vector<std::pair<boost::uint64_t, boost::uint64_t> > *>(10);
 			pEaterIdTrans = new boost::thread(boost::bind(&Shaper::idtrans_reflect_to_base, this, pQueIdTrans));
 		}
-	public:
+
 		void join()
 		{
 			if (pEaterIdTrans != NULL) {
@@ -614,6 +615,7 @@ private:
 				//delete pEaterIdTrans;
 			}
 		}
+
 	private:
 		void idtrans_reflect_to_base(ThreadQueue<std::vector<std::pair<boost::uint64_t, boost::uint64_t> > *> *pQueIdTrans)
 		{
@@ -633,6 +635,7 @@ private:
 						assert(base.cloneIDTransformTable.size() == idTransLast.first + 1);
 					}
 				}
+
 				for (size_t i = 0; i < idTrans.size(); ++i) {
 					const std::pair<boost::uint64_t, boost::uint64_t> &idTransI = idTrans[i];
 					boost::uint64_t fromID = idTransI.first;
@@ -649,9 +652,11 @@ private:
 						base.cloneIDTransformTable.set(toID, id_and_stop(r.id, false));
 					}
 				}
+
 				delete pIdTrans;
 			}
 		}
+
 	public:
 		void setRawReader(const PreprocessedFileRawReader &rawReader_)
 		{
@@ -705,7 +710,7 @@ private:
 			//	std:: cout << pair.left.file << "." << pair.left.begin << "-" << pair.left.end << ", " << pair.right.file << "." << pair.right.begin << "-" << pair.right.end << ", " << pair.reference << std:: endl;
 			//}
 
-			const int shift_by_first_zero = 1;
+			//const int shift_by_first_zero = 1; //unused variable
 
 			std::vector<std::string> minLenValue = base.accessor.getOptionValues("b");
 			if (! minLenValue.empty()) {
@@ -819,6 +824,7 @@ private:
 				}
 			}
 		}
+
 	public:
 		long long getCountOfRemovedClonePairs() const
 		{
@@ -1208,7 +1214,7 @@ private:
 				std::vector<rawclonepair::RawClonePair> clonePairsPrefetched;
 				accessor.getRawClonePairsOfFile(fileIDPrefetched, &clonePairsPrefetched);
 				for (size_t fi = 0; fi < fileIDs.size(); ++fi) {
-					int fileID = fileIDs[fi];
+					//int fileID = fileIDs[fi];
 					assert(fi == fiPrefetched);
 					std::vector<rawclonepair::RawClonePair> clonePairs;
 					clonePairs.swap(clonePairsPrefetched);
@@ -1230,7 +1236,7 @@ private:
 			}
 
 			for (HASH_MAP<boost::uint64_t, std::vector<TrimDown> >::iterator i = trimDownTable.begin(); i != trimDownTable.end(); ++i) {
-				boost::uint64_t src = i->first;
+				//boost::uint64_t src = i->first; //unused variable
 				std::vector<TrimDown> &ts = i->second;
 				//for (size_t j = 0; j < ts.size(); ++j) {
 				//	const TrimDown &t = ts[j];

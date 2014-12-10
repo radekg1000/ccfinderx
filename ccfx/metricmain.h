@@ -1405,7 +1405,7 @@ public:
 		std::string errorMessage;
 		for (size_t i = 0; i < fileIDs.size(); ++i) {
 			++count;
-			int fileID = fileIDs[i];
+			//int fileID = fileIDs[i]; //unused variable
 
 			if (fileMetricRequired) {
 				fmc.scannotFile(i);

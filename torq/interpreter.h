@@ -1122,7 +1122,7 @@ protected:
 
 	boost::int32_t do_Pattern(boost::int32_t pc0, const text::TokenSequence &source, boost::int32_t pos0)
 	{
-		std:: vector<MATCH> * const pMatchSeq = &matchSeq;
+		//std:: vector<MATCH> * const pMatchSeq = &matchSeq; //unused variable
 		recursePc.push_back(pc0);
 
 		boost::int32_t pc = pc0 + 1;
@@ -1606,7 +1606,8 @@ protected:
 
 	boost::int32_t do_XcepPattern(boost::int32_t pc0, const text::TokenSequence &source, boost::int32_t pos0)
 	{
-		std:: vector<MATCH> * const pMatchSeq = &matchSeq;
+		//std:: vector<MATCH> * const pMatchSeq = &matchSeq; //unused variable
+
 		if (! (pos0 < (boost::int32_t)source.size())) {
 			return pos0;
 		}
