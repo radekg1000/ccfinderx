@@ -37,29 +37,35 @@ struct MinMax {
 public:
 	value_type min;
 	value_type max;
+
 public:
 	inline MinMax()
 		: min(), max()
 	{
 	}
+
 	inline MinMax(value_type min_, value_type max_)
 		: min(min_), max(max_)
 	{
 	}
+
 	inline MinMax(const MinMax<value_type> &rhs)
 		: min(rhs.min), max(rhs.max)
 	{
 	}
+
 	inline MinMax(value_type initValue)
 		: min(initValue), max(initValue)
 	{
 	}
+
 public:
 	inline void init(value_type initValue)
 	{
 		min = initValue;
 		max = initValue;
 	}
+
 	inline void update(value_type value)
 	{
 		if (value < min) {
@@ -69,6 +75,7 @@ public:
 			max = value;
 		}
 	}
+
 	inline void setValue(value_type value, bool isInit)
 	{
 		if (isInit) {
@@ -207,6 +214,7 @@ private:
 	MinMax<double> rsiMinMax;
 	MinMax<double> cvrMinMax;
 	MinMax<double> rnrMinMax;
+
 public:
 	FileMetricsCalculator(PreprocessedFileReader *pScannotner, rawclonepair::RawClonePairFileAccessor *pAccessor, const std::string &postfix)
 		:
@@ -226,15 +234,18 @@ public:
         rnrMinMax()
 	{
 	}
+
 public:
 	void setOptionEachItem(bool value)
 	{
 		optionEachItem = value;
 	}
+
 	void setOptionSummary(bool value)
 	{
 		optionSummary = value;
 	}
+
 public:
 	virtual void open(const std::string &fileName_) // called before file scannotning
 	{
@@ -266,6 +277,7 @@ public:
 		fputs("FID" "\t" "LEN" "\t" "CLN" "\t" "NBR" "\t" "RSA" "\t" "RSI" "\t" "CVR" "\n", pOutput);
 #endif
 	}
+
 	virtual void scannotFile(int index) // called for each file
 	{
 		int fileID = fileIDs[index];
@@ -331,6 +343,7 @@ public:
 #endif
 		}
 	}
+
 	virtual void close() // called after scannotning
 	{
 		if (optionSummary) {
@@ -387,6 +400,7 @@ public:
 		fileName.clear();
 		pOutput = NULL;
 	}
+
 private:
 	bool calc_file_metrics(
 		boost::array<long, 7> *pValues, // length, #clones, NBR, RSA*LEN, RSI*LEN, CVR*LEN (#f defined REQUIRE_RNR, then, RNR*LEN)
@@ -428,15 +442,24 @@ private:
 					}
 				}
 				if (pair.right.file != fileID) {
-					assert(0 <= pair.left.begin && pair.left.begin <= pair.left.end && pair.left.end <= tokensCoveredByOthers.size());
-					for (size_t i = pair.left.begin; i < pair.left.end; ++i) {
-						tokensCoveredByOthers.set(i, true);
+					assert(
+                        (0 <= pair.left.begin) &&
+                        (pair.left.begin <= pair.left.end) &&
+                        (pair.left.end <= (boost::int32_t)tokensCoveredByOthers.size()));
+					for (boost::int32_t i = pair.left.begin; i < pair.left.end; ++i) {
+                        assert(i > 0);
+						tokensCoveredByOthers.set((size_t)i, true);
 					}
 				}
 				else {
-					assert(0 <= pair.left.begin && pair.left.begin <= pair.left.end && pair.left.end <= tokensCoveredBySelf.size());
-					for (size_t i = pair.left.begin; i < pair.left.end; ++i) {
-						tokensCoveredBySelf.set(i, true);
+					assert(
+                        (0 <= pair.left.begin) &&
+                        (pair.left.begin <= pair.left.end) &&
+                        (pair.left.end <= (boost::int32_t)tokensCoveredBySelf.size()));
+					for (boost::int32_t i = pair.left.begin; i < pair.left.end; ++i)
+                    {
+                        assert(i > 0);
+						tokensCoveredBySelf.set((size_t)i, true);
 					}
 				}
 			}
@@ -529,15 +552,18 @@ public:
         tempFileName()
 	{
 	}
+
 public:
 	void setOptionEachItem(bool value)
 	{
 		optionEachItem = value;
 	}
+
 	void setOptionSummary(bool value)
 	{
 		optionSummary = value;
 	}
+
 public:
 	virtual void open(const std::string &fileName_) // called before file scannotning
 	{
@@ -566,6 +592,7 @@ public:
 			throw MetricsCalculatorError("can't create a temporary file (3)");
 		}
 	}
+
 	virtual void scannotFile(int index) // called for each file
 	{
 		rawclonepair::RawClonePairFileAccessor &acc = refFileAccessor();
@@ -605,10 +632,11 @@ public:
 				// calc rnr
 				{
 					size_t seqSize = seq.size();
-					if (! (rfbe.end + shift_by_first_zero <= seqSize)) {
+					if (! (rfbe.end + shift_by_first_zero <= (boost::int32_t)seqSize)) {
 						throw MetricsCalculatorError("the clone data file may be obsolete.");
 					}
-					size_t overlappedSize = 0;
+
+					boost::int32_t overlappedSize = 0;
 					const rawclonepair::RawFileBeginEnd &r = clonePairs[j].right;
 					bool tailOverlap = false;
 					if (r.file == rfbe.file) {
@@ -625,6 +653,7 @@ public:
 							overlappedSize = 0;
 						}
 					}
+
 					std:: vector<repdet::Repetition> reps;
 					tokensRepeated.clear();
 					tokensRepeated.resize(seq.size(), false);
@@ -636,15 +665,22 @@ public:
 						repdet::RepetitionDetector<ccfx_token_t>().findRepetitions(&reps, seq,
 							rfbe.begin + shift_by_first_zero + overlappedSize, rfbe.end + shift_by_first_zero, 0);
 					}
+
 					for (std:: vector<repdet::Repetition>::const_iterator i = reps.begin(); i != reps.end(); ++i) {
 						repdet::Repetition rep = *i;
 						rep.beginEnd.first -= shift_by_first_zero;
 						rep.beginEnd.second -= shift_by_first_zero;
-						assert(rfbe.begin <= rep.beginEnd.first + rep.unit && rep.beginEnd.first + rep.unit <= rep.beginEnd.second && rep.beginEnd.second <= rfbe.end);
+						assert(
+                            ((size_t)rfbe.begin <= rep.beginEnd.first + rep.unit) &&
+                            (rep.beginEnd.first + rep.unit <= rep.beginEnd.second) &&
+                            (rep.beginEnd.second <= (size_t)rfbe.end)
+                            );
+
 						for (size_t pos = rep.beginEnd.first + rep.unit; pos < rep.beginEnd.second; ++pos) {
 							tokensRepeated.set(pos, true);
 						}
 					}
+
 					size_t count = tokensRepeated.count() + overlappedSize;
 					rnr.rnr= (rfbe.end - rfbe.begin) - count;
 				}
@@ -665,6 +701,7 @@ public:
 			}
 		}
 	}
+
 	virtual void close() // called after scannotning
 	{
 		rawclonepair::RawClonePairFileAccessor &acc = refFileAccessor();
@@ -736,7 +773,8 @@ public:
 									acc.getFileDescription(fileID, &fileName, NULL);
 									commonPath = common_prefix(commonPath, fileName);
 								}
-								int remainingLengthMax = 0;
+
+								size_t remainingLengthMax = 0;
 								int pathSepCountMax = 0;
 								for (j = fileIDs.begin(); j != fileIDs.end(); ++j) {
 									int fileID = *j;
@@ -781,6 +819,7 @@ public:
 						cond = 0;
 						cyclomatic = 0;
 					}
+
 					if (optionEachItem) {
 						std::string s = (boost::format("%ld\t%d\t%d\t%d\t%d\t%g\t%d\t%d\t%d\t%d" "\n")
 								% (boost::uint64_t)cid
@@ -855,6 +894,7 @@ public:
 			remove(tempFileName.c_str());
 		}
 	}
+
 private:
 	bool prepare_RNRTKS_tempdata(FILE **ppTemp, std:: string *pTempFileName)
 	{
@@ -968,6 +1008,7 @@ public:
 
 		fputs("FID" "\t" "LOC" "\t" "SLOC" "\t" "CLOC" "\t" "CVRL" "\n", pOutput);
 	}
+
 	virtual void scannotFile(int index)
 	{
 		int fileID = fileIDs[index];
@@ -1002,6 +1043,7 @@ public:
 		lineMetricTotals[1] += lineMetrics[1];
 		lineMetricTotals[2] += lineMetrics[2];
 	}
+
 	virtual void close() // called after scannotning
 	{
 		if (optionSummary) {
@@ -1025,6 +1067,7 @@ public:
 			}
 		}
 	}
+
 private:
 	void calc_wordcount(int fileID, boost::array<long, 3> *pLineMetrics)
 	{
@@ -1041,12 +1084,19 @@ private:
 			tokensCoveredByClones.resize(len, false);
 			std:: vector<rawclonepair::RawClonePair> clonePairs;
 			acc.getRawClonePairsOfFile(fileID, &clonePairs);
-			for (size_t i = 0; i < clonePairs.size(); ++i) {
+			for (size_t i = 0; i < clonePairs.size(); ++i)
+            {
 				const rawclonepair::RawClonePair &pair = clonePairs[i];
 				assert(pair.left.file == fileID);
-				assert(0 <= pair.left.begin && pair.left.begin <= pair.left.end && pair.left.end <= tokensCoveredByClones.size());
-				for (size_t i = pair.left.begin; i < pair.left.end; ++i) {
-					tokensCoveredByClones.set(i, true);
+				assert(
+                    (0 <= pair.left.begin) &&
+                    (pair.left.begin <= pair.left.end) &&
+                    (pair.left.end <= (boost::int32_t)tokensCoveredByClones.size()));
+
+				for (boost::int32_t i = pair.left.begin; i < pair.left.end; ++i)
+                {
+                    assert(i > 0);
+					tokensCoveredByClones.set((size_t)i, true);
 				}
 			}
 		}
@@ -1091,6 +1141,7 @@ private:
 	{
 		return toUTF8String(defaultDecoder.decode(systemString));
 	}
+
 	std:: string INNER2SYS(const std::string &innerString)
 	{
 		return defaultDecoder.encode(toWStringV(innerString));

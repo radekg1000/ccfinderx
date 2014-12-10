@@ -39,7 +39,7 @@ bool get_raw_lines(const std:: string &file_path, std:: vector<std:: string> *pL
 	if (! is.is_open()) {
 		return false;
 	}
-	
+
 	std:: vector<std:: string> lines;
 	std:: string str;
 	while (! is.eof()) {
@@ -56,7 +56,7 @@ bool get_raw_lines(const std:: string &file_path, std:: vector<std:: string> *pL
 
 	(*pLines).swap(lines);
 
-	return true;	
+	return true;
 }
 
 enum Operator {
@@ -163,13 +163,13 @@ private:
 			}
 		};
 	};
-		
+
 private:
 	std:: string modulePath;
 	std:: string outputFile;
 	std:: string fromFile;
 	std:: string selectCol;
-	
+
 	std:: vector<Condition> conditions;
 	std:: string orderByAsc; // ¸
 	std:: string orderByDesc; // ~
@@ -190,7 +190,7 @@ public:
 		modulePath = argv[0];
 
 		std::vector<std::string> argvec;
-		for (size_t i = 0; i < argc; ++i) {
+		for (int i = 0; i < argc; ++i) {
 			argvec.push_back(std::string(argv[i]));
 		}
 
@@ -201,7 +201,7 @@ public:
 		modulePath = argv[0];
 
 		std::vector<std::string> argvec;
-		for (size_t i = 0; i < argc; ++i) {
+		for (int i = 0; i < argc; ++i) {
 			argvec.push_back(std::string(argv[i]));
 		}
 
@@ -246,7 +246,7 @@ private:
 		std:: string temp1 = make_temp_file_on_the_same_directory(outputFile, "picoseltmp1", ".tmp");
 		std:: string temp2 = make_temp_file_on_the_same_directory(outputFile, "picoseltmp2", ".tmp");
 		std:: string tempSorted = make_temp_file_on_the_same_directory(outputFile, "picoseltmp3", ".tmp");
-		
+
 		unsigned long long int itemCount;
 		{
 			FILE *pfTemp0 = fopen(tempUnsorted.c_str(), "wb" F_TEMPORARY_FILE_OPTIMIZATION);
@@ -276,7 +276,7 @@ private:
 					std:: cerr << "error: line #" << lineNumber << ": number of colums differs" << std:: endl;
 					return 1;
 				}
-				
+
 				bool headdingLine = false;
 				for (size_t i = 0; i < cols.size(); ++i) {
 					if (! str_to_ld(&colValues[i], cols[i])) {
@@ -309,7 +309,7 @@ private:
 			}
 			sorter.removeTempFiles();
 		}
-		
+
 		::remove(tempUnsorted.c_str());
 
 		{
@@ -364,7 +364,7 @@ private:
 				std:: cerr << "error: line #" << lineNumber << ": number of colums differs" << std:: endl;
 				return 1;
 			}
-			
+
 			bool headdingLine = false;
 			for (size_t i = 0; i < cols.size(); ++i) {
 				if (! str_to_ld(&colValues[i], cols[i])) {
@@ -441,7 +441,7 @@ private:
 		if (r != 0) {
 			return r;
 		}
-		
+
 		int selectColIndex = findNamedColumn(selectCol);
 		if (selectColIndex == -1) {
 			std:: cerr << "error: unknown column name '" << selectCol << "'" << std:: endl;
@@ -510,6 +510,7 @@ private:
 		}
 		return false; // dummy
 	}
+
 	int findNamedColumn(const std:: string &name)
 	{
 		for (size_t j = 0; j < columnNames.size(); ++j) {
@@ -519,6 +520,7 @@ private:
 		}
 		return -1; // not found
 	}
+
 	int get_column_names(std:: istream *pInput)
 	{
 		std:: istream &input = *pInput;
@@ -535,10 +537,10 @@ private:
 		}
 
 		split(&columnNames, str, "\t");
-		
+
 		for (size_t i = 0; i < columnNames.size(); ++i) {
 			std:: string s = columnNames[i];
-			int j = 0;
+			size_t j = 0;
 			int ch;
 			while (
                 (j < s.length()) &&
@@ -569,13 +571,14 @@ private:
 
 		return 0;
 	}
+
 	int analyze_commandline(const std::vector<std::string> &argv)
 	{
-		int argc = argv.size();
+		const size_t argc = argv.size();
 
 		// picosel from inputfile select col where col >= 1 and col < 2
-		
-		size_t i = 1; 
+
+		size_t i = 1;
 		while (i < argc) {
 			std:: string argi = argv[i];
 			if (argi == "-o") {
@@ -628,7 +631,7 @@ private:
 			std:: cerr << "error: no column is selected" << std:: endl;
 			return 1;
 		}
-		
+
 		if (! (i < argc)) {
 			return 0;
 		}
@@ -671,7 +674,7 @@ private:
 		}
 		else if (argi == "where" || argi == "WHERE") {
 			++i;
-			
+
 			std::string s;
 			if (i < argc && (s = argv[i]).find(' ') != std::string::npos) {
 				if (s.length() >= 2 && s[0] == '\"' && s[s.length() - 1] == '\"') {
@@ -705,7 +708,7 @@ private:
 		return 0;
 	}
 
-	static bool scanExpr(std::vector<Condition> *pConditions, const std::vector<std::string> &argv, size_t *pIndex) 
+	static bool scanExpr(std::vector<Condition> *pConditions, const std::vector<std::string> &argv, size_t *pIndex)
 	{
 		std::vector<Condition> &conditions = *pConditions;
 		size_t argc = argv.size();
@@ -719,7 +722,7 @@ private:
 				std:: cerr << "error: invalid expression" << std:: endl;
 				return false;
 			}
-			
+
 			std:: string opeStr = argv[i];
 			Operator ope = opeTbl.toOperator(opeStr);
 			if (ope == OP_NULL) {
@@ -727,7 +730,7 @@ private:
 				return false;
 			}
 			++i;
-			
+
 			long double num;
 			std:: string numStr = argv[i];
 			if (! str_to_ld(&num, numStr)) {
@@ -754,17 +757,17 @@ private:
 		return true;
 	}
 
-	static bool str_to_ld(long double *pNum, const std:: string &numStr) 
+	static bool str_to_ld(long double *pNum, const std:: string &numStr)
 	{
 		char *p;
 		long longValue = strtol(numStr.c_str(), &p, 10);
-		if (p - numStr.c_str() == numStr.length()) {
+		if (p - numStr.c_str() == (ptrdiff_t)numStr.length()) {
 			*pNum = longValue;
 			return true;
 		}
 		else {
 			double doubleValue = strtod(numStr.c_str(), &p);
-			if (p - numStr.c_str() == numStr.length()) {
+			if (p - numStr.c_str() == (ptrdiff_t)numStr.length()) {
 				*pNum = doubleValue;
 				return true;
 			}
@@ -793,8 +796,8 @@ int main(int argc, char *argv[])
 #include "../GemX/utility_Picosel.h"
 
 #ifdef _MSC_VER
-BOOL APIENTRY DllMain( HANDLE hModule, 
-                       DWORD  ul_reason_for_call, 
+BOOL APIENTRY DllMain( HANDLE hModule,
+                       DWORD  ul_reason_for_call,
                        LPVOID lpReserved
 					 )
 {

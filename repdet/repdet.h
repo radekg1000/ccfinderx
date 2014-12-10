@@ -36,10 +36,12 @@ public:
 	{
 		assert(unit == 0 || (beginEnd.second - beginEnd.first) % unit == 0);
 	}
+
 	Repetition(const Repetition &right)
 		: beginEnd(right.beginEnd), unit(right.unit)
 	{
 	}
+
 	Repetition()
 		: beginEnd(0, 0), unit(0)
 	{
@@ -54,31 +56,37 @@ public:
 		: value(right.value)
 	{
 	}
+
 	reppos()
 		: value(0)
 	{
 	}
+
 	reppos(boost::uint32_t begin, boost::uint32_t end)
 		: value((((boost::uint64_t)begin) << 32) | end)
 	{
 	}
-public:
+
 	inline boost::uint32_t begin() const
 	{
 		return (boost::uint32_t)(value >> 32);
 	}
+
 	inline boost::uint32_t end() const
 	{
 		return (boost::uint32_t)value;
 	}
+
 	inline bool operator==(const reppos &right) const
 	{
 		return value == right.value;
 	}
+
 	inline bool operator<(const reppos &right) const
 	{
 		return value < right.value;
 	}
+
 	inline bool operator!=(const reppos &right) const
 	{
 		return ! operator==(right);
@@ -98,6 +106,7 @@ public:
 	{
 		return key.begin() | key.end();
 	}
+
 	inline bool operator()(const reppos &key1, const reppos &key2) const
 	{
 		return key1 < key2;
@@ -129,6 +138,7 @@ private:
 		}
 		return true;
 	}
+
 #if 0
 	static void find_repetitions_brute(std:: map<std:: pair<size_t/* begin */, size_t/* end */>, Repetition> *pReps,
 			const typename std:: vector<Elem> &data, size_t begin, size_t end, size_t upperLimit)
@@ -161,6 +171,7 @@ private:
 		}
 	}
 #endif
+
 	static void find_repetitions_skipvec(MapRepposRepitition *pReps,
 			const typename std:: vector<Elem> &data, size_t begin, size_t end, size_t upperLimit)
 	{
@@ -242,6 +253,7 @@ private:
 			}
 		}
 	}
+
 	static void find_repetitions_skipvec(std::vector</* begin index */ std::vector<Repetition> > *pReps,
 			const typename std:: vector<Elem> &data, size_t begin, size_t end, size_t upperLimit)
 	{
@@ -334,6 +346,7 @@ private:
 			}
 		}
 	}
+
 private:
 	class RepetitionComparatorByBeginEnd
 	{
@@ -343,12 +356,14 @@ private:
 			return left.beginEnd < right.beginEnd;
 		}
 	};
+
 public:
 	void findRepetitions(MapRepposRepitition *pReps,
 			const typename std:: vector<Elem> &data, size_t upperLimit /* special value 0 means +infinity */) const
 	{
 		find_repetitions_skipvec(pReps, data, 0, data.size(), upperLimit);
 	}
+
 	void findRepetitions(std:: vector<Repetition> *pReps,
 			const typename std:: vector<Elem> &data, size_t upperLimit /* special value 0 means +infinity */) const
 	{
@@ -361,12 +376,14 @@ public:
 		}
 		std::sort((*pReps).begin(), (*pReps).end(), RepetitionComparatorByBeginEnd());
 	}
+
 	void findRepetitions(MapRepposRepitition *pReps,
 			const std:: vector<Elem> &data, size_t begin, size_t end,
 			size_t upperLimit /* special value 0 means +infinity */) const
 	{
 		find_repetitions_skipvec(pReps, data, begin, end, upperLimit);
 	}
+
 	void findRepetitions(std:: vector<Repetition> *pReps,
 			const std:: vector<Elem> &data,
 			size_t begin, size_t end,

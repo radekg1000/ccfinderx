@@ -48,15 +48,16 @@ public:
 		}
 		return r;
 	}
+
 	static std:: string encode(const std:: vector<MYWCHAR_T> &text, boost::int32_t begin, boost::int32_t end, bool explicitHTML)
 	{
 		const HASH_MAP<MYWCHAR_T, std:: string> &table = explicitHTML ? codeToStrTableExplicit : codeToStrTable;
-		assert(begin >= 0 && begin <= text.size());
-		assert(end >= 0 && end <= text.size());
+		assert(begin >= 0 && begin <= (boost::int32_t)text.size());
+		assert(end >= 0 && end <= (boost::int32_t)text.size());
 
 		std:: string r;
 		//r.reserve(end - begin);
-		for (size_t i = begin; i < end; ++i) {
+		for (boost::int32_t i = begin; i < end; ++i) {
 			MYWCHAR_T c = text[i];
 			HASH_MAP<MYWCHAR_T, std:: string>::const_iterator ti = table.find(c);
 			if (ti != table.end()) {
@@ -84,19 +85,19 @@ public:
 
 	static void decode(std:: vector<MYWCHAR_T> *pResult, const std:: string &text, boost::int32_t begin, boost::int32_t end)
 	{
-		assert(begin >= 0 && begin <= text.size());
-		assert(end >= 0 && end <= text.size());
+		assert(begin >= 0 && begin <= (boost::int32_t)text.size());
+		assert(end >= 0 && end <= (boost::int32_t)text.size());
 
 		(*pResult).clear();
 		std:: vector<MYWCHAR_T> &r = *pResult;
 		//r.reserve(end - begin);
-		size_t i = begin;
+		boost::int32_t i = begin;
 		while (i < end) {
 			char c = text[i];
 			if (c == '&') {
 				if (i + 1 < end && text[i + 1] == '#') {
 					if (i + 2 < end && text[i + 2] == 'x') {
-						size_t j = i + 3;
+						boost::int32_t j = i + 3;
 						char d;
 						while (
                             (j < end) &&
@@ -125,11 +126,12 @@ public:
 						}
 					}
 					else {
-						size_t j = i + 3;
+						boost::int32_t j = i + 3;
 						char d;
 						while (j < end && ('0' <= (d = text[j]) && d <= '9')) {
 							++j;
 						}
+
 						if (j < end && text[j] == ';') {
 							MYWCHAR_T d;
 #ifdef __linux__
@@ -147,7 +149,7 @@ public:
 					}
 				}
 				else {
-					size_t j = i + 1;
+					boost::int32_t j = i + 1;
 					char d;
 					while (
                         (j < end) &&
@@ -184,21 +186,23 @@ public:
 			}
 		}
 	}
+
 	static void decode(std:: vector<MYWCHAR_T> *pResult, const std:: string &text)
 	{
 		decode(pResult, text, 0, text.length());
 	}
+
 	static void decode(std:: vector<MYWCHAR_T> *pResult, const std:: vector<MYWCHAR_T> &text, boost::int32_t begin, boost::int32_t end)
 	{
 		using namespace boost::assign; // bring 'operator+=()' into scope
 
-		assert(begin >= 0 && begin <= text.size());
-		assert(end >= 0 && end <= text.size());
+		assert(begin >= 0 && begin <= (boost::int32_t)text.size());
+		assert(end >= 0 && end <= (boost::int32_t)text.size());
 
 		(*pResult).clear();
 		std:: vector<MYWCHAR_T> &r = *pResult;
 		//r.reserve(end - begin);
-		size_t i = begin;
+		boost::int32_t i = begin;
 		while (i < end) {
 			MYWCHAR_T c = text[i];
 			if (c == '&') {
@@ -206,7 +210,7 @@ public:
 					if (i + 2 < end && text[i + 2] == 'x') {
 						if (i + 3 < end && text[i + 3] == '(') {
 							// the text is "&#x(...
-							size_t j = i + 4;
+							boost::int32_t j = i + 4;
 							std:: string buf;
 							MYWCHAR_T d;
 							while (
@@ -221,6 +225,7 @@ public:
 								buf += (char)d;
 								++j;
 							}
+
 							if (j < end && text[j] == '-') {
 								++j;
 								std:: string buf2;
@@ -256,7 +261,7 @@ public:
 						}
 						else {
 							// the text is "&#x...
-							size_t j = i + 3;
+							boost::int32_t j = i + 3;
 							std:: string buf;
 							MYWCHAR_T d;
 							while (
@@ -286,7 +291,7 @@ public:
 					else {
 						if (i + 2 < end && text[i + 2] == '(') {
 							// the text is "&#(...
-							size_t j = i + 3;
+							boost::int32_t j = i + 3;
 							std:: string buf;
 							MYWCHAR_T d;
 							while (j < end && ('0' <= (d = text[j]) && d <= '9')) {
@@ -322,7 +327,7 @@ public:
 						}
 						else {
 							// the text is "&#...
-							size_t j = i + 2;
+							boost::int32_t j = i + 2;
 							std:: string buf;
 							MYWCHAR_T d;
 							while (j < end && ('0' <= (d = text[j]) && d <= '9')) {
@@ -345,7 +350,7 @@ public:
 				}
 				else {
 					// the text is "&...
-					size_t j = i + 1;
+					boost::int32_t j = i + 1;
 					std:: string buf;
 					buf += "&";
 					MYWCHAR_T d;
@@ -361,6 +366,7 @@ public:
 						buf += (char)d;
 						++j;
 					}
+
 					if (j < end && text[j] == ';') {
 						buf += ";";
 						std:: string escapeStr = buf;
@@ -582,7 +588,7 @@ public:
 		}
 		return false;
 	}
-public:
+
 	bool operator==(const Version &right) const
 	{
 		if (this->maj == right.maj) {

@@ -96,10 +96,12 @@ private:
 	{
 		return toUTF8String(defaultDecoder.decode(systemString));
 	}
+
 	std:: string INNER2SYS(const std::string &innerString)
 	{
 		return defaultDecoder.encode(toWStringV(innerString));
 	}
+
 public:
 	int main(const std::vector<std::string> &argv)
 	{
@@ -208,13 +210,13 @@ private:
 	static bool requireTokenPatternMatch(const std:: vector<ccfx_token_t> &seq, int begin, int end,
 			const std:: vector<std:: vector<ccfx_token_t> > &patterns)
 	{
-		assert(0 <= begin && begin <= end && end < seq.size());
+		assert(0 <= begin && begin <= end && end < (boost::int32_t)seq.size());
 
 		for (size_t i = 0; i < patterns.size(); ++i) {
 			const std:: vector<ccfx_token_t> &pattern = patterns[i];
 			std:: vector<int> itemFoundCount;
 			itemFoundCount.resize(pattern.size(), 0);
-			for (size_t j = begin; j < end; ++j) {
+			for (boost::int32_t j = begin; j < end; ++j) {
 				ccfx_token_t t = seq[j];
 				std:: vector<ccfx_token_t>::const_iterator k = std:: find(pattern.begin(), pattern.end(), t);
 				if (k != pattern.end()) {
@@ -571,7 +573,7 @@ private:
 	std:: vector<boost::int64_t> inputFileLengthPoss;
 	int shapingLevel;
 	bool useParameterUnification;
-	int minimumTokenSetSize;
+	size_t minimumTokenSetSize;
 	int detectFrom;
 	clone_matches_w_range_func_t *pDetectFromFunc;
 	std::pair<size_t, size_t> targetFileRange;
@@ -637,7 +639,7 @@ private:
 		str = (boost::format("u" "\t" "%s" "\n") % (useParameterUnification ? "+" : "-")).str();
 		FWRITEBYTES(str.data(), str.length(), pOutput);
 
-		str = (boost::format("t" "\t" "%d" "\n") % minimumTokenSetSize).str();
+		str = (boost::format("t" "\t" "%u" "\n") % (unsigned int)minimumTokenSetSize).str();
 		FWRITEBYTES(str.data(), str.length(), pOutput);
 
 		str = (boost::format("w" "\t" "f%cg%cw%c" "\n") % ((detectFrom & DETECT_BETWEEN_FILES) != 0 ? '+' : '-')
@@ -781,7 +783,7 @@ public:
 	{
 		useParameterUnification = useParameterUnification_;
 	}
-	void setMinimumTokenSetSize(int minimumTokenSetSize_)
+	void setMinimumTokenSetSize(size_t minimumTokenSetSize_)
 	{
 		minimumTokenSetSize = minimumTokenSetSize_;
 	}
@@ -841,6 +843,7 @@ public:
 			pOutput = NULL;
 		}
 	}
+
 	virtual bool codeCheck(size_t posA, size_t length)
 	{
 		if (shapingLevel >= 1 && ! parens.empty()) {
@@ -1044,8 +1047,8 @@ private:
 	bool optionOnlyPreprocess;
 	int optionShapingLevel;
 	bool optionMajoritarianShaper;
-	int optionB; // minimumCloneLength
-	int optionT; // minimumTokenSetSize
+	size_t optionB; // minimumCloneLength
+	size_t optionT; // minimumTokenSetSize
 	bool optionParameterUnification;
 	size_t chunkSize;
 	size_t bottomUnitLength;
@@ -1075,6 +1078,7 @@ public:
 			optionParseErrors()
 	{
 	}
+
 private:
 	static void modify_relative_path(std:: string *pPath, const std:: string &origin)
 	{
@@ -1113,6 +1117,7 @@ private:
 			if (! boost::algorithm::starts_with(s, LEN_GT_)) {
 				throw SystemError(boost::format("error: invalid argument of option %s: '%s'") % "--prescreening" % s, 1);
 			}
+
 			std::string v = s.substr(LEN_GT_.length());
 			try {
 				lengthLimit = boost::lexical_cast<size_t>(v);
@@ -1162,7 +1167,7 @@ private:
 				if (argi == "-b") {
 					if (! (i + 1 < argv.size())) throw SystemError("error: option -b requires an argument", 1);
 					try {
-						optionB = boost::lexical_cast<int>(argv[i + 1]);
+						optionB = boost::lexical_cast<size_t>(argv[i + 1]);
 					}
 					catch(boost::bad_lexical_cast &) {
 						throw SystemError("error: invalid argument is given to option -b", 1);
@@ -1273,7 +1278,7 @@ private:
 				else if (argi == "-t") {
 					if (! (i + 1 < argv.size())) throw SystemError("error: option -t requires an argument", 1);
 					try {
-						optionT = boost::lexical_cast<int>(argv[i + 1]);
+						optionT = boost::lexical_cast<size_t>(argv[i + 1]);
 					}
 					catch (boost::bad_lexical_cast &) {
 						throw SystemError("error: invalid argument is given to option -t", 1);
@@ -1598,6 +1603,7 @@ private:
 		std:: cerr << "error: can't open a preprocessed file of souce file: '" << fileName << "' (#4)" << std:: endl;
 		return 2;
 	}
+
 	int fetchPreprocessedFiles(std::vector<ccfx_token_t> *pSeq, std::vector<size_t> *pFileLengths,
 			int fiStart, size_t countMaxFetched,
 			const std::vector<size_t> &selectedToInputTable, PreprocessedFileReader *pPreprocessedFileReader,
@@ -1609,7 +1615,15 @@ private:
 		seq.push_back(0);
 		fileLengths.clear();
 		size_t count = 0;
-		for (int fi = fiStart; (countMaxFetched == 0 || count < countMaxFetched) && fi < selectedToInputTable.size() && (chunkSize == 0 || count <= 2 || seq.size() - 1 < chunkSize); ++fi) {
+		for (
+            int fi = fiStart;
+            (
+                ((countMaxFetched == 0) || (count < countMaxFetched)) &&
+                (fi < (int)selectedToInputTable.size()) &&
+                ((chunkSize == 0) || (count <= 2) || (seq.size() - 1 < chunkSize))
+            );
+            ++fi)
+        {
 			size_t prevSize = seq.size();
 			const InputFileData &fileFi = inputFiles[selectedToInputTable[fi]];
 			int r = readPreprocessedFile(pPreprocessedFileReader, fileFi.path, &seq);
@@ -1715,6 +1729,7 @@ private:
 		std::vector<int> emptyMasks;
 		return detectClonesWithMask(tempOutputName, emptyMasks);
 	}
+
 	int detectClonesWithMask(const std:: string &tempOutputName, const std::vector<int> &maskedFiles)
 	{
 		CloneDetector<ccfx_token_t, unsigned short> cd;
@@ -1826,7 +1841,7 @@ private:
 			boost::scoped_ptr<PreprocessedFileReader> pPreprocessedFileReader(new PreprocessedFileReader());
 			pPreprocessedFileReader->setParameterizationUsage(optionParameterization);
 			pPreprocessedFileReader->setRawReader(rawReader);
-			long processedTokens = 0;
+			size_t processedTokens = 0;
 
 			std::vector<ccfx_token_t> seqPrefetch;
 			std::vector<size_t> fileLengthsPrefetch;
@@ -1857,7 +1872,11 @@ private:
 							size_t fileLength = fileLengthsFetched[c];
 							assert(fileLength < std::numeric_limits<size_t>::max());
 							inputFileLengths[selectedToInputTable[fi]] = fileLength;
-							if (fileLength >= optionB && (! lengthLimit || fileLength <= *lengthLimit)) {
+							if (
+                                (fileLength >= optionB) &&
+                                ((lengthLimit == 0) || (fileLength <= *lengthLimit))
+                               )
+                            {
 								const InputFileData &fileFi = inputFiles[selectedToInputTable[fi]];
 
 								seq.clear();
@@ -2096,6 +2115,7 @@ private:
 
 		return 0;
 	}
+
 public:
 	int main(const std::vector<std::string> &argv)
 	{

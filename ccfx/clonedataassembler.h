@@ -31,7 +31,7 @@ private:
 			: p(p_), filePath(filePath_)
 		{
 		}
-		~closeAndDelete() 
+		~closeAndDelete()
 		{
 			if (p != NULL) {
 				fclose(p);
@@ -139,7 +139,7 @@ public:
 		}
 		FWRITEBYTES("pa:d", 4, poutp);
 
-		if (v2 == 1) {		
+		if (v2 == 1) {
 			static const char options[] = { 'b', 's', 'u', 't', '\0' };
 			std::vector<boost::int32_t> values;
 			for (int i = 0; true; ++i) {
@@ -316,7 +316,7 @@ public:
 					if (! is_utf8_nocontrol(commentStrUtf8)) {
 						throw Error("invalid file remark text", lineNumber);
 					}
-					
+
 					boost::int32_t id = *fileID;
 					flip_endian(&id, sizeof(boost::int32_t));
 					FWRITEBYTES(commentStrUtf8.data(), commentStrUtf8.length(), poutp);
@@ -351,14 +351,17 @@ public:
 				if (str.empty()) {
 					throw Error("invalid clone-pair description", lineNumber);
 				}
+
 				if (str == "}") {
 					break; // while
 				}
+
 				std::vector<std::string> fields;
 				boost::split(fields, str, boost::is_any_of("\t"));
 				if (fields.size() != 3) {
 					throw Error("invalid clone-pair description", lineNumber);
 				}
+
 				boost::uint64_t cloneIDValue;
 				try {
 					cloneIDValue = boost::lexical_cast<boost::uint64_t, std::string>(fields[0]);
@@ -371,12 +374,14 @@ public:
 				if (sscanf(fields[1].c_str(), "%d.%d-%d", &lefts[0], &lefts[1], &lefts[2]) != 3) {
 					throw Error("invalid clone-pair description", lineNumber);
 				}
+
 				boost::array<int, 3> rights;
 				if (sscanf(fields[2].c_str(), "%d.%d-%d", &rights[0], &rights[1], &rights[2]) != 3) {
 					throw Error("invalid clone-pair description", lineNumber);
 				}
+
 				rawclonepair::RawClonePair clonePair(
-					rawclonepair::RawFileBeginEnd(lefts[0], lefts[1], lefts[2]), 
+					rawclonepair::RawFileBeginEnd(lefts[0], lefts[1], lefts[2]),
 					rawclonepair::RawFileBeginEnd(rights[0], rights[1], rights[2]),
 					cloneIDValue);
 
@@ -396,7 +401,10 @@ public:
 						throw Error("unknown file ID", lineNumber);
 					}
 					boost::int32_t rightLen = i->second;
-					if (! (0u < clonePair.right.begin && clonePair.right.begin <= clonePair.right.end && clonePair.right.end <= rightLen)) {
+					if (! (
+                        (0 < clonePair.right.begin) && (clonePair.right.begin <= clonePair.right.end) && (clonePair.right.end <= rightLen)
+                        ))
+                    {
 						throw Error("wrong potision", lineNumber);
 					}
 				}
@@ -431,7 +439,7 @@ public:
 					if (! is_utf8_nocontrol(commentStrUtf8)) {
 						throw Error("invalid clone-set remark text", lineNumber);
 					}
-					
+
 					boost::uint64_t id = *cloneSetID;
 					flip_endian(&id, sizeof(boost::uint64_t));
 					FWRITEBYTES(commentStrUtf8.data(), commentStrUtf8.length(), poutp);

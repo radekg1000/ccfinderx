@@ -229,10 +229,12 @@ public:
 	{
 		return new EncodedFileReader(*this);
 	}
+
 	bool setEncoding(const std:: string &encoding)
 	{
 		return decoder.setEncoding(encoding);
 	}
+
 	bool read(std:: vector<MYWCHAR_T> *pSeq, const std:: string &fileName)
 	{
 		std:: ifstream input;
@@ -254,6 +256,7 @@ public:
 		decoder.decode(pSeq, &buf[0], &buf[0] + buf.size());
 		return true;
 	}
+
 	std:: string getErrorMessage() const
 	{
 		return errorMessage;
@@ -291,7 +294,6 @@ bool check_special_chars(const std:: vector<MYWCHAR_T> &str)
 		}
 	}
 	return true;
-
 }
 
 bool scan_option_node_format(const std:: vector<MYWCHAR_T> &f, size_t beginPos, size_t endPos,
@@ -827,6 +829,7 @@ public:
 		boost::scoped_ptr<FileReader> spefr(pefr);
 		pInputFileReader.swap(spefr);
 	}
+
 	virtual ~Main()
 	{
 	}
@@ -1004,7 +1007,11 @@ protected:
 				std:: string str = args[i + 1];
 				char *p;
 				boost::int32_t value = strtol(str.c_str(), &p, 10);
-				if (p != NULL && (p - str.c_str()) != str.length()) {
+				if (
+                    (p != NULL) &&
+                    ((p - str.c_str()) != (ptrdiff_t)str.length())
+                    )
+                {
 					std:: cerr << "error: invalid --cutoff argument." << std:: endl;
 					return 1;
 				}
@@ -1024,6 +1031,7 @@ protected:
 		}
 		return 0;
 	}
+
 private:
 	int analyzeCommandlineArguments(const std:: vector<std:: string> &args)
 	{
@@ -1050,6 +1058,7 @@ private:
 
 		return 0; // no error
 	}
+
 	void do_output_i(std:: ostream *pOutput, const text::TokenSequence &text,
 		const std:: map<std:: vector<MYWCHAR_T>, text::Helper::NodeFormat> &nodeFormats,
 		const std:: vector<std:: vector<MYWCHAR_T> > &nodeNames)
@@ -1078,6 +1087,7 @@ private:
 			print_result(pOutput, options, nodeFormats, nodeNames, pRawCharEncoder.get(), pGeneratedEncoder.get(), text);
 		}
 	}
+
 	int do_output(const std:: string &outputFile, const text::TokenSequence &text,
 		const std:: map<std:: vector<MYWCHAR_T>, text::Helper::NodeFormat> &nodeFormats,
 		const std:: vector<std:: vector<MYWCHAR_T> > &nodeNames)
@@ -1127,6 +1137,7 @@ private:
 		}
 		return 0; // no error
 	}
+
 public:
 	int main(int argc, char *argv[])
 	{
@@ -1134,12 +1145,14 @@ public:
 		args.insert(args.end(), &argv[0], &argv[argc]);
 		return main(args);
 	}
+
 	int main(int argc, const char *argv[])
 	{
 		std:: vector<std:: string> args;
 		args.insert(args.end(), &argv[0], &argv[argc]);
 		return main(args);
 	}
+
 	int main(const std:: vector<std:: string> args)
 	{
 		{
@@ -1345,6 +1358,7 @@ public:
 	{
 	}
 };
+
 class ParseError : public RuntimeError {
 public:
 	ParseError(const std::string &causeStr)
@@ -1352,6 +1366,7 @@ public:
 	{
 	}
 };
+
 class InterpretationError : public RuntimeError {
 public:
 	InterpretationError(const std::string &causeStr)
@@ -1413,11 +1428,12 @@ public:
 		std:: vector<std:: vector<MYWCHAR_T> > nodeNames = interp.getLabelStrings();
 		common::EscapeSequenceHelper::decode(&varName, "TEXT");
 	}
+
 	void setCutoffValue(long newValue)
 	{
 		cutoffValue = newValue;
 	}
-public:
+
 	void apply(Tree *pTree) const
 	{
 		// do interpretation
@@ -1461,6 +1477,7 @@ public:
 
 		nodeFormats[nameUcs4] = openClose;
 	}
+
 	void addNodeNone(const std::string &nodeName)
 	{
 		std::vector<MYWCHAR_T> nameUcs4 = toWStringV(nodeName);
@@ -1470,6 +1487,7 @@ public:
 
 		nodeFormats[nameUcs4] = openClose;
 	}
+
 	void addNodeTerminate(const std::string &nodeName)
 	{
 		std::vector<MYWCHAR_T> nameUcs4 = toWStringV(nodeName);
@@ -1480,6 +1498,7 @@ public:
 
 		nodeFormats[nameUcs4] = openClose;
 	}
+
 	void addNodeReplace(const std::string &nodeName, const std::string &newName)
 	{
 		std::vector<MYWCHAR_T> nameUcs4 = toWStringV(nodeName);
@@ -1493,6 +1512,7 @@ public:
 
 		nodeFormats[nameUcs4] = openClose;
 	}
+
 	void addNodeFormat(const std::string &nodeName, const std::string &openStr, const std::string &closeStr)
 	{
 		std::vector<MYWCHAR_T> nameUcs4 = toWStringV(nodeName);
@@ -1509,6 +1529,7 @@ public:
 
 		nodeFormats[nameUcs4] = openClose;
 	}
+
 public:
 	std::string format(const Tree &tree) const
 	{
@@ -1536,4 +1557,3 @@ public:
 };
 
 }
-

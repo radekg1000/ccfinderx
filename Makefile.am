@@ -15,7 +15,6 @@ global_compiler_flags = \
     -Wextra \
     -g -O0 \
     -fno-default-inline \
-    -Wno-sign-compare \
     -Wno-unused-variable \
     -Wno-unused-value \
     -Wno-type-limits \

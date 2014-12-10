@@ -41,8 +41,8 @@
 #include "../../common/common.h"
 
 #if 0
-BOOL APIENTRY DllMain( HANDLE hModule, 
-                       DWORD  ul_reason_for_call, 
+BOOL APIENTRY DllMain( HANDLE hModule,
+                       DWORD  ul_reason_for_call,
                        LPVOID lpReserved
 					 )
 {
@@ -128,10 +128,10 @@ JNIEXPORT void JNICALL Java_ccfinderx_CCFinderX_setModuleDirectory
 	if (str.empty()) { // error!
 		str = utf8StrDir;
 	}
-#endif	
+#endif
 	oModuleDir = str;
 
-	env->ReleaseStringUTFChars(strDir, utf8StrDir); 
+	env->ReleaseStringUTFChars(strDir, utf8StrDir);
 }
 
 JNIEXPORT jstring JNICALL Java_ccfinderx_CCFinderX_getCCFinderXPath
@@ -165,7 +165,7 @@ JNIEXPORT jint JNICALL Java_ccfinderx_CCFinderX_invokeCCFinderX(
 	jsize length = env->GetArrayLength(args);
 
 	std:: vector<std:: string> strs;
-	for (size_t i = 0; i < length; ++i) {
+	for (jsize i = 0; i < length; ++i) {
 		jstring jstr = (jstring)env->GetObjectArrayElement(args, i);
 		const char *uniStr = env->GetStringUTFChars(jstr, NULL);
 		std:: string str = uniStr;
@@ -191,7 +191,7 @@ JNIEXPORT jintArray JNICALL Java_ccfinderx_CCFinderX_getVersion(
 	}
 
 	jintArray ary = env->NewIntArray(3);
-	
+
 	jint version[3] = { APPVERSION[0], APPVERSION[1], APPVERSION[2] };
 	env->SetIntArrayRegion(ary, 0, 3, version);
 
@@ -216,7 +216,7 @@ JNIEXPORT void JNICALL Java_ccfinderx_CCFinderX_openOfficialSiteTop
 
 	openUrl(url);
 
-	env->ReleaseStringUTFChars(pageSuffix, utf8PageSuffix); 
+	env->ReleaseStringUTFChars(pageSuffix, utf8PageSuffix);
 }
 
 JNIEXPORT void JNICALL Java_ccfinderx_CCFinderX_openOfficialSiteUserRgistrationPage
@@ -228,7 +228,7 @@ JNIEXPORT void JNICALL Java_ccfinderx_CCFinderX_openOfficialSiteUserRgistrationP
 
 	openUrl(url);
 
-	env->ReleaseStringUTFChars(pageSuffix, utf8PageSuffix); 
+	env->ReleaseStringUTFChars(pageSuffix, utf8PageSuffix);
 }
 
 JNIEXPORT void JNICALL Java_ccfinderx_CCFinderX_openOfficialSiteDocumentPage
@@ -239,7 +239,7 @@ JNIEXPORT void JNICALL Java_ccfinderx_CCFinderX_openOfficialSiteDocumentPage
 		openUrl(p);
 		return;
 	}
-	
+
 	const char* utf8PageSuffix = env->GetStringUTFChars(pageSuffix, NULL);
 	std::string str = utf8PageSuffix;
 	if (str.length() == 0) {
@@ -251,8 +251,8 @@ JNIEXPORT void JNICALL Java_ccfinderx_CCFinderX_openOfficialSiteDocumentPage
 
 	openUrl(url);
 
-	env->ReleaseStringUTFChars(pageFileName, utf8PageFileName); 
-	env->ReleaseStringUTFChars(pageSuffix, utf8PageSuffix); 
+	env->ReleaseStringUTFChars(pageFileName, utf8PageFileName);
+	env->ReleaseStringUTFChars(pageSuffix, utf8PageSuffix);
 }
 
 
@@ -287,7 +287,7 @@ int exec_ccfx(const std:: vector<std:: string> &argsUtf8)
 	//	std::string s = argv.str();
 	//	std::vector<char> buffer(s.begin(), s.end());
 	//	buffer.push_back('\0');
-	//	BOOL result = ::CreateProcess(NULL, &buffer[0], NULL, NULL, TRUE, 
+	//	BOOL result = ::CreateProcess(NULL, &buffer[0], NULL, NULL, TRUE,
 	//		CREATE_NO_WINDOW | CREATE_DEFAULT_ERROR_MODE, NULL, NULL, &si, &pi);
 	//	if (result == 0) {
 	//		r = -1;
@@ -378,7 +378,7 @@ JNIEXPORT jbyteArray JNICALL Java_ccfinderx_CCFinderX_openPrepFile
 		}
 		buffer.resize(j);
 	}
-	
+
 	jbyteArray ary = env->NewByteArray(buffer.size());
 #if defined _MSC_VER
 	const unsigned char *p = &buffer[0];
@@ -446,31 +446,31 @@ JNIEXPORT jboolean JNICALL Java_ccfinderx_CCFinderX_isProcessAlive
 boost::optional<std::vector<std::string> > read_lines(const std::string &fileName)
 {
     using namespace std;
-        
+
     ifstream is(fileName.c_str(), ios::binary);
     if (! is) return boost::optional<std::vector<std::string> >(); // fail
-    
+
     vector<string> lines;
     string line;
     while (getline(is, line)) {
         lines.push_back(line);
     }
-    
+
     return boost::optional<std::vector<std::string> >(lines);
 }
 
 bool process_is_alive(int UNUSED(processId))
 {
 
-    /* 
+    /*
     References
-      /linux/fs/proc/array.c 
+      /linux/fs/proc/array.c
       /linux-mon/linux_monitor-2.rc2/src/ps.c
     */
-    
+
     using namespace std;
     namespace bal = boost::algorithm;
-    
+
     DIR *dp = opendir("/proc");
     if (dp == NULL) return false; // unknown
     struct dirent *ep;

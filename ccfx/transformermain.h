@@ -120,7 +120,7 @@ public:
 		return 0;
 	}
 
-	static int do_shaper(const std:: string &input, const std:: string &output, 
+	static int do_shaper(const std:: string &input, const std:: string &output,
 		int shaping_level, bool recalculate_tks, bool verbose)
 	{
 		TransformerMain obj;
@@ -179,7 +179,7 @@ public:
 	{
 	}
 
-	int main(const std::vector<std::string> &argv) 
+	int main(const std::vector<std::string> &argv)
 	{
 		assert(argv.size() >= 2);
 		if (argv.size() <= 2 || argv[2] == "-h" || argv[2] == "--help") {
@@ -318,8 +318,8 @@ private:
 	std:: string errorMessage;
 
 #if defined USE_BOOST_POOL
-	typedef std:: map<rawclonepair::RawFileBeginEnd, std::vector<boost::uint64_t>, 
-		std::less<rawclonepair::RawFileBeginEnd>, 
+	typedef std:: map<rawclonepair::RawFileBeginEnd, std::vector<boost::uint64_t>,
+		std::less<rawclonepair::RawFileBeginEnd>,
 		boost::fast_pool_allocator<std::pair<rawclonepair::RawFileBeginEnd, std::vector<boost::uint64_t> > > > EquivalentTable;
 #else
 	typedef std:: map<rawclonepair::RawFileBeginEnd, std::vector<boost::uint64_t> > EquivalentTable;
@@ -327,7 +327,7 @@ private:
 
 	class ShaperError : public std:: runtime_error {
 	public:
-		ShaperError() 
+		ShaperError()
 			: runtime_error("")
 		{
 		}
@@ -378,7 +378,7 @@ private:
 	}
 
 	static void build_id_transfom_table_from_equivs(
-			std::vector<std::pair<boost::uint64_t, boost::uint64_t> > *pIdTrans, 
+			std::vector<std::pair<boost::uint64_t, boost::uint64_t> > *pIdTrans,
 			std::vector<std::vector<boost::uint64_t> > *pEquivs)
 	{
 		std::vector<std::vector<boost::uint64_t> > &equivs = *pEquivs;
@@ -389,7 +389,7 @@ private:
 			std::vector<boost::uint64_t>::iterator endPos = std::unique(equiv.begin(), equiv.end());
 			equiv.erase(endPos, equiv.end());
 		}
-		
+
 		std::vector<size_t> heads;
 		heads.resize(equivs.size(), 0);
 
@@ -470,7 +470,7 @@ private:
 			assert(smallests.size() >= 1);
 			heads[smallests[0]] += 1;
 		}
-		
+
 		std::vector<std::pair<boost::uint64_t, boost::uint64_t> > &idTrans = *pIdTrans;
 		idTrans.clear();
 
@@ -490,7 +490,7 @@ private:
 	private:
 		TransformerMain &base;
 		long long countOfRemovedClonePairs;
-	public:		
+	public:
 		DumShaper(TransformerMain *pBase)
 			: base(*pBase), countOfRemovedClonePairs(0)
 		{
@@ -598,7 +598,7 @@ private:
 			delete pQueIdTrans;
 		}
 		Shaper(TransformerMain *pBase)
-			: base(*pBase), tksValue(0), countOfRemovedClonePairs(0), pQueIdTrans(NULL), 
+			: base(*pBase), tksValue(0), countOfRemovedClonePairs(0), pQueIdTrans(NULL),
 			pEaterIdTrans(NULL)
 		{
 			pQueIdTrans = new ThreadQueue<std::vector<std::pair<boost::uint64_t, boost::uint64_t> > *>(10);
@@ -615,7 +615,7 @@ private:
 			}
 		}
 	private:
-		void idtrans_reflect_to_base(ThreadQueue<std::vector<std::pair<boost::uint64_t, boost::uint64_t> > *> *pQueIdTrans) 
+		void idtrans_reflect_to_base(ThreadQueue<std::vector<std::pair<boost::uint64_t, boost::uint64_t> > *> *pQueIdTrans)
 		{
 			std::vector<std::pair<boost::uint64_t, boost::uint64_t> > *pIdTrans;
 			while ((pIdTrans = (*pQueIdTrans).pop()) != NULL) {
@@ -698,8 +698,8 @@ private:
 			shaper.setParens(scannotner.refParens());
 			shaper.setPrefixes(scannotner.refPrefixes());
 			shaper.setSuffixes(scannotner.refSuffixes());
-			
-			//std:: cout << std:: endl;		
+
+			//std:: cout << std:: endl;
 			//for (size_t i = 0; i < pairs.size(); ++i) {
 			//	const rawclonepair::RawClonePair &pair = pairs[i];
 			//	std:: cout << pair.left.file << "." << pair.left.begin << "-" << pair.left.end << ", " << pair.right.file << "." << pair.right.begin << "-" << pair.right.end << ", " << pair.reference << std:: endl;
@@ -721,9 +721,10 @@ private:
 			std:: vector<rawclonepair::RawFileBeginEnd> shapedLeftFragments;
 			shapedLeftFragments.resize(pairs.size());
 #pragma omp parallel for
-			for (int i = 0; i < pairs.size(); ++i) {
+			for (int i = 0; i < (int)pairs.size(); ++i) {
 				const rawclonepair::RawClonePair &pair = pairs[i];
-				if (i > 0 && pair.left == pairs[i - 1].left) {
+				if ((i > 0) && (pair.left == pairs[i - 1].left))
+                {
 					// do nothing
 				}
 				else {
@@ -750,7 +751,7 @@ private:
 						}
 					}
 				}
-				
+
 				std::vector<std::vector<boost::uint64_t> > equivs;
 				equivs.reserve(equivalents.size());
 				for (EquivalentTable::iterator i = equivalents.begin(); i != equivalents.end(); ++i) {
@@ -771,7 +772,7 @@ private:
 						const rawclonepair::RawClonePair &pair = pairs[i];
 						shapedPairs.resize(shapedPairs.size() + 1);
 						rawclonepair::RawClonePair &p = shapedPairs.back();
-						
+
 						p.left = f;
 						p.right = pair.right;
 						p.right.begin += f.begin - pair.left.begin;
@@ -798,6 +799,7 @@ private:
 
 			(*pPairs).swap(shapedPairs);
 		}
+
 		void filterOptions(std::vector<std::pair<std::string/* name */, std::string/* value */> > *pOptions)
 		{
 			std::vector<std::pair<std::string/* name */, std::string/* value */> > &table = *pOptions;
@@ -822,8 +824,9 @@ private:
 		{
 			return countOfRemovedClonePairs;
 		}
+
 	private:
-		rawclonepair::RawFileBeginEnd to_shaped_fragment(const rawclonepair::RawFileBeginEnd &leftCode, 
+		rawclonepair::RawFileBeginEnd to_shaped_fragment(const rawclonepair::RawFileBeginEnd &leftCode,
 				const std:: vector<ccfx_token_t> &seq, shaper::ShapedFragmentsCalculator<ccfx_token_t> *pShaper)
 		{
 			const int shift_by_first_zero = 1;
@@ -832,7 +835,7 @@ private:
 			std::vector<std::string> minLenValue = base.accessor.getOptionValues("b");
 			if (! minLenValue.empty()) {
 				try {
-					minimumLength = boost::lexical_cast<int, std::string>(minLenValue.back());	
+					minimumLength = boost::lexical_cast<int, std::string>(minLenValue.back());
 				}
 				catch(boost::bad_lexical_cast &) {
 					// do nothing
@@ -848,10 +851,10 @@ private:
 			std:: vector<shaper::ShapedFragmentPosition> fragmentsLargerThanThreshold;
 			{
 				std:: vector<shaper::ShapedFragmentPosition> fragments;
-				assert(leftCode.end + shift_by_first_zero <= seq.size());
-				shaper.calc(&fragments, seq, leftCode.begin + shift_by_first_zero, leftCode.end + shift_by_first_zero, 
+				assert(leftCode.end + shift_by_first_zero <= (boost::int32_t)seq.size());
+				shaper.calc(&fragments, seq, leftCode.begin + shift_by_first_zero, leftCode.end + shift_by_first_zero,
 						base.shapingLevel == 2 ? shaper::HAT_FRAGMENT : shaper::CAP_FRAGMENT);
-				
+
 				fragmentsLargerThanThreshold.reserve(fragments.size());
 				for (size_t j = 0; j < fragments.size(); ++j) {
 					const shaper::ShapedFragmentPosition &p = fragments[j];
@@ -892,7 +895,7 @@ private:
 			return shapedLeft;
 		}
 	};
-	
+
 	friend class IDTransformer;
 	class IDTransformer : public rawclonepair::RawClonePairFileTransformer::FilterFileByFile
 	{
@@ -955,7 +958,7 @@ private:
 			}
 		}
 	};
-	
+
 	class NonmaximalPairRemover : public rawclonepair::RawClonePairFileTransformer::FilterFileByFile
 	{
 	private:
@@ -984,11 +987,11 @@ private:
 		void transformPairs(std:: vector<rawclonepair::RawClonePair> *pPairs)
 		{
 			std:: vector<rawclonepair::RawClonePair> &pairs = *pPairs; // must be sorted
-			
+
 			boost::dynamic_bitset<> nonmaximal;
 			nonmaximal.resize(pairs.size(), false);
 
-			size_t i = 0; 
+			size_t i = 0;
 			while (i < pairs.size()) {
 				const rawclonepair::RawClonePair &pairI = pairs[i];
 				size_t j = i + 1;
@@ -1000,7 +1003,7 @@ private:
 				{
 					size_t begin = i;
 					size_t end = j;
-					
+
 					for (size_t k = begin; k < end; ++k) {
 						if (nonmaximal.test(k)) {
 							continue; // k
@@ -1065,7 +1068,7 @@ private:
 		boost::int32_t curShapingLevel = -1;
 		std::vector<std::string> sl = accessor.getOptionValues("s");
 		if (! sl.empty()) {
-			curShapingLevel = boost::lexical_cast<int, std::string>(sl.back());	
+			curShapingLevel = boost::lexical_cast<int, std::string>(sl.back());
 		}
 		if (shapingLevel < curShapingLevel) {
 			std:: cerr << "error: wrong level for block shaper" << std:: endl;
@@ -1163,7 +1166,7 @@ private:
 		}
 		bool isTruelyIncludedBy(const TrimDown &right) const
 		{
-			return trimming.first <= right.trimming.first && trimming.second <= right.trimming.second 
+			return trimming.first <= right.trimming.first && trimming.second <= right.trimming.second
 					&& trimming != right.trimming;
 		}
 	};
@@ -1256,7 +1259,7 @@ private:
 		}
 
 	private:
-		void accumTrimDownTable(const std::vector<rawclonepair::RawClonePair> &pairs, 
+		void accumTrimDownTable(const std::vector<rawclonepair::RawClonePair> &pairs,
 				HASH_MAP<boost::uint64_t, std::vector<TrimDown> > *pTrimDownTable)
 		{
 			HASH_MAP<boost::uint64_t, std::vector<TrimDown> > &trimDownTable = *pTrimDownTable;
@@ -1355,13 +1358,13 @@ public:
 			const HASH_MAP<boost::uint64_t, TrimDown> &trimmerTable = *pTrimmerTable;
 
 #pragma omp parallel for
-			for (int i = 0; i < pairs.size(); ++i) {
+			for (int i = 0; i < (int)pairs.size(); ++i) {
 				rawclonepair::RawClonePair &pair = pairs[i];
 				HASH_MAP<boost::uint64_t, TrimDown>::const_iterator j = trimmerTable.find(pair.reference);
 				if (j != trimmerTable.end()) {
 					const TrimDown &td = j->second;
-					assert(pair.left.end - pair.left.begin >= td.length());
-					assert(pair.right.end - pair.right.begin >= td.length());
+					assert(pair.left.end - pair.left.begin >= (boost::int32_t)td.length());
+					assert(pair.right.end - pair.right.begin >= (boost::int32_t)td.length());
 					pair.left.begin += td.trimming.first;
 					pair.left.end -= td.trimming.second;
 					pair.right.begin += td.trimming.first;

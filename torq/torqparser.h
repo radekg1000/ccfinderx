@@ -420,7 +420,7 @@ public:
 			}
 			return false; // error
 		}
-		if (pos != tokens.size()) {
+		if (pos != (boost::int32_t)tokens.size()) {
 			errorPos = pos;
 			errorCode = UNEXPECTED_EOF;
 			if (pCallback == &dummyCallback) {
@@ -443,7 +443,11 @@ public:
 	boost::int32_t parseUsrBinTorq(boost::int32_t pos0)
 	{
 		boost::int32_t pos = pos0;
-		if (pos < tokens.size() && tokens[pos].classification == TOKEN::USR_BIN_TORQ) {
+		if (
+            (pos < (boost::int32_t)tokens.size()) &&
+            ((boost::int32_t)tokens[pos].classification == TOKEN::USR_BIN_TORQ)
+            )
+        {
 			return pos + 1;
 		}
 		else {
@@ -533,11 +537,12 @@ public:
 			errorPos = pos0;
 			return pos0; // error
 		}
+
 		boost::int32_t pos = pos0;
-		if (pos < tokens.size() && tokens[pos].classification == TOKEN::IDENTIFIER) {
+		if ((pos < (boost::int32_t)tokens.size()) && (tokens[pos].classification == TOKEN::IDENTIFIER)) {
 			const TOKEN &leftVar = tokens[pos];
 			++pos;
-			if (pos < tokens.size() && tokens[pos].classification == TOKEN::OPE_EQUAL) {
+			if ((pos < (boost::int32_t)tokens.size()) && (tokens[pos].classification == TOKEN::OPE_EQUAL)) {
 				++pos;
 				boost::int32_t p = parseExpression(pos);
 				if (errorPos >= 0) {
@@ -545,7 +550,7 @@ public:
 				}
 				if (p >= 0) {
 					pos = p;
-					if (pos < tokens.size() && tokens[pos].classification == TOKEN::SEMICOLON) {
+					if ((pos < (boost::int32_t)tokens.size()) && (tokens[pos].classification == TOKEN::SEMICOLON)) {
 						++pos;
 						if (! pCallback->acceptAssignStatement(pos0, pos, leftVar)) {
 							errorPos = pos0;
@@ -571,10 +576,10 @@ public:
 		}
 		boost::int32_t pos = pos0;
 		TOKEN t;
-		if (pos < tokens.size() && (t = tokens[pos]).classification == TOKEN::IDENTIFIER) {
+		if ((pos < (boost::int32_t)tokens.size()) && ((t = tokens[pos]).classification == TOKEN::IDENTIFIER)) {
 			const TOKEN &leftVar = tokens[pos];
 			++pos;
-			if (pos < tokens.size() && (t = tokens[pos]).classification == TOKEN::OPE_SCAN_EQ) {
+			if (pos < (boost::int32_t)tokens.size() && (t = tokens[pos]).classification == TOKEN::OPE_SCAN_EQ) {
 				++pos;
 				boost::int32_t p = parsePattern(pos);
 				if (errorPos >= 0) {
@@ -582,7 +587,7 @@ public:
 				}
 				if (p >= 0) {
 					pos = p;
-					if (pos < tokens.size() && (t = tokens[pos]).classification == TOKEN::SEMICOLON) {
+					if (pos < (boost::int32_t)tokens.size() && (t = tokens[pos]).classification == TOKEN::SEMICOLON) {
 						++pos;
 						if (! pCallback->acceptScanEqStatement(pos0, pos, leftVar)) {
 							errorPos = pos0;
@@ -607,10 +612,10 @@ public:
 			return pos0; // error
 		}
 		boost::int32_t pos = pos0;
-		if (pos < tokens.size() && tokens[pos].classification == TOKEN::IDENTIFIER) {
+		if (pos < (boost::int32_t)tokens.size() && tokens[pos].classification == TOKEN::IDENTIFIER) {
 			const TOKEN &leftVar = tokens[pos];
 			++pos;
-			if (pos < tokens.size() && tokens[pos].classification == TOKEN::OPE_MATCH_EQ) {
+			if (pos < (boost::int32_t)tokens.size() && tokens[pos].classification == TOKEN::OPE_MATCH_EQ) {
 				++pos;
 				boost::int32_t p = parsePattern(pos);
 				if (errorPos >= 0) {
@@ -618,7 +623,7 @@ public:
 				}
 				if (p >= 0) {
 					pos = p;
-					if (pos < tokens.size() && tokens[pos].classification == TOKEN::SEMICOLON) {
+					if (pos < (boost::int32_t)tokens.size() && tokens[pos].classification == TOKEN::SEMICOLON) {
 						++pos;
 						if (! pCallback->acceptMatchEqStatement(pos0, pos, leftVar)) {
 							errorPos = pos0;
@@ -642,8 +647,9 @@ public:
 			errorPos = pos0;
 			return pos0; // error
 		}
+
 		boost::int32_t pos = pos0;
-		if (pos < tokens.size() && tokens[pos].classification == TOKEN::IDENTIFIER) {
+		if (pos < (boost::int32_t)tokens.size() && tokens[pos].classification == TOKEN::IDENTIFIER) {
 			const TOKEN &val = tokens[pos];
 			++pos;
 			if (! pCallback->acceptExpression(pos0, pos, val)) {
@@ -703,7 +709,7 @@ public:
 		return -1; // unmatch
 	}
 
-	boost::int32_t parsePackPattern(boost::int32_t pos0) 
+	boost::int32_t parsePackPattern(boost::int32_t pos0)
 	{
 		if (! pCallback->enterPackPattern(pos0)) {
 			errorPos = pos0;
@@ -711,10 +717,10 @@ public:
 		}
 		{
 			boost::int32_t pos = pos0;
-			if (pos < tokens.size() && tokens[pos].classification == TOKEN::IDENTIFIER) {
+			if (pos < (boost::int32_t)tokens.size() && tokens[pos].classification == TOKEN::IDENTIFIER) {
 				const TOKEN &generatedToken = tokens[pos];
 				++pos;
-				if (pos < tokens.size() && tokens[pos].classification == TOKEN::OPE_PACK) {
+				if (pos < (boost::int32_t)tokens.size() && tokens[pos].classification == TOKEN::OPE_PACK) {
 					++pos;
 					boost::int32_t p = parseOrPattern(pos);
 					if (errorPos >= 0) {
@@ -742,7 +748,7 @@ public:
 		return -1; // umatch
 	}
 
-	boost::int32_t parseMatchPattern(boost::int32_t pos0) 
+	boost::int32_t parseMatchPattern(boost::int32_t pos0)
 	{
 		if (! pCallback->enterMatchPattern(pos0)) {
 			errorPos = pos0;
@@ -750,10 +756,10 @@ public:
 		}
 		{
 			boost::int32_t pos = pos0;
-			if (pos < tokens.size() && tokens[pos].classification == TOKEN::IDENTIFIER) {
+			if (pos < (boost::int32_t)tokens.size() && tokens[pos].classification == TOKEN::IDENTIFIER) {
 				const TOKEN &generatedToken = tokens[pos];
 				++pos;
-				if (pos < tokens.size() && tokens[pos].classification == TOKEN::OPE_MATCH) {
+				if (pos < (boost::int32_t)tokens.size() && tokens[pos].classification == TOKEN::OPE_MATCH) {
 					++pos;
 					boost::int32_t p = parseOrPattern(pos);
 					if (errorPos >= 0) {
@@ -781,7 +787,7 @@ public:
 		return -1; // umatch
 	}
 
-	boost::int32_t parseScanPattern(boost::int32_t pos0) 
+	boost::int32_t parseScanPattern(boost::int32_t pos0)
 	{
 		if (! pCallback->enterScanPattern(pos0)) {
 			errorPos = pos0;
@@ -789,10 +795,10 @@ public:
 		}
 		{
 			boost::int32_t pos = pos0;
-			if (pos < tokens.size() && tokens[pos].classification == TOKEN::IDENTIFIER) {
+			if (pos < (boost::int32_t)tokens.size() && tokens[pos].classification == TOKEN::IDENTIFIER) {
 				const TOKEN &generatedToken = tokens[pos];
 				++pos;
-				if (pos < tokens.size() && tokens[pos].classification == TOKEN::OPE_SCAN) {
+				if (pos < (boost::int32_t)tokens.size() && tokens[pos].classification == TOKEN::OPE_SCAN) {
 					++pos;
 					boost::int32_t p = parseOrPattern(pos);
 					if (errorPos >= 0) {
@@ -820,7 +826,7 @@ public:
 		return -1; // umatch
 	}
 
-	boost::int32_t parseOrPattern(boost::int32_t pos0) 
+	boost::int32_t parseOrPattern(boost::int32_t pos0)
 	{
 		if (! pCallback->enterOrPattern(pos0)) {
 			errorPos = pos0;
@@ -833,7 +839,7 @@ public:
 		}
 		if (p >= 0) {
 			pos = p;
-			while (pos < tokens.size() && tokens[pos].classification == TOKEN::OPE_OR) {
+			while (pos < (boost::int32_t)tokens.size() && tokens[pos].classification == TOKEN::OPE_OR) {
 				++pos;
 				boost::int32_t p = parseOrPattern(pos);
 				if (errorPos >= 0) {
@@ -898,7 +904,7 @@ public:
 		return -1; // unmatch
 	}
 
-	boost::int32_t parseRepeatPattern(boost::int32_t pos0) 
+	boost::int32_t parseRepeatPattern(boost::int32_t pos0)
 	{
 		if (! pCallback->enterRepeatPattern(pos0)) {
 			errorPos = pos0;
@@ -906,8 +912,15 @@ public:
 		}
 		boost::int32_t pos = pos0;
 		TOKEN t;
-		if (pos < tokens.size() 
-				&& ((t = tokens[pos]).classification == TOKEN::OPE_STAR || t.classification == TOKEN::OPE_PLUS || t.classification == TOKEN::OPE_QUES)) {
+		if (
+            (pos < (boost::int32_t)tokens.size()) &&
+            (
+                ((t = tokens[pos]).classification == TOKEN::OPE_STAR) ||
+                (t.classification == TOKEN::OPE_PLUS) ||
+                (t.classification == TOKEN::OPE_QUES)
+            )
+           )
+        {
 			const TOKEN &ope = tokens[pos];
 			++pos;
 			boost::int32_t p = parseAtomPattern(pos);
@@ -948,7 +961,7 @@ public:
 		return -1; // umatch
 	}
 
-	boost::int32_t parseAtomPattern(boost::int32_t pos0) 
+	boost::int32_t parseAtomPattern(boost::int32_t pos0)
 	{
 		if (! pCallback->enterAtomPattern(pos0)) {
 			errorPos = pos0;
@@ -1053,7 +1066,7 @@ public:
 		}
 	}
 
-	boost::int32_t parseParenPattern(boost::int32_t pos0) 
+	boost::int32_t parseParenPattern(boost::int32_t pos0)
 	{
 		if (! pCallback->enterParenPattern(pos0)) {
 			errorPos = pos0;
@@ -1061,7 +1074,7 @@ public:
 		}
 
 		boost::int32_t pos = pos0;
-		if (pos < tokens.size() && tokens[pos].classification == TOKEN::LPAREN) {
+		if (pos < (boost::int32_t)tokens.size() && tokens[pos].classification == TOKEN::LPAREN) {
 			++pos;
 			boost::int32_t p = parsePattern(pos);
 			if (errorPos >= 0) {
@@ -1069,7 +1082,7 @@ public:
 			}
 			if (p >= 0) {
 				pos = p;
-				if (pos < tokens.size() && tokens[pos].classification == TOKEN::RPAREN) {
+				if (pos < (boost::int32_t)tokens.size() && tokens[pos].classification == TOKEN::RPAREN) {
 					++pos;
 					if (! pCallback->acceptParenPattern(pos0, pos)) {
 						errorPos = pos0;
@@ -1121,7 +1134,7 @@ public:
 
 		boost::int32_t pos = pos0;
 		if (
-            (pos < tokens.size()) &&
+            (pos < (boost::int32_t)tokens.size()) &&
             (
                 (is_xcep && (tokens[pos].classification == TOKEN::XCEP)) ||
                 (! is_xcep && (tokens[pos].classification == TOKEN::PREQ))
@@ -1129,9 +1142,9 @@ public:
             )
         {
 			++pos;
-			if (pos < tokens.size() && tokens[pos].classification == TOKEN::LPAREN) {
+			if (pos < (boost::int32_t)tokens.size() && tokens[pos].classification == TOKEN::LPAREN) {
 				++pos;
-				if (pos < tokens.size() && tokens[pos].classification == TOKEN::RPAREN) {
+				if (pos < (boost::int32_t)tokens.size() && tokens[pos].classification == TOKEN::RPAREN) {
 					++pos;
 					if (is_xcep) {
 						if (! pCallback->acceptXcepPattern(pos0, pos)) {
@@ -1160,7 +1173,7 @@ public:
 					}
 					if (p >= 0) {
 						pos = p;
-						while (pos < tokens.size() && tokens[pos].classification == TOKEN::OPE_OR) {
+						while (pos < (boost::int32_t)tokens.size() && tokens[pos].classification == TOKEN::OPE_OR) {
 							++pos;
 							boost::int32_t p = parseLiteralPattern(pos, true);
 							if (errorPos >= 0) {
@@ -1180,7 +1193,7 @@ public:
 								return pos0; // error
 							}
 						}
-						if (pos < tokens.size() && tokens[pos].classification == TOKEN::RPAREN) {
+						if (pos < (boost::int32_t)tokens.size() && tokens[pos].classification == TOKEN::RPAREN) {
 							++pos;
 							if (is_xcep) {
 								if (! pCallback->acceptXcepPattern(pos0, pos)) {
@@ -1233,8 +1246,9 @@ public:
 			errorPos = pos0;
 			return pos0; // error
 		}
+
 		boost::int32_t pos = pos0;
-		if (pos < tokens.size() && tokens[pos].classification == TOKEN::STRING) {
+		if (pos < (boost::int32_t)tokens.size() && tokens[pos].classification == TOKEN::STRING) {
 			const TOKEN &literal = tokens[pos];
 			++pos;
 			if (! pCallback->acceptLiteralPattern(pos0, pos, literal)) {
@@ -1256,8 +1270,9 @@ public:
 			errorPos = pos0;
 			return pos0; // error
 		}
+
 		boost::int32_t pos = pos0;
-		if (pos < tokens.size() && tokens[pos].classification == TOKEN::IDENTIFIER) {
+		if (pos < (boost::int32_t)tokens.size() && tokens[pos].classification == TOKEN::IDENTIFIER) {
 			const TOKEN &generatedToken = tokens[pos];
 			++pos;
 			if (! pCallback->acceptGeneratedTokenPattern(pos0, pos, generatedToken)) {
@@ -1279,15 +1294,16 @@ public:
 			errorPos = pos0;
 			return pos0; // error
 		}
+
 		boost::int32_t pos = pos0;
-		if (pos < tokens.size() && tokens[pos].classification == TOKEN::INSERT) {
+		if (pos < (boost::int32_t)tokens.size() && tokens[pos].classification == TOKEN::INSERT) {
 			++pos;
-			if (pos < tokens.size() && tokens[pos].classification == TOKEN::LPAREN) {
+			if (pos < (boost::int32_t)tokens.size() && tokens[pos].classification == TOKEN::LPAREN) {
 				++pos;
-				if (pos < tokens.size() && tokens[pos].classification == TOKEN::IDENTIFIER) {
+				if (pos < (boost::int32_t)tokens.size() && tokens[pos].classification == TOKEN::IDENTIFIER) {
 					const TOKEN &generatedToken = tokens[pos];
 					++pos;
-					if (pos < tokens.size() && tokens[pos].classification == TOKEN::RPAREN) {
+					if (pos < (boost::int32_t)tokens.size() && tokens[pos].classification == TOKEN::RPAREN) {
 						++pos;
 						if (! pCallback->acceptInsertPattern(pos0, pos, generatedToken)) {
 							errorPos = pos0;
@@ -1324,7 +1340,7 @@ public:
 			return pos0; // error
 		}
 		boost::int32_t pos = pos0;
-		if (pos < tokens.size() && tokens[pos].classification == TOKEN::OPE_RECURSE) {
+		if (pos < (boost::int32_t)tokens.size() && tokens[pos].classification == TOKEN::OPE_RECURSE) {
 			++pos;
 			if (! pCallback->acceptRecursePattern(pos0, pos)) {
 				errorPos = pos0;
@@ -1411,27 +1427,32 @@ public:
 	boost::int32_t end;
 	TOKEN ref;
 public:
+
 	TRACE_ITEM()
 		: classification(Nul), node(NC_Nul), begin(-1), end(-1), ref()
 	{
 	}
+
 	TRACE_ITEM(const TRACE_ITEM &right)
 		: classification(right.classification), node(right.node), begin(right.begin), end(right.end), ref(right.ref)
 	{
 	}
+
 	TRACE_ITEM(Classification classification_, NodeClassification node_, boost::int32_t begin_)
 		: classification(classification_), node(node_), begin(begin_), end(-1), ref()
 	{
 	}
+
 	TRACE_ITEM(Classification classification_, NodeClassification node_, boost::int32_t begin_, boost::int32_t end_)
 		: classification(classification_), node(node_), begin(begin_), end(end_), ref()
 	{
 	}
+
 	TRACE_ITEM(Classification classification_, NodeClassification node_, boost::int32_t begin_, boost::int32_t end_, const TOKEN &ref_)
 		: classification(classification_), node(node_), begin(begin_), end(end_), ref(ref_)
 	{
 	}
-public:
+
 	void swap(TRACE_ITEM &right)
 	{
 		std:: swap(this->classification, right.classification);
@@ -1450,349 +1471,415 @@ public:
 	{
 		return trace;
 	}
-public:
+
 	virtual void enter(NodeClassification node, boost::int32_t begin)
 	{
 		TRACE_ITEM ti(TRACE_ITEM::Enter, node, begin);
 		trace.push_back(ti);
 	}
+
 	virtual void reject(NodeClassification node, boost::int32_t begin)
 	{
 		TRACE_ITEM ti(TRACE_ITEM::Reject, node, begin);
 		trace.push_back(ti);
 	}
+
 	virtual void accept(NodeClassification node, boost::int32_t begin, boost::int32_t end)
 	{
 		TRACE_ITEM ti(TRACE_ITEM::Accept, node, begin, end);
 		trace.push_back(ti);
 	}
+
 	virtual void accept(NodeClassification node, boost::int32_t begin, boost::int32_t end, const TOKEN &ref)
 	{
 		TRACE_ITEM ti(TRACE_ITEM::Accept, node, begin, end, ref);
 		trace.push_back(ti);
 	}
-public:
+
 	virtual bool enterStatements(boost::int32_t begin)
 	{
 		enter(NC_Statements, begin);
 		return true; // success
 	}
+
 	virtual bool rejectStatements(boost::int32_t begin)
 	{
 		reject(NC_Statements, begin);
 		return true; // success
 	}
+
 	virtual bool acceptStatements(boost::int32_t begin, boost::int32_t end)
 	{
 		accept(NC_Statements, begin, end);
 		return true; // success
 	}
+
 	virtual bool enterStatement(boost::int32_t begin)
 	{
 		enter(NC_Statement, begin);
 		return true; // success
 	}
+
 	virtual bool rejectStatement(boost::int32_t begin)
 	{
 		reject(NC_Statement, begin);
 		return true; // success
 	}
+
 	virtual bool acceptStatement(boost::int32_t begin, boost::int32_t end)
 	{
 		accept(NC_Statement, begin, end);
 		return true; // success
 	}
+
 	virtual bool enterAssignStatement(boost::int32_t begin)
 	{
 		enter(NC_AssignStatement, begin);
 		return true; // success
 	}
+
 	virtual bool rejectAssignStatement(boost::int32_t begin)
 	{
 		reject(NC_AssignStatement, begin);
 		return true; // success
 	}
+
 	virtual bool acceptAssignStatement(boost::int32_t begin, boost::int32_t end, const TOKEN &leftVar)
 	{
 		accept(NC_AssignStatement, begin, end, leftVar);
 		return true; // success
 	}
+
 	virtual bool enterScanEqStatement(boost::int32_t begin)
 	{
 		enter(NC_ScanEqStatement, begin);
 		return true; // success
 	}
+
 	virtual bool rejectScanEqStatement(boost::int32_t begin)
 	{
 		reject(NC_ScanEqStatement, begin);
 		return true; // success
 	}
+
 	virtual bool acceptScanEqStatement(boost::int32_t begin, boost::int32_t end, const TOKEN &leftVar)
 	{
 		accept(NC_ScanEqStatement, begin, end, leftVar);
 		return true; // success
 	}
+
 	virtual bool enterMatchEqStatement(boost::int32_t begin)
 	{
 		enter(NC_MatchEqStatement, begin);
 		return true; // success
 	}
+
 	virtual bool rejectMatchEqStatement(boost::int32_t begin)
 	{
 		reject(NC_MatchEqStatement, begin);
 		return true; // success
 	}
+
 	virtual bool acceptMatchEqStatement(boost::int32_t begin, boost::int32_t end, const TOKEN &leftVar)
 	{
 		accept(NC_MatchEqStatement, begin, end, leftVar);
 		return true; // success
 	}
+
 	virtual bool enterExpression(boost::int32_t begin)
 	{
 		enter(NC_Expression, begin);
 		return true; // success
 	}
+
 	virtual bool rejectExpression(boost::int32_t begin)
 	{
 		reject(NC_Expression, begin);
 		return true; // success
 	}
+
 	virtual bool acceptExpression(boost::int32_t begin, boost::int32_t end, const TOKEN &var)
 	{
 		accept(NC_Expression, begin, end, var);
 		return true; // success
 	}
+
 	virtual bool enterPattern(boost::int32_t begin)
 	{
 		enter(NC_Pattern, begin);
 		return true; // success
 	}
+
 	virtual bool rejectPattern(boost::int32_t begin)
 	{
 		reject(NC_Pattern, begin);
 		return true; // success
 	}
+
 	virtual bool acceptPattern(boost::int32_t begin, boost::int32_t end)
 	{
 		accept(NC_Pattern, begin, end);
 		return true; // success
 	}
+
 	virtual bool enterPackPattern(boost::int32_t begin)
 	{
 		enter(NC_PackPattern, begin);
 		return true; // success
 	}
+
 	virtual bool rejectPackPattern(boost::int32_t begin)
 	{
 		reject(NC_PackPattern, begin);
 		return true; // success
 	}
+
 	virtual bool acceptPackPattern(boost::int32_t begin, boost::int32_t end, const TOKEN &ope)
 	{
 		accept(NC_PackPattern, begin, end, ope);
 		return true; // success
 	}
+
 	virtual bool enterMatchPattern(boost::int32_t begin)
 	{
 		enter(NC_MatchPattern, begin);
 		return true; // success
 	}
+
 	virtual bool rejectMatchPattern(boost::int32_t begin)
 	{
 		reject(NC_MatchPattern, begin);
 		return true; // success
 	}
+
 	virtual bool acceptMatchPattern(boost::int32_t begin, boost::int32_t end, const TOKEN &ope)
 	{
 		accept(NC_MatchPattern, begin, end, ope);
 		return true; // success
 	}
+
 	virtual bool enterScanPattern(boost::int32_t begin)
 	{
 		enter(NC_ScanPattern, begin);
 		return true; // success
 	}
+
 	virtual bool rejectScanPattern(boost::int32_t begin)
 	{
 		reject(NC_ScanPattern, begin);
 		return true; // success
 	}
+
 	virtual bool acceptScanPattern(boost::int32_t begin, boost::int32_t end, const TOKEN &ope)
 	{
 		accept(NC_ScanPattern, begin, end, ope);
 		return true; // success
 	}
+
 	virtual bool enterSequencePattern(boost::int32_t begin)
 	{
 		enter(NC_SequencePattern, begin);
 		return true; // success
 	}
+
 	virtual bool rejectSequencePattern(boost::int32_t begin)
 	{
 		reject(NC_SequencePattern, begin);
 		return true; // success
 	}
+
 	virtual bool acceptSequencePattern(boost::int32_t begin, boost::int32_t end)
 	{
 		accept(NC_SequencePattern, begin, end);
 		return true; // success
 	}
+
 	virtual bool enterOrPattern(boost::int32_t begin)
 	{
 		enter(NC_OrPattern, begin);
 		return true; // success
 	}
+
 	virtual bool rejectOrPattern(boost::int32_t begin)
 	{
 		reject(NC_OrPattern, begin);
 		return true; // success
 	}
+
 	virtual bool acceptOrPattern(boost::int32_t begin, boost::int32_t end)
 	{
 		accept(NC_OrPattern, begin, end);
 		return true; // success
 	}
+
 	virtual bool enterRepeatPattern(boost::int32_t begin)
 	{
 		enter(NC_RepeatPattern, begin);
 		return true; // success
 	}
+
 	virtual bool rejectRepeatPattern(boost::int32_t begin)
 	{
 		reject(NC_RepeatPattern, begin);
 		return true; // success
 	}
+
 	virtual bool acceptRepeatPattern(boost::int32_t begin, boost::int32_t end, const TOKEN &ope)
 	{
 		accept(NC_RepeatPattern, begin, end, ope);
 		return true; // success
 	}
+
 	virtual bool acceptRepeatPattern(boost::int32_t begin, boost::int32_t end)
 	{
 		accept(NC_RepeatPattern, begin, end);
 		return true; // success
 	}
+
 	virtual bool enterAtomPattern(boost::int32_t begin)
 	{
 		enter(NC_AtomPattern, begin);
 		return true; // success
 	}
+
 	virtual bool rejectAtomPattern(boost::int32_t begin)
 	{
 		reject(NC_AtomPattern, begin);
 		return true; // success
 	}
+
 	virtual bool acceptAtomPattern(boost::int32_t begin, boost::int32_t end)
 	{
 		accept(NC_AtomPattern, begin, end);
 		return true; // success
 	}
+
 	virtual bool enterParenPattern(boost::int32_t begin)
 	{
 		enter(NC_ParenPattern, begin);
 		return true; // success
 	}
+
 	virtual bool rejectParenPattern(boost::int32_t begin)
 	{
 		reject(NC_ParenPattern, begin);
 		return true; // success
 	}
+
 	virtual bool acceptParenPattern(boost::int32_t begin, boost::int32_t end)
 	{
 		accept(NC_ParenPattern, begin, end);
 		return true; // success
 	}
+
 	virtual bool enterXcepPattern(boost::int32_t begin)
 	{
 		enter(NC_XcepPattern, begin);
 		return true; // success
 	}
+
 	virtual bool rejectXcepPattern(boost::int32_t begin)
 	{
 		reject(NC_XcepPattern, begin);
 		return true; // success
 	}
+
 	virtual bool acceptXcepPattern(boost::int32_t begin, boost::int32_t end)
 	{
 		accept(NC_XcepPattern, begin, end);
 		return true; // success
 	}
+
 	virtual bool enterPreqPattern(boost::int32_t begin)
 	{
 		enter(NC_PreqPattern, begin);
 		return true; // success
 	}
+
 	virtual bool rejectPreqPattern(boost::int32_t begin)
 	{
 		reject(NC_PreqPattern, begin);
 		return true; // success
 	}
+
 	virtual bool acceptPreqPattern(boost::int32_t begin, boost::int32_t end)
 	{
 		accept(NC_PreqPattern, begin, end);
 		return true; // success
 	}
+
 	virtual bool enterLiteralPattern(boost::int32_t begin)
 	{
 		enter(NC_LiteralPattern, begin);
 		return true; // success
 	}
+
 	virtual bool rejectLiteralPattern(boost::int32_t begin)
 	{
 		reject(NC_LiteralPattern, begin);
 		return true; // success
 	}
+
 	virtual bool acceptLiteralPattern(boost::int32_t begin, boost::int32_t end, const TOKEN &literal)
 	{
 		accept(NC_LiteralPattern, begin, end, literal);
 		return true; // success
 	}
+
 	virtual bool enterGeneratedTokenPattern(boost::int32_t begin)
 	{
 		enter(NC_GeneratedTokenPattern, begin);
 		return true; // success
 	}
+
 	virtual bool rejectGeneratedTokenPattern(boost::int32_t begin)
 	{
 		reject(NC_GeneratedTokenPattern, begin);
 		return true; // success
 	}
+
 	virtual bool acceptGeneratedTokenPattern(boost::int32_t begin, boost::int32_t end, const TOKEN &generatedToken)
 	{
 		accept(NC_GeneratedTokenPattern, begin, end, generatedToken);
 		return true; // success
 	}
+
 	virtual bool enterInsertPattern(boost::int32_t begin)
 	{
 		enter(NC_InsertPattern, begin);
 		return true; // success
 	}
+
 	virtual bool rejectInsertPattern(boost::int32_t begin)
 	{
 		reject(NC_InsertPattern, begin);
 		return true; // success
 	}
+
 	virtual bool acceptInsertPattern(boost::int32_t begin, boost::int32_t end, const TOKEN &generatedToken)
 	{
 		accept(NC_InsertPattern, begin, end, generatedToken);
 		return true; // success
 	}
+
 	virtual bool enterRecursePattern(boost::int32_t begin)
 	{
 		enter(NC_RecursePattern, begin);
 		return true; // success
 	}
+
 	virtual bool rejectRecursePattern(boost::int32_t begin)
 	{
 		reject(NC_RecursePattern, begin);
 		return true; // success
 	}
+
 	virtual bool acceptRecursePattern(boost::int32_t begin, boost::int32_t end)
 	{
 		accept(NC_RecursePattern, begin, end);
 		return true; // success
 	}
-public:
+
 	static std:: vector<TRACE_ITEM> reduce(const std:: vector<TRACE_ITEM> &trace0)
 	{
 		std:: vector<TRACE_ITEM> trace;
@@ -1815,7 +1902,7 @@ public:
 						}
 						trace.pop_back();
 					}
-					
+
 					if (trace.size() > 0) {
 						TRACE_ITEM &ti = trace[trace.size() - 1];
 						assert(ti.classification == TRACE_ITEM::Enter);
@@ -1853,23 +1940,27 @@ public:
 		trace = trace_;
 		pairInfo = findPairs(trace);
 	}
+
 	const std:: vector<TRACE_ITEM> &refTrace() const
 	{
 		return trace;
 	}
+
 	TRACE_ITEM getAt(boost::int32_t idx) const
 	{
-		assert(0 <= idx && idx <= trace.size());
+		assert((0 <= idx) && (idx <= (boost::int32_t)trace.size()));
 		return trace[idx];
 	}
+
 	boost::int32_t findPair(boost::int32_t idx) const
 	{
-		assert(0 <= idx && idx <= trace.size());
+		assert(0 <= idx && idx <= (boost::int32_t)trace.size());
 		return pairInfo[idx];
 	}
+
 	boost::int32_t findNext(boost::int32_t idx) const // return -1 if no next exists
 	{
-		assert(0 <= idx && idx <= trace.size());
+		assert(0 <= idx && idx <= (boost::int32_t)trace.size());
 		const TRACE_ITEM &item = trace[idx];
 		boost::int32_t closeIdx;
 		if (item.classification == TRACE_ITEM::Enter) {
@@ -1879,14 +1970,20 @@ public:
 		else {
 			closeIdx = idx;
 		}
-		if (! ((closeIdx + 1) < trace.size() && trace[closeIdx + 1].classification == TRACE_ITEM::Enter)) {
+		if (! (
+            (closeIdx + 1 < (boost::int32_t)trace.size()) &&
+            (trace[closeIdx + 1].classification == TRACE_ITEM::Enter)
+            )
+           )
+        {
 			return -1; // no next exists
 		}
 		return closeIdx + 1;
 	}
+
 	boost::int32_t findPrev(boost::int32_t idx) const // return -1 if no prev exists
 	{
-		assert(0 <= idx && idx <= trace.size());
+		assert(0 <= idx && idx <= (boost::int32_t)trace.size());
 		const TRACE_ITEM &item = trace[idx];
 		boost::int32_t openIdx;
 		if (item.classification != TRACE_ITEM::Enter) {
@@ -1901,9 +1998,10 @@ public:
 		}
 		return pairInfo[openIdx - 1];
 	}
+
 	boost::int32_t findParent(boost::int32_t idx) const // return -1 if no parent exists
 	{
-		assert(0 <= idx && idx <= trace.size());
+		assert(0 <= idx && idx <= (boost::int32_t)trace.size());
 		const TRACE_ITEM &item = trace[idx];
 		boost::int32_t openIdx;
 		if (item.classification != TRACE_ITEM::Enter) {
@@ -1924,9 +2022,10 @@ public:
 		assert(trace[cur - 1].classification == TRACE_ITEM::Enter);
 		return cur - 1;
 	}
+
 	std:: vector<boost::int32_t> findChildren(boost::int32_t idx) const
 	{
-		assert(0 <= idx && idx <= trace.size());
+		assert(0 <= idx && idx <= (boost::int32_t)trace.size());
 		const TRACE_ITEM &item = trace[idx];
 		boost::int32_t openIdx;
 		if (item.classification != TRACE_ITEM::Enter) {
@@ -1949,6 +2048,7 @@ public:
 		}
 		return r;
 	}
+
 private:
 	static std:: vector<boost::int32_t> findPairs(const std:: vector<TRACE_ITEM> &trace)
 	{
@@ -1956,7 +2056,7 @@ private:
 		pairs.resize(trace.size());
 
 		std:: vector<boost::int32_t> stack;
-		for (boost::int32_t i = 0; i < trace.size(); ++i) {
+		for (boost::int32_t i = 0; i < (boost::int32_t)trace.size(); ++i) {
 			const TRACE_ITEM &item = trace[i];
 			switch (item.classification) {
 			case TRACE_ITEM::Enter:

@@ -30,8 +30,8 @@ public:
 	typedef std::vector<typename Range<IntType>::Type > Type;
 };
 
-template<typename DstIntType, typename SrcIntType> 
-bool convert_ranges(typename RangeVector<DstIntType>::Type *pDstRanges, const typename RangeVector<SrcIntType>::Type &srcRanges, 
+template<typename DstIntType, typename SrcIntType>
+bool convert_ranges(typename RangeVector<DstIntType>::Type *pDstRanges, const typename RangeVector<SrcIntType>::Type &srcRanges,
 		DstIntType allowedMinValue, DstIntType allowedMaxValue)
 {
 	assert(pDstRanges != NULL);
@@ -62,11 +62,13 @@ private:
 	{
 	private:
 		FilteringMain &base;
-	public:		
+
+	public:
 		Filter(FilteringMain *pBase)
 			: base(*pBase)
 		{
 		}
+
 		bool isValidFileID(int fileID)
 		{
 			if (! base.fileRangeMap.empty()) {
@@ -85,7 +87,8 @@ private:
 				return true; // will not do filtering by fileID
 			}
 		}
-		bool isValidCloneID(boost::uint64_t cloneID) 
+
+		bool isValidCloneID(boost::uint64_t cloneID)
 		{
 			if (! base.cloneRangeMap.empty()) {
 				if (cloneID >= base.cloneRangeMap.size()) {
@@ -103,6 +106,7 @@ private:
 				return true; // will not do filtering by cloneID
 			}
 		}
+
 		virtual bool isValidClonePair(const rawclonepair::RawFileBeginEnd &left, const rawclonepair::RawFileBeginEnd &right, boost::uint64_t cloneID)
 		{
 			if (! (isValidCloneID(cloneID) && isValidFileID(left.file) && isValidFileID(right.file))) {
@@ -116,25 +120,26 @@ private:
 				return left.file == right.file;
 			}
 			else if (! base.groupIndex.empty()) {
-				int lg = left.file >= base.groupIndex.size() ? 0 : base.groupIndex[left.file];
+				int lg = (left.file >= (boost::int32_t)base.groupIndex.size()) ? 0 : base.groupIndex[left.file];
 				if (lg == 0) {
 					return false;
 				}
-				int rg = right.file >= base.groupIndex.size() ? 0 : base.groupIndex[right.file];
+				int rg = (right.file >= (boost::int32_t)base.groupIndex.size()) ? 0 : base.groupIndex[right.file];
 				return lg == rg;
 			}
 			else if (! base.notGroupIndex.empty()) {
-				int lg = left.file >= base.notGroupIndex.size() ? 0 : base.notGroupIndex[left.file];
+				int lg = (left.file >= (boost::int32_t)base.notGroupIndex.size()) ? 0 : base.notGroupIndex[left.file];
 				if (lg == 0) {
 					return true;
 				}
-				int rg = right.file >= base.notGroupIndex.size() ? 0 : base.notGroupIndex[right.file];
+				int rg = (right.file >= (boost::int32_t)base.notGroupIndex.size()) ? 0 : base.notGroupIndex[right.file];
 				return lg != rg;
 			}
 			else {
 				return true;
 			}
 		}
+
 		virtual void transformFiles(std:: vector<rawclonepair::RawClonePairFileTransformer::RawFileData> *pFiles)
 		{
 			if (! base.fileOrder.empty()) {
@@ -216,6 +221,7 @@ private:
 				}
 			}
 			int num1End = i;
+
 			std:: string s = str.substr(num1Begin, num1End - num1Begin);
 			long long num1;
 			try {
@@ -224,6 +230,7 @@ private:
 			catch (boost::bad_lexical_cast &) {
 				return false;
 			}
+
 			if (i < str.length() && str[i] == '-') {
 				++i;
 				int num2Begin = i;
@@ -235,6 +242,7 @@ private:
 						break; // while
 					}
 				}
+
 				int num2End = i;
 				std:: string s = str.substr(num2Begin, num2End - num2Begin);
 				long long num2;
@@ -244,14 +252,17 @@ private:
 				catch (boost::bad_lexical_cast &) {
 					return false;
 				}
+
 				if (num2 <= num1) {
 					errorMessage = "invalid range string";
 				}
+
 				(*pRanges).push_back(std:: pair<long long, long long>(num1, num2));
 			}
 			else {
 				(*pRanges).push_back(std:: pair<long long, long long>(num1, num1));
 			}
+
 			if (i < str.length()) {
 				if (str[i] == ',') {
 					++i;
@@ -264,10 +275,11 @@ private:
 		}
 		return true;
 	}
+
 	size_t analyze_command(size_t *pI, const std::vector<std::string> &argv)
 	{
 		// -f 1-3,5,7,9   1,2,3,5,7,9
-		
+
 		size_t &ai = *pI;
 		std:: string argi = argv[ai];
 
@@ -551,7 +563,7 @@ private:
 					}
 					for (size_t j = 0; j < ranges.size(); ++j) {
 						const std:: pair<int, int> &range = ranges[j];
-						if (! (range.second + 1 < groupIndex.size())) {
+						if (! (range.second + 1 < (int)groupIndex.size())) {
 							groupIndex.resize(range.second + 1, 0);
 						}
 						for (int fi = range.first; fi <= range.second; ++fi) {
@@ -574,7 +586,7 @@ private:
 					}
 					for (size_t j = 0; j < ranges.size(); ++j) {
 						const Range<int>::Type &range = ranges[j];
-						if (! (range.second + 1 < groupIndex.size())) {
+						if (! (range.second + 1 < (int)groupIndex.size())) {
 							notGroupIndex.resize(range.second + 1, 0);
 						}
 						for (int fi = range.first; fi <= range.second; ++fi) {
@@ -595,6 +607,7 @@ private:
 		}
 		return true;
 	}
+
 	template<typename DynamicBitSetType>
 	static bool getList(DynamicBitSetType *pBits, const std:: string &listFile)
 	{
@@ -603,7 +616,7 @@ private:
 		if (! is.is_open()) {
 			return false;
 		}
-		
+
 		std:: string str;
 		while (! is.eof()) {
 			std:: getline(is, str, '\n');
@@ -630,6 +643,7 @@ private:
 
 		return true;
 	}
+
 	template<typename DynamicBitSetType>
 	static bool getListBinary(DynamicBitSetType *pBits, const std:: string &listFileBinary)
 	{
@@ -637,7 +651,7 @@ private:
 		if (! pf) {
 			return false;
 		}
-		
+
 		while (true) {
 			long long num;
 			if (FREAD(&num, sizeof(long long), 1, pf) != 1) {
@@ -652,6 +666,7 @@ private:
 
 		return true;
 	}
+
 	template<typename DynamicBitSetType>
 	static bool getList(DynamicBitSetType *pBits, const std:: string &listFile, long long maxSize)
 	{
@@ -660,7 +675,7 @@ private:
 		if (! is.is_open()) {
 			return false;
 		}
-		
+
 		std:: string str;
 		while (! is.eof()) {
 			std:: getline(is, str, '\n');
@@ -689,6 +704,7 @@ private:
 
 		return true;
 	}
+
 	template<typename DynamicBitSetType>
 	static bool getListBinary(DynamicBitSetType *pBits, const std:: string &listFileBinary, long long maxSize)
 	{
@@ -696,7 +712,7 @@ private:
 		if (! pf) {
 			return false;
 		}
-		
+
 		while (true) {
 			long long num;
 			if (FREAD(&num, sizeof(long long), 1, pf) != 1) {
@@ -713,6 +729,7 @@ private:
 
 		return true;
 	}
+
 	static bool getList(std::vector<int> *pList, int *pMaxValue, const std:: string &listFile)
 	{
 		std:: ifstream is;
@@ -720,7 +737,7 @@ private:
 		if (! is.is_open()) {
 			return false;
 		}
-		
+
 		bool firstOne = true;
 		std:: string str;
 		while (! is.eof()) {
@@ -754,13 +771,14 @@ private:
 
 		return true;
 	}
+
 	static bool getListBinary(std::vector<int> *pList, int *pMaxValue, const std:: string &listFileBinary)
 	{
 		FileStructWrapper pf(listFileBinary, "rb");
 		if (! pf) {
 			return false;
 		}
-		
+
 		bool firstOne = true;
 		while (true) {
 			long long num;
@@ -782,8 +800,9 @@ private:
 
 		return true;
 	}
+
 public:
-	int main(const std::vector<std::string> &argv) 
+	int main(const std::vector<std::string> &argv)
 	{
 		assert(argv.size() >= 2);
 		if (argv.size() == 2 || argv[2] == "-h" || argv[2] == "--help") {
@@ -948,7 +967,7 @@ public:
 				fileRangeMap.set(fileID);
 			}
 		}
-		
+
 		const std:: string tempFile = ::make_temp_file_on_the_same_directory(outputFile, "ccfxfiltering", ".tmp");
 		if (! cloneRange.empty()) {
 			if (! cloneRangeMap.create(tempFile, true)) {

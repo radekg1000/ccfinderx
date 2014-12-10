@@ -51,30 +51,33 @@ namespace rawclonepair {
 
 struct RawFileBeginEnd {
 public:
-	boost::uint32_t file; // >= 1
-	boost::uint32_t begin; // >= 0
-	boost::uint32_t end; // >= 0
+	boost::int32_t file; // >= 1
+	boost::int32_t begin; // >= 0
+	boost::int32_t end; // >= 0
+
 public:
 	RawFileBeginEnd(boost::int32_t file_, boost::int32_t begin_, boost::int32_t end_)
 		: file(file_), begin(begin_), end(end_)
 	{
 	}
+
 	RawFileBeginEnd()
 		: file(0), begin(0), end(0)
 	{
 	}
+
 	RawFileBeginEnd(const RawFileBeginEnd &right)
 		: file(right.file), begin(right.begin), end(right.end)
 	{
 	}
-public:
+
 	void swap(RawFileBeginEnd &right)
 	{
 		std:: swap(this->file, right.file);
 		std:: swap(this->begin, right.begin);
 		std:: swap(this->end, right.end);
 	}
-public:
+
 	bool operator==(const RawFileBeginEnd &right) const
 	{
 		if (file == right.file) {
@@ -86,6 +89,7 @@ public:
 		}
 		return false;
 	}
+
 	bool operator<(const RawFileBeginEnd &right) const
 	{
 		if (file < right.file) {
@@ -112,24 +116,28 @@ public:
 	RawFileBeginEnd left;
 	RawFileBeginEnd right;
 	boost::uint64_t reference;
+
 public:
 	RawClonePair(const RawFileBeginEnd &left_, const RawFileBeginEnd &right_, boost::uint64_t reference_)
 		: left(left_), right(right_), reference(reference_)
 	{
 	}
+
 	RawClonePair()
 		: left(), right(), reference(0)
 	{
 	}
+
 	RawClonePair(boost::int32_t lFile_, boost::int32_t lBegin_, boost::int32_t lEnd_, boost::int32_t rFile_, boost::int32_t rBegin_, boost::int32_t rEnd_, boost::uint64_t reference_)
 		: left(lFile_, lBegin_, lEnd_), right(rFile_, rBegin_, rEnd_), reference(reference_)
 	{
 	}
+
 	RawClonePair(const RawClonePair &b)
 		: left(b.left), right(b.right), reference(b.reference)
 	{
 	}
-public:
+
 	bool operator==(const RawClonePair &b) const
 	{
 		const RawClonePair &a = *this;
@@ -152,6 +160,7 @@ public:
 
 		return false;
 	}
+
 	bool operator<(const RawClonePair &b) const
 	{
 		const RawClonePair &a = *this;
@@ -244,21 +253,25 @@ protected:
 	virtual ~AppVersionChecker()
 	{
 	}
+
 public:
 	AppVersionChecker(const AppVersionChecker &right)
 		: versionChecker(right.versionChecker)
 	{
 	}
+
 	AppVersionChecker(const std::vector<boost::int32_t> &versionChecker_)
 	{
 		assert(versionChecker_.size() <= 3);
 		versionChecker = versionChecker_;
 	}
+
 	AppVersionChecker(boost::int32_t num1, boost::int32_t num2)
 	{
 		versionChecker.push_back(num1);
 		versionChecker.push_back(num2);
 	}
+
 protected:
 	template<typename fwdIt>
 	bool checkVersion(fwdIt it) const
@@ -287,19 +300,22 @@ public:
 		: pOutput(&std:: cout)
 	{
 	}
+
 	void attachOutput(std:: ostream *pOutput_)
 	{
 		pOutput = pOutput_;
 	}
+
 	void setOptionDefinitions(const std::vector<std::pair<std::string /* option name */, std::string /* comment */> > &optionDefinitions_)
 	{
 		optionDefinitions = optionDefinitions_;
 	}
-public:
-	std:: string getErrorMessage() const
+
+	const std:: string& getErrorMessage() const
 	{
 		return errorMessage;
 	}
+
 	bool print(const std:: string &file)
 	{
 		errorMessage.clear();
@@ -396,6 +412,7 @@ public:
 
 		return true;
 	}
+
 private:
 	bool printVersion(FILE *pFile)
 	{
@@ -444,6 +461,7 @@ private:
 
 		return true;
 	}
+
 	bool printOptions_v0(FILE *pFile)
 	{
 		if (! (version[0] == 10 && version[1] == 0 && version[2] == 5)) {
@@ -457,6 +475,7 @@ private:
 		(*pOutput) << "min_length: " << tl << std:: endl;
 		return true;
 	}
+
 	bool printOptions_v1(FILE *pFile)
 	{
 		boost::int32_t count;
@@ -483,6 +502,7 @@ private:
 		}
 		return true;
 	}
+
 	bool printOptions_v2(FILE *pFile)
 	{
 		std::string line;
@@ -491,14 +511,17 @@ private:
 				errorMessage = "invalid option field";
 				return false;
 			}
+
 			if (line.length() == 0) {
 				break; // while true
 			}
+
 			std::string::size_type p = line.find('\t');
 			if (p == std::string::npos) {
 				errorMessage = "invalid option field";
 				return false;
 			}
+
 			std::string name = line.substr(0, p);
 			std::string value = line.substr(p + 1);
 			if (! is_name(name)) {
@@ -513,6 +536,7 @@ private:
 		}
 		return true;
 	}
+
 	bool printPreprocessScript(FILE *pFile)
 	{
 		(*pOutput) << "preprocess_script: ";
@@ -528,6 +552,7 @@ private:
 		errorMessage = "broken file";
 		return false;
 	}
+
 	bool printInputFiles(FILE *pFile)
 	{
 		(*pOutput) << "source_files {" << std:: endl;
@@ -562,6 +587,7 @@ private:
 		errorMessage = "broken source-file item";
 		return false;
 	}
+
 	bool printInputFiles_v2(FILE *pFile)
 	{
 		bool success = printInputFiles(pFile);
@@ -579,6 +605,7 @@ private:
 
 		return true;
 	}
+
 	bool printInputFileRemarks(FILE *pFile)
 	{
 		Decoder defaultDecoder;
@@ -618,6 +645,7 @@ private:
 		(*pOutput) << "}" << std::endl;
 		return true;
 	}
+
 	bool printClonePairs(FILE *pFile)
 	{
 		static const RawClonePair terminator(0, 0, 0, 0, 0, 0, 0);
@@ -643,6 +671,7 @@ private:
 
 		return true;
 	}
+
 	bool printCloneSetRemarks(FILE *pFile)
 	{
 		Decoder defaultDecoder;
@@ -686,25 +715,30 @@ private:
 
 class RawClonePairFileTransformer : private AppVersionChecker {
 public:
-	struct RawFileData {
+	struct RawFileData
+    {
 	public:
 		int fileID;
 		size_t length;
 		std:: string path;
+
 	public:
 		RawFileData()
 			: fileID(0), length(0), path()
 		{
 		}
+
 		RawFileData(const RawFileData &right)
 			: fileID(right.fileID), length(right.length), path(right.path)
 		{
 		}
+
 		RawFileData(int fileID_, size_t length_, std::string path_)
 			: fileID(fileID_), length(length_), path(path_)
 		{
 		}
-	};
+	}; //RawFileData
+
 private:
 	size_t maxMemoryUse;
 	unsigned long long blockSize;
@@ -717,21 +751,24 @@ private:
 	std:: vector<std:: pair<boost::int64_t/* begin */, unsigned long long/* length */> > blocks;
 	std:: string errorMessage;
 	RawClonePair terminator;
+
 public:
 	RawClonePairFileTransformer()
 		: AppVersionChecker(APPVERSION[0], APPVERSION[1]),
 		maxMemoryUse(0), terminator(0, 0, 0, 0, 0, 0, 0)
 	{
 	}
-public:
-	std:: string getErrorMessage() const
+
+	const std:: string& getErrorMessage() const
 	{
 		return errorMessage;
 	}
+
 	void setMemoryUsageLimit(size_t maxMemoryUse_)
 	{
 		maxMemoryUse = maxMemoryUse_;
 	}
+
 	bool sort(const std:: string &sorted, const std:: string &unsorted)
 	{
 		errorMessage.clear();
@@ -745,6 +782,7 @@ public:
 		else {
 			blockSize = maxMemoryUse / sizeof(RawClonePair);
 		}
+
 		if (blockSize < 1000) {
 			blockSize = 1000;
 		}
@@ -752,6 +790,7 @@ public:
 		if (! copyHeader(tempInput, unsorted)) { // assign bodyStartPos, oututBodyStartPos, sourceFiles
 			return false;
 		}
+
 		if (! copyHeader(tempOutput, unsorted)) {
 			return false;
 		}
@@ -782,7 +821,6 @@ public:
 
 		return true;
 	}
-    public:
 
 	class Filter {
 	public:
@@ -827,7 +865,7 @@ public:
 
 		return true;
 	}
-public:
+
 	class FilterFileByFile {
 	public:
 		virtual ~FilterFileByFile() { }
@@ -906,6 +944,7 @@ private:
 			errorMessage = (boost::format("can't create a file '%s'") % output).str();
 			return false;
 		}
+
 		FileStructWrapper pInput(input, "rb" F_SEQUENTIAL_ACCESS_OPTIMIZATION);
 		if (! (bool)pInput) {
 			errorMessage = (boost::format("can't open a file '%s'") % input).str();
@@ -942,6 +981,7 @@ private:
 
 		return true;
 	}
+
 	bool copySortBlocks(const std:: string &output, const std:: string &input)
 	{
 		static const RawClonePair terminator(0, 0, 0, 0, 0, 0, 0);
@@ -981,6 +1021,7 @@ private:
 				bodySize += readCount;
 				break; // while
 			}
+
 			block.second = readCount;
 			blocks.push_back(block);
 			std:: sort(buffer.begin(), buffer.begin() + readCount);
@@ -999,6 +1040,7 @@ private:
 
 		return true;
 	}
+
 	bool copyFooter(const std::string &output, const std::string &input)
 	{
 		FileStructWrapper pOutput(output, "r+b" F_SEQUENTIAL_ACCESS_OPTIMIZATION);
@@ -1058,10 +1100,12 @@ private:
 
 		return true;
 	}
+
 	bool filterHeader(const std:: string &output, const std:: string &input, Filter *pFilter)
 	{
 		return filterHeader_i<Filter>(output, input, pFilter);
 	}
+
 	bool filterHeaderFileByFile(const std:: string &output, const std:: string &input, FilterFileByFile *pFilter)
 	{
 		return filterHeader_i<FilterFileByFile>(output, input, pFilter);
@@ -1111,6 +1155,7 @@ private:
 
 		return true;
 	}
+
 	void transform_and_write(ThreadQueue<std::vector<RawClonePair> *> *pQue, FileStructWrapper *ppOutput, FilterFileByFile *pFilter)
 	{
 		FileStructWrapper &pOutput = *ppOutput;
@@ -1128,6 +1173,7 @@ private:
 					errorMessage = "invalid transformation, file ID modified";
 					return;
 				}
+
 				for (size_t i = 1; i < pairs.size(); ++i) {
 					const RawClonePair &lastPair = pairs[i - 1];
 					const RawClonePair &pair = pairs[i];
@@ -1140,12 +1186,14 @@ private:
 						return;
 					}
 				}
+
 				fwrite_RawClonePair(&pairs[0], pairs.size(), pOutput);
 			}
 
 			delete pPairs;
 		}
 	}
+
 	bool filterBodyFileByFile(const std:: string &output, const std:: string &input, FilterFileByFile *pFilter)
 	{
 		errorMessage = "";
@@ -1176,6 +1224,7 @@ private:
 			errorMessage = "broken file";
 			return false;
 		}
+
 		bodySize += readCount;
 		while (true) {
 			if (errorMessage != "") {
@@ -1255,31 +1304,37 @@ private:
 		return filterFooter_i<FilterFileByFile>(output, input, pFilter);
 	}
 
-	struct FRD {
+	struct FRD
+    {
 	public:
 		FILE *pFile;
 		unsigned long long rest;
 		RawClonePair curData;
+
 	public:
 		FRD(FILE *pFile_, unsigned long long rest_)
 			: pFile(pFile_), rest(rest_), curData()
 		{
 		}
+
 		FRD(const FRD &right)
 			: pFile(right.pFile), rest(right.rest), curData(right.curData)
 		{
 		}
+
 		FRD()
 			: pFile(NULL), rest(0), curData()
 		{
 		}
+
 		void swap(FRD &right)
 		{
 			std:: swap(pFile, right.pFile);
 			std:: swap(rest, right.rest);
 			std:: swap(curData, right.curData);
 		}
-	};
+	}; //FRD
+
 	bool mergeBlocks(const std:: string &output, const std:: string &input)
 	{
 		static const RawClonePair terminator(0, 0, 0, 0, 0, 0, 0);
@@ -1353,6 +1408,7 @@ private:
 
 		return true;
 	}
+
 	bool copyVersion(FILE *pOutput, FILE *pInput)
 	{
 		{
@@ -1390,6 +1446,7 @@ private:
 
 		return true;
 	}
+
 	bool copyFormat(FILE *pOutput, FILE *pInput)
 	{
 		std:: vector<char> buf;
@@ -1408,6 +1465,7 @@ private:
 
 		return true;
 	}
+
 	//bool makeDiploidFormat(FILE *pOutput, FILE *pInput)
 	//{
 	//	std:: vector<char> buf;
@@ -1427,6 +1485,7 @@ private:
 	//
 	//	return true;
 	//}
+
 	template<typename Filter>
 	bool filterOptions_v2(FILE *pOutput, FILE *pInput, Filter *pFilter)
 	{
@@ -1502,6 +1561,7 @@ private:
 
 	//	return true;
 	//}
+
 	bool copyOptions_v2(FILE *pOutput, FILE *pInput)
 	{
 		while (true) {
@@ -1534,6 +1594,7 @@ private:
 		}
 		return true;
 	}
+
 	bool copyPreprocessScript(FILE *pOutput, FILE *pInput)
 	{
 		while (! feof(pInput)) {
@@ -1546,6 +1607,7 @@ private:
 		errorMessage = "wrong format";
 		return false;
 	}
+
 	bool copyInputFiles(FILE *pOutput, FILE *pInput)
 	{
 		sourceFiles = 0;
@@ -1572,6 +1634,7 @@ private:
 		errorMessage = "invalid source file";
 		return false;
 	}
+
 	bool copyInputFiles_v2(FILE *pOutput, FILE *pInput)
 	{
 		if (! copyInputFiles(pOutput, pInput)) {
@@ -1713,6 +1776,7 @@ private:
 			}
 		}
 	}
+
 	template<typename FilterFileByFile>
 	void filterInputFilesFileByFile_v2(FILE *pOutput, FILE *pInput, FilterFileByFile *pFilter)
 	{
@@ -1789,20 +1853,24 @@ private:
 		int id;
 		std:: string path;
 		size_t len;
+
 	public:
 		IDPathLen()
 			: id(0), path(), len(0)
 		{
 		}
+
 		IDPathLen(const IDPathLen &right)
 			: id(right.id), path(right.path), len(right.len)
 		{
 		}
+
 		IDPathLen(int id_, const std:: string &path_, size_t len_)
 			: id(id_), path(path_), len(len_)
 		{
 		}
 	};
+
 public:
 	enum { FILEDATA = 1 << 0, CLONEDATA = 1 << 1, FILEREMARK = 1 << 2, CLONEREMARK = 1 << 3 };
 private:
@@ -1815,7 +1883,7 @@ private:
 	std:: vector<IDPathLen> fileDescriptions; // fileID -> IDPathLen
 	std:: vector<std:: pair<boost::int64_t, boost::int64_t> > fileClonePairLocations; // fileID -> pos
 	size_t fileCount;
-	size_t maxFileID;
+	boost::int32_t maxFileID;
 	boost::uint64_t maxCloneSetID;
 	std::vector<std::pair<std::string/* name */, std::string/* value */> > options;
 	std:: string preprocessScript;
@@ -1823,6 +1891,7 @@ private:
 
 	bool useCache;
 	mutable boost::optional<std::pair<int/* fileID */, std:: vector<RawClonePair> > > clonePairsCache;
+
 public:
 	RawClonePairFileAccessor()
 		: AppVersionChecker(APPVERSION[0], APPVERSION[1]),
@@ -1830,33 +1899,39 @@ public:
 		useCache(false), clonePairsCache()
 	{
 	}
+
 	virtual ~RawClonePairFileAccessor()
 	{
 		close();
 	}
-public:
+
 	void setCacheUsage(bool cacheUsage)
 	{
 		useCache = cacheUsage;
 	}
+
 	bool getCacheUsage() const
 	{
 		return useCache;
 	}
-	std:: string getErrorMessage() const
+
+	const std:: string& getErrorMessage() const
 	{
 		return errorMessage;
 	}
-	std:: string getPreprocessScript() const
+
+	const std:: string& getPreprocessScript() const
 	{
 		return preprocessScript;
 	}
+
 	void getVersion(boost::int32_t versionNumber[3]) const
 	{
 		for (size_t i = 0; i < 3; ++i) {
 			versionNumber[i] = version[i];
 		}
 	}
+
 	std::vector<std::string> getOptionValues(const std::string &name) const
 	{
 		std::vector<std::string> r;
@@ -1867,10 +1942,12 @@ public:
 		}
 		return r;
 	}
+
 	void getOptions(std::vector<std::pair<std::string/* name */, std::string/* value */> > *pOptions)
 	{
 		(*pOptions) = options;
 	}
+
 	bool open(const std:: string &path, unsigned int requiredData)
 	{
 		clonePairsCache.reset();
@@ -1949,6 +2026,7 @@ public:
 
 		return true;
 	}
+
 private:
 	bool readVersion(FILE *pDataFile)
 	{
@@ -1978,6 +2056,7 @@ private:
 
 		return true;
 	}
+
 	bool readFormat(FILE *pDataFile)
 	{
 		std:: vector<char> buf;
@@ -1994,6 +2073,7 @@ private:
 		//}
 		return true;
 	}
+
 	bool readOptions_v2(FILE *pDataFile)
 	{
 		while (true) {
@@ -2024,6 +2104,7 @@ private:
 		}
 		return true;
 	}
+
 	bool readPreprocessScript(FILE *pDataFile)
 	{
 		std:: string buf;
@@ -2038,6 +2119,7 @@ private:
 		errorMessage = "broken file";
 		return false;
 	}
+
 	bool readInputFiles_v2(FILE *pDataFile)
 	{
 		std:: string fileName;
@@ -2057,7 +2139,7 @@ private:
 				IDPathLen ipl((int)id, fileName, (size_t)len);
 
 				// inflate table if needed
-				if (! (id < fileDescriptions.size())) {
+				if (! (id < (boost::int32_t)fileDescriptions.size())) {
 					IDPathLen dummy(-1, "", 0);
 					maxFileID = id;
 					fileDescriptions.resize(id + 1, dummy);
@@ -2093,6 +2175,7 @@ private:
 		errorMessage = "broken file";
 		return false;
 	}
+
 	bool readFileRemarks(FILE *pDataFile)
 	{
 		std::string line;
@@ -2121,6 +2204,7 @@ private:
 
 		return true;
 	}
+
 	bool readClonePairs(FILE *pDataFile)
 	{
 		static const RawClonePair terminator(0, 0, 0, 0, 0, 0, 0);
@@ -2146,15 +2230,23 @@ private:
 				}
 				break; // while true
 			}
+
 			if (pd.left.file != leftID) {
 				if (leftID != -1) {
                     fileClonePairLocations[leftID].second = pos;
 				}
-				if (! (pd.left.file <= maxFileID && fileDescriptions[pd.left.file].id != -1)) {
+
+				if (! (
+                    (pd.left.file <= maxFileID) && (fileDescriptions[pd.left.file].id != -1)
+                    ))
+                {
 					errorMessage = "invalid FileID in clone description";
 					return false;
 				}
-				if (! (pd.right.file <= maxFileID && fileDescriptions[pd.right.file].id != -1)) {
+
+				if (! (
+                    (pd.right.file <= maxFileID) && (fileDescriptions[pd.right.file].id != -1)
+                    )) {
 					errorMessage = "invalid FileID in clone description";
 					return false;
 				}
@@ -2189,6 +2281,7 @@ private:
 
 		return true;
 	}
+
 public:
 	void close()
 	{
@@ -2209,10 +2302,12 @@ public:
 		options.clear();
 		preprocessScript.clear();
 	}
+
 	size_t getFileCount() const
 	{
 		return fileCount;
 	}
+
 	void getFiles(std:: vector<int> *pFileIDs) const
 	{
 		(*pFileIDs).clear();
@@ -2225,11 +2320,12 @@ public:
 			}
 		}
 	}
+
 	void getFileDescription(int fileID, std:: string *pFilePath, size_t *pLength) const
 	{
 		assert(fileID >= 0);
 
-		if (! (fileID < fileDescriptions.size())) {
+		if (! (fileID < (boost::int32_t)fileDescriptions.size())) {
 			assert(false);
 			return;
 		}
@@ -2253,6 +2349,7 @@ public:
 			}
 		}
 	}
+
 	void getFileRemark(int fileID, std::vector<std::string> *pRemarks) const
 	{
 		assert(pRemarks != NULL);
@@ -2265,6 +2362,7 @@ public:
 			(*pRemarks).clear();
 		}
 	}
+
 	void getFileIDsHavingRemark(std::vector<int> *pFileIDs) const
 	{
 		assert(pFileIDs != NULL);
@@ -2279,6 +2377,7 @@ public:
 		std::sort(fileIDs.begin(), fileIDs.end());
 		(*pFileIDs).swap(fileIDs);
 	}
+
 	void getRawClonePairsOfFile(int fileID, std:: vector<RawClonePair> *pClonePairs) const
 	{
 		assert(fileID >= 0);
@@ -2288,7 +2387,7 @@ public:
 			return;
 		}
 
-		if (! (fileID < fileDescriptions.size())) {
+		if (! (fileID < (boost::int32_t)fileDescriptions.size())) {
 			assert(false);
 			return;
 		}
@@ -2304,7 +2403,9 @@ public:
 			const std:: pair<boost::int64_t, boost::int64_t> &loc = fileClonePairLocations[ipl.id];
 			if (loc.second > loc.first) {
 				boost::int64_t count64 = (loc.second - loc.first) / sizeof(RawClonePair);
-				assert(count64 <= std::numeric_limits<size_t>::max());
+				assert(
+                    (count64 > 0) &&
+                    (size_t)count64 <= std::numeric_limits<size_t>::max());
 				size_t count = count64;
 				(*pClonePairs).resize(count);
 				FSEEK64(pDataFile, loc.first, SEEK_SET);
@@ -2319,6 +2420,7 @@ public:
 			clonePairsCache->second = *pClonePairs;
 		}
 	}
+
 	void getRawClonePairsOfFile(int fileID, std:: vector<RawClonePair> *pClonePairs, boost::uint64_t cloneSetID) const
 	{
 		std:: vector<RawClonePair> pairs;
@@ -2330,10 +2432,12 @@ public:
 			}
 		}
 	}
+
 	boost::uint64_t getMaxCloneSetID() const
 	{
 		return maxCloneSetID;
 	}
+
 	boost::uint64_t getCloneSetCount() const
 	{
 		boost::uint64_t id;
@@ -2347,6 +2451,7 @@ public:
 		}
 		return count;
 	}
+
 	bool cloneSetExists(boost::uint64_t cloneSetID) const
 	{
 		if (cloneSetID > maxCloneSetID) {
@@ -2361,6 +2466,7 @@ public:
 
 		return true;
 	}
+
 	bool getFirstCloneSetID(boost::uint64_t *pCloneSetID) const
 	{
 		boost::uint64_t i = 0;
@@ -2379,6 +2485,7 @@ public:
 		}
 		return false;
 	}
+
 	bool getNextCloneSetID(boost::uint64_t *pCloneSetID) const
 	{
 		boost::uint64_t i = *pCloneSetID + 1;
@@ -2394,6 +2501,7 @@ public:
 		}
 		return false;
 	}
+
 	void getRawClonePairsOfCloneSet(boost::uint64_t cloneSetID, std:: vector<RawClonePair> *pClonePairs) const
 	{
 		(*pClonePairs).clear();
@@ -2434,6 +2542,7 @@ public:
 
 		std:: sort((*pClonePairs).begin(), (*pClonePairs).end());
 	}
+
 	void getCodeFragmentsOfCloneSet(boost::uint64_t cloneSetID, std:: vector<rawclonepair::RawFileBeginEnd> *pCodeFragments) const
 	{
 		std:: vector<rawclonepair::RawFileBeginEnd> &codeFragments = *pCodeFragments;

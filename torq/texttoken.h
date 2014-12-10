@@ -23,10 +23,12 @@ public:
 	virtual ~Token()
 	{
 	}
+
 	virtual void destroy()
 	{
 		assert(false); // this code must not be executed
 	}
+
 public:
 	virtual Token *dup() const = 0;
 	virtual bool operator==(const Token &right) const = 0;
@@ -50,6 +52,7 @@ public:
 	{
 		return boost::optional<boost::int32_t>();
 	}
+
 	virtual void destroy()
 	{
 		assert(false); // this code must not be executed
@@ -64,6 +67,7 @@ possbly bug.
 class TokenSequence {
 private:
 	std::vector<Token *> body;
+
 public:
 	~TokenSequence()
 	{
@@ -74,6 +78,7 @@ public:
 			}
 		}
 	}
+
 	TokenSequence(const TokenSequence &right)
 	{
 		body.resize(right.body.size(), NULL);
@@ -84,14 +89,16 @@ public:
 			}
 		}
 	}
+
 	TokenSequence()
 	{
 	}
+
 	void swap(TokenSequence &right)
 	{
 		body.swap(right.body);
 	}
-public:
+
 	TokenSequence &operator=(const TokenSequence &right)
 	{
 		if (&right == this) {
@@ -116,7 +123,7 @@ public:
 
 		return *this;
 	}
-public:
+
 	void resize(size_t newSize)
 	{
 		size_t curSize = size();
@@ -133,33 +140,39 @@ public:
 			body.resize(newSize);
 		}
 	}
+
 	void reserve(size_t rSize)
 	{
 		body.reserve(rSize);
 	}
+
 	void clear()
 	{
 		resize(0);
 	}
-public:
+
 	size_t size() const
 	{
 		return body.size();
 	}
+
 	Token *refAt(size_t index) const
 	{
 		assert(index < body.size());
 		return body[index];
 	}
+
 	Token *refBack() const
 	{
 		assert(body.size() >= 1);
 		return body.back();
 	}
+
 	void attachBack(Token *pToken)
 	{
 		body.push_back(pToken);
 	}
+
 	Token *replaceAt(size_t index, Token *pToken)
 	{
 		assert(index < body.size());
@@ -167,7 +180,7 @@ public:
 		body[index] = pToken;
 		return p;
 	}
-public:
+
 	bool operator==(const TokenSequence &right) const
 	{
 		if (body.size() != right.body.size()) {
@@ -210,20 +223,24 @@ protected:
 public:
 	boost::int32_t code;
 	TokenSequence value;
+
 public:
 	GeneratedToken()
 		: code(0), value()
 	{
 	}
+
 protected:
 	GeneratedToken(const GeneratedToken &right)
 		: code(right.code), value(right.value)
 	{
 	}
+
 	GeneratedToken(boost::int32_t code_, const TokenSequence &value_)
 		: code(code_), value(value_)
 	{
 	}
+
 public:
 	static GeneratedToken *create()
 	{
@@ -233,6 +250,7 @@ public:
 		return new GeneratedToken();
 #endif
 	}
+
 	static GeneratedToken *create(boost::int32_t code_, const TokenSequence &value_)
 	{
 #if defined USE_BOOST_POOL
@@ -244,6 +262,7 @@ public:
 		return new GeneratedToken(code_, value_);
 #endif
 	}
+
 	virtual void destroy()
 	{
 #if defined USE_BOOST_POOL
@@ -252,12 +271,13 @@ public:
 		delete this;
 #endif
 	}
+
 	void swap(GeneratedToken &right)
 	{
 		std:: swap(this->code, right.code);
 		this->value.swap(right.value);
 	}
-public:
+
 	virtual Token *dup() const
 	{
 #if defined USE_BOOST_POOL
@@ -269,6 +289,7 @@ public:
 		return new GeneratedToken(*this);
 #endif
 	}
+
 	virtual bool operator==(const Token &right) const
 	{
 		const GeneratedToken *pRight = right.castToGenerated();
@@ -289,14 +310,17 @@ public:
 			return false;
 		}
 	}
+
 	virtual boost::optional<MYWCHAR_T> getRawCharCode() const
 	{
 		return boost::optional<MYWCHAR_T>();
 	}
+
 	virtual boost::optional<boost::int32_t> getGeneratedCode() const
 	{
 		return boost::optional<boost::int32_t>(code);
 	}
+
 public:
 	static const std:: vector<std:: pair<std:: vector<MYWCHAR_T>/* name */, GeneratedToken *> > SpecialTokens;
 };
@@ -372,35 +396,40 @@ public:
 
 		(*pSeq).swap(seq);
 	}
+
 public:
 	enum PrintOptions {
 		RecurseNull = (1 << 1),
 		NewLineThru = (1 << 2),
 		SkipNull = (1 << 3),
 	};
-public:
+
 	enum NF_NODETYPE {
 		NF_NONE, NF_TERMINATED, NF_EXPANDED
 	};
+
 	struct NodeFormat {
 	public:
 		NF_NODETYPE nodeType;
 		std:: vector<MYWCHAR_T> opening;
 		std:: vector<MYWCHAR_T> closing;
+
 	public:
 		NodeFormat(NF_NODETYPE nodeType_, const std:: vector<MYWCHAR_T> &opening_, const std:: vector<MYWCHAR_T> &closing_)
 			: nodeType(nodeType_), opening(opening_), closing(closing_)
 		{
 		}
+
 		NodeFormat()
 			: nodeType(NF_NONE), opening(), closing()
 		{
 		}
+
 		NodeFormat(const NodeFormat &right)
 			: nodeType(right.nodeType), opening(right.opening), closing(right.closing)
 		{
 		}
-	public:
+
 		void swap(NodeFormat &right)
 		{
 			std:: swap(nodeType, right.nodeType);
@@ -408,26 +437,31 @@ public:
 			closing.swap(right.closing);
 		}
 	};
+
 private:
-	struct NodeFormatI {
+	struct NodeFormatI
+    {
 	public:
 		NF_NODETYPE nodeType;
 		std:: string opening;
 		std:: string closing;
+
 	public:
 		NodeFormatI(NF_NODETYPE nodeType_, const std:: string &opening_, const std:: string &closing_)
 			: nodeType(nodeType_), opening(opening_), closing(closing_)
 		{
 		}
+
 		NodeFormatI()
 			: nodeType(NF_NONE), opening(), closing()
 		{
 		}
+
 		NodeFormatI(const NodeFormatI &right)
 			: nodeType(right.nodeType), opening(right.opening), closing(right.closing)
 		{
 		}
-	public:
+
 		void swap(NodeFormatI &right)
 		{
 			std:: swap(nodeType, right.nodeType);
@@ -435,6 +469,7 @@ private:
 			closing.swap(right.closing);
 		}
 	};
+
 	struct PrintData {
 		std:: ostream *pOutput;
 		std:: string separator;
@@ -446,6 +481,7 @@ private:
 		std:: string bra;
 		std:: string ket;
 	};
+
 public:
 	static void print(std:: ostream *pOutput, const TokenSequence &text, const std:: vector<MYWCHAR_T> &separator0,
 			unsigned long options, const common::Encoder *pRawCharEncoder0)
@@ -486,6 +522,7 @@ public:
 			delete data.pRawCharEncoder;
 		}
 	}
+
 	static void print(std:: ostream *pOutput, const TokenSequence &text,
 			const NodeFormat &rawTextFormat, const std:: vector<MYWCHAR_T> &separator, unsigned long options,
 			const HASH_MAP<boost::int32_t/* code */, NodeFormat> &nodeFormats,
@@ -561,11 +598,13 @@ public:
 			delete pGeneratedEncoder;
 		}
 	}
+
 private:
 	static void write(std:: ostream *pOutput, const std:: string &str)
 	{
 		(*pOutput).write(str.data(), str.length());
 	}
+
 	static std:: string expandSpecials(const std:: string &format,
 			const std:: pair<size_t/* row */, size_t/* col */> &rowCol, size_t index)
 	{
@@ -623,6 +662,7 @@ private:
 
 		return s;
 	}
+
 	static void print_i(std:: pair<size_t/* row */, size_t/* col */> *pRowCol, size_t *pIndex,
 			const TokenSequence &text, const PrintData &data)
 	{
@@ -678,6 +718,7 @@ private:
 				write(&output, data.separator);
 				continue;
 			}
+
 			const text::GeneratedToken *g = pToken->castToGenerated();
 			if (g != NULL) {
 				if (g->code == 0 && (data.options & SkipNull) != 0) {
@@ -689,7 +730,12 @@ private:
 					print_i_silent(&rowCol, &index, value);
 				}
 				else {
-					if (data.pNodeFormats != NULL && g->code < (*data.pNodeFormats).size() && (*data.pNodeFormats)[g->code].first) {
+					if (
+                        (data.pNodeFormats != NULL) &&
+                        (g->code < (boost::int32_t)(*data.pNodeFormats).size()) &&
+                        (*data.pNodeFormats)[g->code].first
+                        )
+                    {
 						const TokenSequence &value = g->value;
 						const NodeFormatI &openClose = (*data.pNodeFormats)[g->code].second;
 						switch (openClose.nodeType) {
@@ -754,6 +800,7 @@ private:
 			}
 		}
 	}
+
 private:
 	struct PrintDataXml {
 		std:: ostream *pOutput;
@@ -761,6 +808,7 @@ private:
 		std:: string rawTokenTagName;
 		const std:: vector<std:: string> *pNodeNames;
 	};
+
 	static void printXml_i(const TokenSequence &text, const PrintDataXml &data)
 	{
 		std:: ostream &output = *data.pOutput;
@@ -772,34 +820,39 @@ private:
 				++i;
 				continue;
 			}
+
 			boost::optional<MYWCHAR_T> r = p->getRawCharCode();
 			if (r) {
 				MYWCHAR_T ch = *r;
-				if (ch == '\r') {
+				if ((ch == '\r') || (ch == '\n'))
+                {
 					output << "<" << data.rawTokenTagName << ">"
 							<< common::EscapeSequenceHelper::encode(ch, true)
 							<< "</" << data.rawTokenTagName << ">" << std:: endl;
 					++i;
 				}
-				else if (ch == '\n') {
-					output << "<" << data.rawTokenTagName << ">"
-							<< common::EscapeSequenceHelper::encode(ch, true)
-							<< "</" << data.rawTokenTagName << ">" << std:: endl;
-					++i;
-				}
-				else {
+				else
+                {
 					output << "<" << data.rawTokenTagName << ">"
 							<< common::EscapeSequenceHelper::encode(ch, true);
 					++i;
 					const text::Token *pToken;
-					while (i < text.size() && (pToken = text.refAt(i)) != NULL && (r = pToken->getRawCharCode()) && (ch = *r) != '\n') {
+					while (
+                        (i < text.size()) &&
+                        ((pToken = text.refAt(i)) != NULL) &&
+                        (r = pToken->getRawCharCode()) &&
+                        ((ch = *r) != '\n')
+                        )
+                    {
 						output << common::EscapeSequenceHelper::encode(ch, true);
 						++i;
 					}
+
 					output << "</" << data.rawTokenTagName << ">" << std:: endl;
 				}
 				continue;
 			}
+
 			const text::GeneratedToken *g = p->castToGenerated();
 			if (g != NULL) {
 				boost::int32_t code = g->code;
@@ -807,7 +860,11 @@ private:
 					NULL;
 				}
 				else {
-					if (0 <= code && code < data.pNodeNames->size()) {
+					if (
+                        (0 <= code) &&
+                        (code < (boost::int32_t)data.pNodeNames->size())
+                        )
+                    {
 						output << "<" << (*data.pNodeNames)[code] << ">" << std:: endl;
 					}
 					else {
@@ -823,7 +880,11 @@ private:
 						printXml_i(value, data);
 					}
 
-					if (0 <= code && code < data.pNodeNames->size()) {
+					if (
+                        (0 <= code) &&
+                        (code < (boost::int32_t)data.pNodeNames->size())
+                        )
+                    {
 						output << "</" << (*data.pNodeNames)[code] << ">" << std:: endl;
 					}
 					else {
@@ -834,6 +895,7 @@ private:
 			}
 		}
 	}
+
 public:
 	static void printXml(std:: ostream *pOutput, const TokenSequence &text, const std:: vector<MYWCHAR_T> &rawTokenTagName,
 			unsigned long options, const std:: vector<std:: vector<MYWCHAR_T> > &nodeNames)
@@ -854,6 +916,7 @@ public:
 		printXml_i(text, data);
 		(*pOutput) << "</xml>" << std:: endl;
 	}
+
 public:
 	static void printCng(std:: ostream *pOutput, const TokenSequence &text, const HASH_MAP<boost::int32_t/* code */, NodeFormat> &nodeFormats)
 	{
@@ -883,6 +946,7 @@ public:
 		size_t index = 0;
 		printCng_i(pOutput, &rowCol, &index, text, encodedNodeFormats);
 	}
+
 private:
 	static void printCng_i(std:: ostream *pOutput, std:: pair<size_t/* row */, size_t/* col */> *pRowCol, size_t *pIndex,
 			const TokenSequence &text, const std:: vector<std:: pair<bool/* is valid */, NodeFormatI> > &encodedNodeFormats)
@@ -949,6 +1013,7 @@ private:
 				}
 				continue;
 			}
+
 			const text::GeneratedToken *g = p->castToGenerated();
 			if (g != NULL) {
 				boost::int32_t gCode = g->code;
@@ -957,7 +1022,11 @@ private:
 					print_i_silent(&rowCol, &index, value);
 				}
 				else {
-					if (0 <= gCode && gCode < encodedNodeFormats.size() && encodedNodeFormats[gCode].first) {
+					if (
+                        (0 <= gCode) &&
+                        (gCode < (boost::int32_t)encodedNodeFormats.size()) &&
+                        encodedNodeFormats[gCode].first
+                    ) {
 						const NodeFormatI &openClose = encodedNodeFormats[gCode].second;
 						switch (openClose.nodeType) {
 						case text::Helper::NF_EXPANDED:
@@ -979,20 +1048,28 @@ private:
 								if (! openClose.opening.empty()) {
 									output << (boost::format("%x.%x.%x\t") % rowCol.first % rowCol.second % index);
 								}
+
 								std:: pair<size_t/* row */, size_t/* col */> lastRowCol = rowCol;
 								size_t lastIndex = index;
 								const TokenSequence &value = g->value;
 								std:: pair<size_t/* row */, size_t/* col */> rowColLTE = rowCol;
 								size_t indexLTE = index;
+
 								print_i_silent(&rowCol, &rowColLTE, &index, &indexLTE, value);
-								if (! openClose.opening.empty()) {
+								if (! openClose.opening.empty())
+                                {
 									int indexDiff = indexLTE - lastIndex;
-									if (rowColLTE.first == lastRowCol.first && rowColLTE.second - lastRowCol.second == indexDiff) {
+									if (
+                                        (rowColLTE.first == lastRowCol.first) &&
+                                        (rowColLTE.second - lastRowCol.second == (size_t)indexDiff)
+                                        )
+                                    {
 										output << (boost::format("+%x\t") % indexDiff);
 									}
 									else {
 										output << (boost::format("%x.%x.%x\t") % rowColLTE.first % rowColLTE.second % indexLTE);
 									}
+
 									static const std:: string PERCENT_S = "%s";
 									size_t p = openClose.opening.find(PERCENT_S);
 									if (p != std:: string::npos) {
@@ -1003,6 +1080,7 @@ private:
 									else {
 										output << openClose.opening;
 									}
+
 									output << std:: endl;
 								}
 							}
@@ -1030,6 +1108,7 @@ private:
 			}
 		}
 	}
+
 	static void print_i_silent(
 			std:: pair<size_t/* row */, size_t/* col */> *pRowCol,
 			size_t *pIndex,
@@ -1037,6 +1116,7 @@ private:
 	{
 		print_i_silent(pRowCol, NULL, pIndex, NULL, text);
 	}
+
 	static void print_i_silent(
 			std:: pair<size_t/* row */, size_t/* col */> *pRowCol,
 			std:: pair<size_t/* row */, size_t/* col */> *pRowColLastNonNull,
@@ -1048,12 +1128,14 @@ private:
 		std:: pair<size_t/* row */, size_t/* col */> &rowCol = *pRowCol;
 		size_t &index = *pIndex;
 		size_t i = 0;
+
 		while (i < text.size()) {
 			const text::Token *p = text.refAt(i);
 			if (p == NULL) {
 				++i;
 				continue;
 			}
+
 			boost::optional<MYWCHAR_T> r = p->getRawCharCode();
 			if (r) {
 				MYWCHAR_T ch = *r;
@@ -1081,14 +1163,17 @@ private:
 					++index;
 					++i;
 				}
+
 				if (pRowColLastNonNull != NULL) {
 					*pRowColLastNonNull = rowCol;
 				}
+
 				if (pIndexLastNonNull != NULL) {
 					*pIndexLastNonNull = index;
 				}
 				continue;
 			}
+
 			const text::GeneratedToken *g = p->castToGenerated();
 			if (g != NULL) {
 				const TokenSequence &value = g->value;
@@ -1103,6 +1188,7 @@ private:
 			}
 		}
 	}
+
 	static void print_i_leaftext(std:: pair<size_t/* row */, size_t/* col */> *pRowCol, size_t *pIndex,
 			const TokenSequence &text, const PrintData &data)
 	{
@@ -1162,6 +1248,7 @@ private:
 			}
 		}
 	}
+
 	static void printCng_i_leaftext(std:: ostream *pOutput, const TokenSequence &text)
 	{
 		std:: ostream &output = *pOutput;

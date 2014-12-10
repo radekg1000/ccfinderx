@@ -10,7 +10,7 @@
 #include <boost/lexical_cast.hpp>
 #include <boost/shared_ptr.hpp>
 
-#include "../common/utf8support.h" 
+#include "../common/utf8support.h"
 #include "texttoken.h"
 #include "torqparser.h"
 #include "../common/common.h"
@@ -22,17 +22,18 @@ private:
 
 public:
 	virtual ~LabelCodeTableBase() { }
+
 	LabelCodeTableBase()
 	{
 		const std:: vector<std:: pair<std:: vector<MYWCHAR_T>/* name */, text::GeneratedToken *> > &specialTokens
 				= text::GeneratedToken::SpecialTokens;
-		
+
 		for (size_t i = 0; i < specialTokens.size(); ++i) {
 			labelIndexToNameTable.push_back(specialTokens[i].first);
 			labelNameToIndexTable[specialTokens[i].first] = (boost::int32_t)i;
 		}
 	}
-public:
+
 	boost::int32_t allocLabelCode(const std:: vector<MYWCHAR_T> &label)
 	{
 		boost::int32_t labelCode = -1;
@@ -47,17 +48,19 @@ public:
 		}
 		return labelCode;
 	}
-public:
+
 	size_t getNumberOfLabels() const
 	{
 		return labelIndexToNameTable.size();
 	}
+
 	std:: vector<MYWCHAR_T> getLabelString(boost::int32_t labelCode) const
 	{
 		size_t size = getNumberOfLabels();
-		assert(0 <= labelCode && labelCode < size);
+		assert((0 <= labelCode) && (labelCode < (boost::int32_t)size));
 		return labelIndexToNameTable[labelCode];
 	}
+
 	std:: vector<std:: vector<MYWCHAR_T> > getLabelStrings() const
 	{
 		return labelIndexToNameTable;
@@ -67,6 +70,7 @@ public:
 class LabelCodeTableSingleton : public LabelCodeTableBase {
 private:
 	static boost::shared_ptr<LabelCodeTableBase> pTheInstance;
+
 public:
 	static boost::shared_ptr<LabelCodeTableBase> instance()
 	{
@@ -76,6 +80,7 @@ public:
 		}
 		return pTheInstance;
 	}
+
 private:
 	LabelCodeTableSingleton() { }
 };
@@ -83,11 +88,13 @@ private:
 
 class Interpreter {
 protected:
+
 	struct MATCH {
 	public:
 		enum Classification {
 			M_NUL, M_COPY, M_PACKBEGIN, M_PACKEND, M_CHILDRENBEGIN, M_CHILDRENEND
 		};
+
 	private:
 		boost::int32_t value;
 		/*
@@ -97,17 +104,19 @@ protected:
 		-3 : childrenEnd
 		<= -4 : packBegin
 		*/
+
 	public:
 		void swap(MATCH &right)
 		{
 			std:: swap(value, right.value);
 		}
-	public:
+
 		size_t size() const
 		{
 			assert(value >= 0);
 			return value;
 		}
+
 		boost::int32_t getCode() const
 		{
 			assert(value <= -4);
@@ -115,98 +124,117 @@ protected:
 			assert(code >= 0);
 			return code;
 		}
+
 		void extend(size_t extendingLength)
 		{
 			assert(value >= 0);
 			value += extendingLength;
 		}
-	public:
+
 		MATCH &assignCopy(const text::TokenSequence *pSource_, boost::int32_t begin_, boost::int32_t end_)
 		{
 			assert(pSource_ != NULL);
 			assert(0 <= begin_);
 			assert(begin_ <= end_);
-			assert(end_ <= (*pSource_).size());
+			assert(end_ <= (boost::int32_t)(*pSource_).size());
 			value = end_ - begin_;
 			return *this;
 		}
+
 		static MATCH makeCopy(const text::TokenSequence *pSource, boost::int32_t begin, boost::int32_t end)
 		{
 			return MATCH().assignCopy(pSource, begin, end);
 		}
+
 		MATCH &assignCopy1(const text::TokenSequence *pSource_, boost::int32_t begin_)
 		{
 			assert(pSource_ != NULL);
 			assert(0 <= begin_);
-			assert(begin_ + 1 <= (*pSource_).size());
+			assert(begin_ + 1 <= (boost::int32_t)(*pSource_).size());
 			value = 1;
 			return *this;
 		}
+
 		static MATCH makeCopy1(const text::TokenSequence *pSource, boost::int32_t begin)
 		{
 			return MATCH().assignCopy1(pSource, begin);
 		}
+
 		MATCH &assignPackBegin(boost::int32_t code)
 		{
 			assert(code >= 0);
 			value = -(code + 4);
 			return *this;
 		}
+
 		static MATCH makePackBegin(boost::int32_t code)
 		{
 			return MATCH().assignPackBegin(code);
 		}
+
 		MATCH &assignPackEnd()
 		{
 			value = -1;
 			return *this;
 		}
+
 		static MATCH makePackEnd()
 		{
 			return MATCH().assignPackEnd();
 		}
+
 		MATCH &assignChildrenBegin()
 		{
 			value = -2;
 			return *this;
 		}
+
 		static MATCH makeChildrenBegin()
 		{
 			return MATCH().assignChildrenBegin();
 		}
+
 		MATCH &assignChildrenEnd()
 		{
 			value = -3;
 			return *this;
 		}
+
 		static MATCH makeChildrenEnd()
 		{
 			return MATCH().assignChildrenEnd();
 		}
+
 		bool isCopy() const
 		{
 			return value >= 0;
 		}
-		bool isPackEnd() const 
+
+		bool isPackEnd() const
 		{
 			return value == -1;
 		}
-		bool isPackBegin() const 
+
+		bool isPackBegin() const
 		{
 			return value <= -4;
 		}
+
 		bool isChildrenBegin() const
 		{
 			return value == -2;
 		}
+
 		bool isChildrenEnd() const
 		{
 			return value == -3;
 		}
+
 		bool isSomethingEnd() const
 		{
 			return value == -1 || value == -3;
 		}
+
 		Classification getClassification() const
 		{
 			switch (value) {
@@ -235,7 +263,7 @@ protected:
 		text::TokenSequence &source = *pSource;
 		size_t si = 0;
 		size_t siEnd = source.size();
-		
+
 		for (std:: vector<MATCH>::const_iterator miBegin = mi; mi != miEnd && ! mi->isSomethingEnd(); ++mi) {
 			const MATCH &m = *mi;
 			switch (m.getClassification()) {
@@ -305,7 +333,7 @@ protected:
 						text::Token *p = source.refAt(sourceIndex);
 						assert(p != NULL);
 						boost::optional<boost::int32_t> r;
-						bool nullMerging = (r = p->getGeneratedCode()) && *r == cNULL 
+						bool nullMerging = (r = p->getGeneratedCode()) && *r == cNULL
 								&& result.size() > 0  && (r = result.refBack()->getGeneratedCode()) && *r == cNULL;
 						source.replaceAt(sourceIndex, NULL);
 						if (nullMerging) {
@@ -345,7 +373,7 @@ protected:
 				{
 					assert(m.getCode() >= 0);
 					boost::optional<boost::int32_t> r;
-					bool nullMerging = m.getCode() == cNULL && result.size() > 0 
+					bool nullMerging = m.getCode() == cNULL && result.size() > 0
 						&& (r = result.refBack()->getGeneratedCode()) && *r == cNULL;
 					text::GeneratedToken *pGenerated = NULL;
 					if (nullMerging) {
@@ -385,10 +413,10 @@ public:
 	{
 		TraceDirector td;
 		td.setTrace(trace);
-		
+
 		std:: set<boost::int32_t> unrequired;
 		{
-			for (boost::int32_t i = 0; i < trace.size(); ++i) {
+			for (boost::int32_t i = 0; i < (boost::int32_t)trace.size(); ++i) {
 				const TRACE_ITEM &item = trace[i];
 				if (item.classification == TRACE_ITEM::Enter) {
 					switch (item.node) {
@@ -414,7 +442,10 @@ public:
 					switch (item.node) {
 					case NC_OrPattern:
 						{
-							bool hasPrev = i + 1 < trace.size() && trace[i + 1].classification == TRACE_ITEM::Accept && trace[i + 1].node == NC_OrPattern;
+							bool hasPrev =
+                                (i + 1 < (boost::int32_t)trace.size()) &&
+                                (trace[i + 1].classification == TRACE_ITEM::Accept) &&
+                                (trace[i + 1].node == NC_OrPattern);
 							if (! hasPrev) {
 								bool hasNext = i - 1 >= 0 && trace[i - 1].classification == TRACE_ITEM::Accept && trace[i - 1].node == NC_OrPattern;
 								if (! hasNext) {
@@ -435,7 +466,10 @@ public:
 						break;
 					case NC_SequencePattern:
 						{
-							bool hasPrev = i + 1 < trace.size() && trace[i + 1].classification == TRACE_ITEM::Accept && trace[i + 1].node == NC_SequencePattern;
+							bool hasPrev =
+                                (i + 1 < (boost::int32_t)trace.size()) &&
+                                (trace[i + 1].classification == TRACE_ITEM::Accept) &&
+                                (trace[i + 1].node == NC_SequencePattern);
 							if (! hasPrev) {
 								bool hasNext = i - 1 >= 0 && trace[i - 1].classification == TRACE_ITEM::Accept && trace[i - 1].node == NC_SequencePattern;
 								if (! hasNext) {
@@ -457,13 +491,13 @@ public:
 				for (std:: set<boost::int32_t>::const_iterator ui = unrequired.begin(); ui != unrequired.end(); ++ui) {
 					boost::int32_t idx = *ui;
 					boost::int32_t pairIdx = td.findPair(idx);
-					additionals.insert(pairIdx);		
+					additionals.insert(pairIdx);
 				}
 				unrequired.insert(additionals.begin(), additionals.end());
 			}
 		}
 		std:: vector<TRACE_ITEM> shapeupTrace;
-		for (boost::int32_t i = 0; i < trace.size(); ++i) {
+		for (boost::int32_t i = 0; i < (boost::int32_t)trace.size(); ++i) {
 			if (unrequired.find(i) == unrequired.end()) {
 				shapeupTrace.push_back(trace[i]);
 			}
@@ -475,40 +509,50 @@ public:
 	enum ErrorCode {
 		Nul = 0, InvalidStartPC, UndefinedVariable, Unmatch, Cutoff
 	};
-	struct Error {
+
+	struct Error
+    {
 	public:
 		ErrorCode code;
 		std:: vector<MYWCHAR_T> ref;
+
 	public:
 		Error()
 			: code(Nul), ref()
 		{
 		}
+
 		Error(const Error &right)
 			: code(right.code), ref(right.ref)
 		{
 		}
+
 		Error(ErrorCode code_, const std:: vector<MYWCHAR_T> &ref_)
 			: code(code_), ref(ref_)
 		{
 		}
+
 		Error(ErrorCode code_)
 			: code(code_), ref()
 		{
 		}
-	public:
+
 		void swap(Error &right)
 		{
 			std:: swap(this->code, right.code);
 			ref.swap(right.ref);
 		}
 	};
+
 protected:
-	struct TokenStringTableItem {
+
+	struct TokenStringTableItem
+    {
 	public:
 		bool isCharClass;
 		std:: vector<MYWCHAR_T> str;
 		std:: pair<MYWCHAR_T, MYWCHAR_T> range;
+
 	public:
 		void swap(TokenStringTableItem &right)
 		{
@@ -520,8 +564,10 @@ protected:
 			this->range.swap(right.range);
 #endif
 		}
-	};
-	struct TSL {
+	}; //TokenStringTableItem
+
+	struct TSL
+    {
 	public:
 		TRACE_ITEM item;
 		TokenStringTableItem str;
@@ -532,15 +578,18 @@ protected:
 			: item(), str(), label(0), next(0)
 		{
 		}
+
 		TSL(const TSL &right)
 			: item(right.item), str(right.str), label(right.label), next(right.next)
 		{
 		}
+
 		TSL(const TRACE_ITEM &item_, const TokenStringTableItem &str_, boost::int32_t label_, boost::int32_t next_)
 			: item(item_), str(str_), label(label_), next(next_)
 		{
 		}
-	};
+	}; //TSL
+
 protected:
 	std:: vector<MYWCHAR_T> script;
 	std:: vector<TRACE_ITEM> programv;
@@ -559,14 +608,17 @@ protected:
 	static const boost::int32_t/* code */ cEOL;
 	static const boost::int32_t/* code */ cRAW;
 	boost::shared_ptr<LabelCodeTableBase> pLabelCodeTable;
+
 public:
 	~Interpreter()
 	{
 	}
+
 	Interpreter()
 		: cutoffValue(0), pLabelCodeTable(LabelCodeTableSingleton::instance())
 	{
 	}
+
 protected:
 	boost::int32_t allocLabelCode(boost::int32_t pc)
 	{
@@ -577,6 +629,7 @@ protected:
 		label.insert(label.end(), script.begin() + citem.ref.beginPos, script.begin() + citem.ref.endPos);
 		return pLabelCodeTable->allocLabelCode(label);
 	}
+
 public:
 	void setProgram(const std:: vector<TRACE_ITEM> &program_, const std:: vector<MYWCHAR_T> &script_)
 	{
@@ -587,16 +640,16 @@ public:
 		tdata.resize(programv.size());
 
 		{
-			for (boost::int32_t pc = 0; pc < programv.size(); ++pc) {
+			for (boost::int32_t pc = 0; pc < (boost::int32_t)programv.size(); ++pc) {
 				tdata[pc].item = programv[pc];
 				tdata[pc].next = td.findNext(pc);
 			}
 		}
-		
+
 		// setup label table
 		{
 			std:: set<std:: vector<MYWCHAR_T> > labels;
-			for (boost::int32_t pc = 0; pc < tdata.size(); ++pc) {
+			for (boost::int32_t pc = 0; pc < (boost::int32_t)tdata.size(); ++pc) {
 				const TRACE_ITEM &citem = tdata[pc].item;
 				if (citem.classification == TRACE_ITEM::Accept) {
 					switch (citem.node) {
@@ -617,11 +670,13 @@ public:
 					}
 				}
 			}
+
 			for (std:: set<std:: vector<MYWCHAR_T> >::const_iterator i = labels.begin(); i != labels.end(); ++i) {
 				const std:: vector<MYWCHAR_T> &label = *i;
 				pLabelCodeTable->allocLabelCode(label);
 			}
-			for (boost::int32_t pc = 0; pc < tdata.size(); ++pc) {
+
+			for (boost::int32_t pc = 0; pc < (boost::int32_t)tdata.size(); ++pc) {
 				const TRACE_ITEM &citem = tdata[pc].item;
 				if (citem.classification == TRACE_ITEM::Accept) {
 					switch (citem.node) {
@@ -633,7 +688,7 @@ public:
 						{
 							boost::int32_t labelCode = allocLabelCode(pc);
 							tdata[pc].label = labelCode;
-							
+
 							boost::int32_t p = td.findPair(pc);
 							tdata[p].label = labelCode;
 						}
@@ -647,14 +702,14 @@ public:
 
 		// setup string table
 		{
-			for (boost::int32_t pc = 0; pc < tdata.size(); ++pc) {
+			for (boost::int32_t pc = 0; pc < (boost::int32_t)tdata.size(); ++pc) {
 				const TRACE_ITEM &citem = tdata[pc].item;
 				if (citem.classification == TRACE_ITEM::Accept) {
 					if (citem.node == NC_LiteralPattern) {
 						assert(citem.classification == TRACE_ITEM::Accept);
 						assert(citem.node == NC_LiteralPattern);
 						assert(citem.ref.classification != TOKEN::NUL);
-						
+
 						const TOKEN &t0 = citem.ref;
 						TOKEN t(t0);
 						t.beginPos += 1;
@@ -685,7 +740,7 @@ public:
 						assert(citem.classification == TRACE_ITEM::Accept);
 						assert(citem.node == NC_RepeatPattern);
 						assert(citem.ref.classification != TOKEN::NUL);
-						
+
 						assert(citem.ref.endPos - citem.ref.beginPos == 1);
 						TokenStringTableItem ci;
 						MYWCHAR_T markChar = script[citem.ref.beginPos];
@@ -702,7 +757,7 @@ public:
 							ci.range.first = 0;
 							ci.range.second = 999;
 						}
-						
+
 						tdata[pc].str = ci;
 
 						boost::int32_t p = td.findPair(pc);
@@ -711,10 +766,10 @@ public:
 				}
 			}
 		}
-		
+
 		// copy the reference of items to their pair items
 		{
-			for (boost::int32_t pc = 0; pc < tdata.size(); ++pc) {
+			for (boost::int32_t pc = 0; pc < (boost::int32_t)tdata.size(); ++pc) {
 				const TRACE_ITEM &citem = tdata[pc].item;
 				if (citem.classification == TRACE_ITEM::Accept) {
 					boost::int32_t p = td.findPair(pc);
@@ -726,39 +781,47 @@ public:
 			}
 		}
 	}
+
 	std:: vector<TRACE_ITEM> getProgram() const
 	{
 		return programv;
 	}
+
 	void swapVariable(const std:: vector<MYWCHAR_T> &name, text::TokenSequence *pValue)
 	{
 		variables[name].swap(*pValue);
 	}
+
 	size_t getNumberOfLabels() const
 	{
 		return pLabelCodeTable->getNumberOfLabels();
 	}
+
 	std:: vector<MYWCHAR_T> getLabelString(boost::int32_t labelCode) const
 	{
 		return pLabelCodeTable->getLabelString(labelCode);
 	}
+
 	std:: vector<std:: vector<MYWCHAR_T> > getLabelStrings() const
 	{
 		return pLabelCodeTable->getLabelStrings();
 	}
-	void setCutoffValue(long long cutoffValue_) 
+
+	void setCutoffValue(long long cutoffValue_)
 	{
 		this->cutoffValue = cutoffValue_;
 	}
+
 	Error getError() const
 	{
 		return errorData;
 	}
+
 	boost::int32_t interpret(boost::int32_t pcStart)
 	{
 		errorPc = -1; // clear
 		errorData = Error(Nul);
-		assert(0 <= pcStart && pcStart <= programv.size());
+		assert((0 <= pcStart) && (pcStart <= (boost::int32_t)programv.size()));
 		boost::int32_t pc = pcStart;
 		const TRACE_ITEM &item = tdata[pc].item;
 		if (item.classification != TRACE_ITEM::Enter) {
@@ -791,6 +854,7 @@ public:
 		}
 		return -1; // no error
 	}
+
 protected:
 	void do_Statements(boost::int32_t pc0)
 	{
@@ -809,11 +873,12 @@ protected:
 	{
 		assert(false); // not implemented yet
 	}
+
 	static void skip_null(const text::TokenSequence &source, boost::int32_t *pPos)
 	{
 		boost::int32_t &pos = *pPos;
-		assert(0 <= pos && pos <= source.size());
-		while (pos < source.size()) {
+		assert((0 <= pos) && (pos <= (boost::int32_t)source.size()));
+		while (pos < (boost::int32_t)source.size()) {
 			assert(source.refAt(pos) != NULL);
 			boost::optional<boost::int32_t> r;
 			if (! (r = source.refAt(pos)->getGeneratedCode()) || *r != cNULL) {
@@ -858,7 +923,7 @@ protected:
 			assert(citem.ref == item0.ref);
 		}
 #endif
-		
+
 		std:: vector<MYWCHAR_T> varName;
 		varName.insert(varName.end(), script.begin() + item0.ref.beginPos, script.begin() + item0.ref.endPos);
 		std:: map<std:: vector<MYWCHAR_T>, text::TokenSequence>::iterator i = variables.find(varName);
@@ -883,7 +948,7 @@ protected:
 		if (cutoffValue != 0) {
 			cutoffTimer = cutoffValue;
 		}
-		while (pos < varValue.size()) {
+		while (pos < (boost::int32_t)varValue.size()) {
 			recursePc.resize(0);
 			boost::int32_t q = eval(pc, varValue, pos);
 			assert(errorPc == -1);
@@ -907,6 +972,7 @@ protected:
 		expandMatchSeq(&result, &varValue, matchSeq);
 		varValue.swap(result);
 	}
+
 	void do_MatchEqStatement(boost::int32_t pc0)
 	{
 		const TRACE_ITEM &item0 = tdata[pc0].item;
@@ -930,7 +996,7 @@ protected:
 			throw errorData;
 		}
 		text::TokenSequence &varValue = i->second;
-		
+
 		boost::int32_t pc = pc0 + 1;
 		const TRACE_ITEM &item = tdata[pc].item;
 		assert(item.classification == TRACE_ITEM::Enter);
@@ -958,7 +1024,7 @@ protected:
 			pos = q;
 			extendNullMatchSeq(varValue, &pos);
 		}
-		if (pos == varValue.size()) {
+		if (pos == (boost::int32_t)varValue.size()) {
 			text::TokenSequence result;
 			expandMatchSeq(&result, &varValue, matchSeq);
 			varValue.swap(result);
@@ -969,10 +1035,13 @@ protected:
 			throw errorData;
 		}
 	}
+
 	typedef boost::int32_t (Interpreter::*pfunc_t) (boost::int32_t, const text::TokenSequence &, boost::int32_t);
+
 #if defined INTERPRETER_USE_DISPATCHTABLE
 	static const pfunc_t dispatchTable[NC_SIZE];
 #endif
+
 	boost::int32_t eval(boost::int32_t pc0, const text::TokenSequence &source, boost::int32_t pos0)
 	{
 		std:: vector<MATCH> * const pMatchSeq = &matchSeq;
@@ -983,7 +1052,7 @@ protected:
 				return -1;
 			}
 		}
-		
+
 		boost::int32_t pos = pos0;
 		///extendNullMatchSeq(source, &pos);
 		size_t size1 = pMatchSeq->size();
@@ -991,9 +1060,9 @@ protected:
 		boost::int32_t pc = pc0;
 		const TRACE_ITEM &item = tdata[pc].item;
 		assert(item.classification == TRACE_ITEM::Enter);
-		assert(NC_Nul < item.node && item.node < NC_SIZE); 
+		assert(NC_Nul < item.node && item.node < NC_SIZE);
 #if defined INTERPRETER_USE_DISPATCHTABLE
-		pfunc_t pfunc = dispatchTable[item.node]; 
+		pfunc_t pfunc = dispatchTable[item.node];
 		boost::int32_t npos = (this->*pfunc)(pc, source, pos);
 #else
 		pfunc_t pfunc = NULL;
@@ -1073,6 +1142,7 @@ protected:
 			throw e;
 		}
 	}
+
 	boost::int32_t do_PackPattern(boost::int32_t pc0, const text::TokenSequence &source, boost::int32_t pos0)
 	{
 		std:: vector<MATCH> * const pMatchSeq = &matchSeq;
@@ -1117,7 +1187,7 @@ protected:
 		}
 
 		pMatchSeq->push_back(MATCH::makePackBegin(labelCode));
-		
+
 		boost::int32_t pos = pos0;
 		extendNullMatchSeq(source, &pos);
 		pos = eval(pc, source, pos);
@@ -1129,11 +1199,12 @@ protected:
 		pMatchSeq->push_back(MATCH::makePackEnd());
 		return pos;
 	}
+
 	boost::int32_t do_MatchPattern(boost::int32_t pc0, const text::TokenSequence &source, boost::int32_t pos0)
 	{
 		std:: vector<MATCH> * const pMatchSeq = &matchSeq;
 		size_t size0 = pMatchSeq->size();
-		
+
 #if ! defined NDEBUG
 		boost::int32_t p = td.findPair(pc0);
 		const TRACE_ITEM &citem = tdata[p].item;
@@ -1147,7 +1218,7 @@ protected:
 			return -1;
 		}
 		else {
-			if (pos0 < source.size()) {
+			if (pos0 < (boost::int32_t)source.size()) {
 				assert(source.refAt(pos0) != NULL);
 				const text::GeneratedToken *p = source.refAt(pos0)->castToGenerated();
 				if (p != NULL && (labelCode == cANY || p->code == labelCode)) {
@@ -1166,7 +1237,7 @@ protected:
 
 					extendNullMatchSeq(p->value, &pos);
 
-					if (pos != p->value.size()) {
+					if (pos != (boost::int32_t)p->value.size()) {
 						pMatchSeq->resize(size0);
 						return -1;
 					}
@@ -1188,11 +1259,12 @@ protected:
 		pMatchSeq->resize(size0);
 		return -1;
 	}
+
 	boost::int32_t do_ScanPattern(boost::int32_t pc0, const text::TokenSequence &source, boost::int32_t pos0)
 	{
 		std:: vector<MATCH> * const pMatchSeq = &matchSeq;
 		size_t size0 = pMatchSeq->size();
-		
+
 #if ! defined NDEBUG
 		boost::int32_t p = td.findPair(pc0);
 		const TRACE_ITEM &citem = tdata[p].item;
@@ -1206,7 +1278,7 @@ protected:
 			return -1;
 		}
 		else {
-			if (pos0 < source.size()) {
+			if (pos0 < (boost::int32_t)source.size()) {
 				assert(source.refAt(pos0) != NULL);
 				const text::GeneratedToken *p = source.refAt(pos0)->castToGenerated();
 				if (p != NULL && (labelCode == cANY || p->code == labelCode)) {
@@ -1216,7 +1288,7 @@ protected:
 					pMatchSeq->push_back(MATCH::makeChildrenBegin());
 					boost::int32_t pos = 0;
 					extendNullMatchSeq(p->value, &pos);
-					while (pos < p->value.size()) {
+					while (pos < (boost::int32_t)p->value.size()) {
 						boost::int32_t q = eval(pc, p->value, pos);
 						assert(errorPc == -1);
 						if (q <= pos) {
@@ -1247,6 +1319,7 @@ protected:
 		pMatchSeq->resize(size0);
 		return -1;
 	}
+
 	boost::int32_t do_OrPattern(boost::int32_t pc0, const text::TokenSequence &source, boost::int32_t pos0)
 	{
 		std:: vector<MATCH> * const pMatchSeq = &matchSeq;
@@ -1319,7 +1392,7 @@ protected:
 	{
 		std:: vector<MATCH> * const pMatchSeq = &matchSeq;
 		size_t size0 = pMatchSeq->size();
-		
+
 		boost::int32_t pc = pc0 + 1;
 		boost::int32_t pos = pos0;
 		while (true) {
@@ -1351,6 +1424,7 @@ protected:
 		sequence_optimization(size0);
 		return pos;
 	}
+
 	void sequence_optimization(size_t size0)
 	{
 		if (matchSeq.size() >= size0 + 2) {
@@ -1371,6 +1445,7 @@ protected:
 			}
 		}
 	}
+
 	boost::int32_t do_RepeatPattern(boost::int32_t pc0, const text::TokenSequence &source, boost::int32_t pos0)
 	{
 		std:: vector<MATCH> * const pMatchSeq = &matchSeq;
@@ -1383,7 +1458,7 @@ protected:
 		}
 
 		boost::int32_t pc = pc0 + 1;
-		
+
 		// an optimization
 		{
 			const TRACE_ITEM &item = tdata[pc].item;
@@ -1434,12 +1509,13 @@ protected:
 		sequence_optimization(size0);
 		return pos;
 	}
+
 	static boost::int32_t substrEqual(const text::TokenSequence &str, boost::int32_t pos0, const std:: vector<MYWCHAR_T> &token)
 	{
 		boost::int32_t pos = pos0;
-		size_t i = 0; 
+		size_t i = 0;
 		while (true) {
-			if (! (pos < str.size())) {
+			if (! (pos < (boost::int32_t)str.size())) {
 				return -1;
 			}
 			const text::Token *pToken = str.refAt(pos);
@@ -1448,24 +1524,25 @@ protected:
 			if (! (r = pToken->getRawCharCode()) || *r != token[i]) {
 				return -1;
 			}
-			
+
 			++i;
 			++pos;
 
 			if (! (i < token.size())) {
 				break; // while
 			}
-			
+
 			skip_null(str, &pos);
 		}
 
 		return pos;
 	}
+
 	boost::int32_t substrEqualWithCharClass(const text::TokenSequence &source, boost::int32_t pos0, boost::int32_t pc) const
 	{
 		const TokenStringTableItem &ci = tdata[pc].str;
 		if (ci.isCharClass) {
-			if (pos0 < source.size()) {
+			if (pos0 < (boost::int32_t)source.size()) {
 				assert(source.refAt(pos0) != NULL);
 				boost::optional<MYWCHAR_T> r = source.refAt(pos0)->getRawCharCode();
 				MYWCHAR_T code;
@@ -1488,7 +1565,11 @@ protected:
 		boost::int32_t pos = pos0;
 		boost::int32_t posLastNonNull = pos;
 		if (ci.isCharClass) {
-			while (repeatCount < underUpper.second && pos < source.size()) {
+			while (
+                (repeatCount < underUpper.second) &&
+                (pos < (boost::int32_t)source.size())
+                )
+            {
 				assert(source.refAt(pos) != NULL);
 				boost::optional<MYWCHAR_T> r = source.refAt(pos)->getRawCharCode();
 				MYWCHAR_T code;
@@ -1502,7 +1583,11 @@ protected:
 			}
 		}
 		else {
-			while (repeatCount < underUpper.second && pos < source.size()) {
+			while (
+                (repeatCount < underUpper.second) &&
+                (pos < (boost::int32_t)source.size())
+                )
+            {
 				boost::int32_t npos = substrEqual(source, pos, ci.str);
 				if (npos < 0) {
 					break; // while
@@ -1522,7 +1607,7 @@ protected:
 	boost::int32_t do_XcepPattern(boost::int32_t pc0, const text::TokenSequence &source, boost::int32_t pos0)
 	{
 		std:: vector<MATCH> * const pMatchSeq = &matchSeq;
-		if (! (pos0 < source.size())) {
+		if (! (pos0 < (boost::int32_t)source.size())) {
 			return pos0;
 		}
 
@@ -1610,6 +1695,7 @@ protected:
 			return -1;
 		}
 	}
+
 	boost::int32_t do_GeneratedTokenPattern(boost::int32_t pc0, const text::TokenSequence &source, boost::int32_t pos0)
 	{
 		std:: vector<MATCH> * const pMatchSeq = &matchSeq;
@@ -1622,9 +1708,10 @@ protected:
 #endif
 		boost::int32_t code = tdata[p].label;
 		assert(code != -1);
-		if (! (pos0 < source.size())) {
+		if (! (pos0 < (boost::int32_t)source.size())) {
 			return -1;
 		}
+
 		if (code == cANY) {
 			pMatchSeq->push_back(MATCH::makeCopy1(&source, pos0));
 			return pos0 + 1;
@@ -1644,6 +1731,7 @@ protected:
 				return pos0 + 1;
 			}
 		}
+
 		return -1;
 	}
 

@@ -3,6 +3,19 @@
 #include "utf8support.h"
 #include "allocaarray.h"
 
+/**
+ * UTF-32 - Unicode Transformation Format 32 bits (or UCS-4)
+ */
+ namespace
+ {
+ const MYWCHAR_T UTF_THRESHOLD_1 = (MYWCHAR_T)0x7f;
+ const MYWCHAR_T UTF_THRESHOLD_2 = (MYWCHAR_T)0x07ff;
+ const MYWCHAR_T UTF_THRESHOLD_3 = (MYWCHAR_T)0xffff;
+ const MYWCHAR_T UTF_THRESHOLD_4 = (MYWCHAR_T)0x001FFFFFUL;
+ const MYWCHAR_T UTF_THRESHOLD_5 = (MYWCHAR_T)0x03FFFFFFUL;
+ const MYWCHAR_T UTF_THRESHOLD_6 = (MYWCHAR_T)0x7FFFFFFFUL;
+ }
+
 size_t countCharUTF8String(const char *str, size_t strLength)
 {
 	size_t count = 0;
@@ -16,6 +29,7 @@ size_t countCharUTF8String(const char *str, size_t strLength)
 		assert(nextI > i);
 		i = nextI;
 	}
+
 	return count;
 }
 
@@ -32,6 +46,7 @@ size_t countCharUTF8String(const std:: string &str)
 		assert(nextI > i);
 		i = nextI;
 	}
+
 	return count;
 }
 
@@ -43,30 +58,30 @@ size_t toUTF8String(char *buf, const MYWCHAR_T *str, size_t strLength)
 	for (size_t i = 0; i < strLength; ++i) {
 		int shift_count = -1;
 		MYWCHAR_T c = str[i];
-		if (c != 0x00 && c <= 0x7f) {
+		if ((c != 0x00) && (c <= UTF_THRESHOLD_1)) {
 			buf[j++] = (char)(unsigned char)c;
 		}
-		else if (c <= 0x07ff) {
+		else if (c <= UTF_THRESHOLD_2) {
 			unsigned char firstChar = 0xc0 | (unsigned char)(c >> 6);
 			buf[j++] = firstChar;
 			shift_count = 0;
 		}
-		else if (c <= 0xffff) {
+		else if (c <= UTF_THRESHOLD_3) {
 			unsigned char firstChar = 0xe0 | (unsigned char)(c >> 12);
 			buf[j++] = firstChar;
 			shift_count = 6;
 		}
-		else if (c <= 0x001FFFFFUL) {
+		else if (c <= UTF_THRESHOLD_4) {
 			unsigned char firstChar = 0xf0 | (unsigned char)(c >> 18);
 			buf[j++] = firstChar;
 			shift_count = 12;
 		}
-		else if (c <= 0x03FFFFFFUL) {
+		else if (c <= UTF_THRESHOLD_5) {
 			unsigned char firstChar = 0xf8 | (unsigned char)(c >> 24);
 			buf[j++] = firstChar;
 			shift_count = 18;
 		}
-		else if (c <= 0x7FFFFFFFUL) {
+		else if (c <= UTF_THRESHOLD_6) {
 			unsigned char firstChar = 0xfc | (unsigned char)(c >> 30);
 			buf[j++] = firstChar;
 			shift_count = 24;
@@ -74,6 +89,7 @@ size_t toUTF8String(char *buf, const MYWCHAR_T *str, size_t strLength)
 		else {
 			assert(false);
 		}
+
 		while (shift_count >= 0) {
 			unsigned char fc = 0x80 | (unsigned char)((c >> shift_count) & 0x3f);
 			buf[j++] = fc;
@@ -90,30 +106,30 @@ std:: string toUTF8String(const MYWCHAR_T *str, size_t strLength)
 	for (size_t i = 0; i < strLength; ++i) {
 		int shift_count = -1;
 		MYWCHAR_T c = str[i];
-		if (c != 0x00 && c <= 0x7f) {
+		if ((c != 0x00) && (c <= UTF_THRESHOLD_1)) {
 			buf += (char)(unsigned char)c;
 		}
-		else if (c <= 0x07ff) {
+		else if (c <= UTF_THRESHOLD_2) {
 			unsigned char firstChar = 0xc0 | (unsigned char)(c >> 6);
 			buf += firstChar;
 			shift_count = 0;
 		}
-		else if (c <= 0xffff) {
+		else if (c <= UTF_THRESHOLD_3) {
 			unsigned char firstChar = 0xe0 | (unsigned char)(c >> 12);
 			buf += firstChar;
 			shift_count = 6;
 		}
-		else if (c <= 0x001FFFFFUL) {
+		else if (c <= UTF_THRESHOLD_4) {
 			unsigned char firstChar = 0xf0 | (unsigned char)(c >> 18);
 			buf += firstChar;
 			shift_count = 12;
 		}
-		else if (c <= 0x03FFFFFFUL) {
+		else if (c <= UTF_THRESHOLD_5) {
 			unsigned char firstChar = 0xf8 | (unsigned char)(c >> 24);
 			buf += firstChar;
 			shift_count = 18;
 		}
-		else if (c <= 0x7FFFFFFFUL) {
+		else if (c <= UTF_THRESHOLD_6) {
 			unsigned char firstChar = 0xfc | (unsigned char)(c >> 30);
 			buf += firstChar;
 			shift_count = 24;
@@ -121,6 +137,7 @@ std:: string toUTF8String(const MYWCHAR_T *str, size_t strLength)
 		else {
 			assert(false);
 		}
+
 		while (shift_count >= 0) {
 			unsigned char fc = 0x80 | (unsigned char)((c >> shift_count) & 0x3f);
 			buf += fc;
@@ -137,30 +154,30 @@ std:: string toUTF8String(const std:: basic_string<MYWCHAR_T> &str)
 	for (size_t i = 0; i < str.length(); ++i) {
 		int shift_count = -1;
 		MYWCHAR_T c = str[i];
-		if (c != 0x00 && c <= 0x7f) {
+		if ((c != 0x00) && (c <= UTF_THRESHOLD_1)) {
 			buf += (char)(unsigned char)c;
 		}
-		else if (c <= 0x07ff) {
+		else if (c <= UTF_THRESHOLD_2) {
 			unsigned char firstChar = 0xc0 | (unsigned char)(c >> 6);
 			buf += firstChar;
 			shift_count = 0;
 		}
-		else if (c <= 0xffff) {
+		else if (c <= UTF_THRESHOLD_3) {
 			unsigned char firstChar = 0xe0 | (unsigned char)(c >> 12);
 			buf += firstChar;
 			shift_count = 6;
 		}
-		else if (c <= 0x001FFFFFUL) {
+		else if (c <= UTF_THRESHOLD_4) {
 			unsigned char firstChar = 0xf0 | (unsigned char)(c >> 18);
 			buf += firstChar;
 			shift_count = 12;
 		}
-		else if (c <= 0x03FFFFFFUL) {
+		else if (c <= UTF_THRESHOLD_5) {
 			unsigned char firstChar = 0xf8 | (unsigned char)(c >> 24);
 			buf += firstChar;
 			shift_count = 18;
 		}
-		else if (c <= 0x7FFFFFFFUL) {
+		else if (c <= UTF_THRESHOLD_6) {
 			unsigned char firstChar = 0xfc | (unsigned char)(c >> 30);
 			buf += firstChar;
 			shift_count = 24;
@@ -168,6 +185,7 @@ std:: string toUTF8String(const std:: basic_string<MYWCHAR_T> &str)
 		else {
 			assert(false);
 		}
+
 		while (shift_count >= 0) {
 			unsigned char fc = 0x80 | (unsigned char)((c >> shift_count) & 0x3f);
 			buf += fc;
@@ -189,30 +207,30 @@ void addUTF8String(std:: string *pDst, MYWCHAR_T c)
 {
 	int shift_count = -1;
 	std:: string &buf = *pDst;
-	if (c != 0x00 && c <= 0x7f) {
+	if ((c != 0x00) && (c <= UTF_THRESHOLD_1)) {
 		buf += (char)(unsigned char)c;
 	}
-	else if (c <= 0x07ff) {
+	else if (c <= UTF_THRESHOLD_2) {
 		unsigned char firstChar = 0xc0 | (unsigned char)(c >> 6);
 		buf += firstChar;
 		shift_count = 0;
 	}
-	else if (c <= 0xffff) {
+	else if (c <= UTF_THRESHOLD_3) {
 		unsigned char firstChar = 0xe0 | (unsigned char)(c >> 12);
 		buf += firstChar;
 		shift_count = 6;
 	}
-	else if (c <= 0x001FFFFFUL) {
+	else if (c <= UTF_THRESHOLD_4) {
 		unsigned char firstChar = 0xf0 | (unsigned char)(c >> 18);
 		buf += firstChar;
 		shift_count = 12;
 	}
-	else if (c <= 0x03FFFFFFUL) {
+	else if (c <= UTF_THRESHOLD_5) {
 		unsigned char firstChar = 0xf8 | (unsigned char)(c >> 24);
 		buf += firstChar;
 		shift_count = 18;
 	}
-	else if (c <= 0x7FFFFFFFUL) {
+	else if (c <= UTF_THRESHOLD_6) {
 		unsigned char firstChar = 0xfc | (unsigned char)(c >> 30);
 		buf += firstChar;
 		shift_count = 24;
@@ -220,6 +238,7 @@ void addUTF8String(std:: string *pDst, MYWCHAR_T c)
 	else {
 		assert(false);
 	}
+
 	while (shift_count >= 0) {
 		unsigned char fc = 0x80 | (unsigned char)((c >> shift_count) & 0x3f);
 		buf += fc;
@@ -258,6 +277,7 @@ std:: basic_string<MYWCHAR_T> toWString(const std:: string &str)
 	if (buf != stackBuf.data()) {
 		delete [] buf;
 	}
+
 	return r;
 }
 
@@ -272,6 +292,7 @@ std:: vector<MYWCHAR_T> toWStringV(const std:: string &str)
 		buf.resize(bufLen);
 		return buf;
 	}
+
 	return std::vector<MYWCHAR_T>();
 }
 
@@ -286,6 +307,7 @@ void toWStringV(std:: vector<MYWCHAR_T> *pBuf, const std:: string &str)
 		buf.resize(bufLen);
 		return;
 	}
+
 	buf.resize(0);
 }
 
@@ -300,6 +322,7 @@ void toWStringV(std:: vector<MYWCHAR_T> *pBuf, const char *str, size_t strLength
 		buf.resize(bufLen);
 		return;
 	}
+
 	buf.resize(0);
 }
 
@@ -322,6 +345,7 @@ int compareWStringUTF8(const MYWCHAR_T *pWStr, size_t wStrLength, const char *pU
 			return wch < uch ? -1:1;
 		}
 	}
+
 	if (wi == wStrLength) {
 		if (ui == utf8StrLength) {
 			return 0; // same length
@@ -340,7 +364,7 @@ int compareWStringUTF8(const MYWCHAR_T *pWStr, size_t wStrLength, const char *pU
 MYWCHAR_T firstCharUTF8String(const char *str)
 {
 	unsigned char ch = (unsigned char)(*str);
-	
+
 	MYWCHAR_T r = 0;
 	int followingBytes = 0;
 	if ((ch & 0x80) == 0) {
@@ -370,9 +394,11 @@ MYWCHAR_T firstCharUTF8String(const char *str)
 	else {
 		return 0; // error: invalid
 	}
+
 	for (int i = 1; i <= followingBytes; ++i) {
 		r = (r << 6) | ((*(str + i)) & 0x3f);
 	}
+
 	return r;
 }
 
@@ -461,8 +487,8 @@ std:: string remapper(const char *str, size_t strLength)
 
 	char *buf = stackBuf.size() > 0 ? stackBuf.c_array() : (new char[strLength]);
 	char *bufP = buf;
-	
-	size_t i = 0; 
+
+	size_t i = 0;
 	while (i < strLength) {
 		switch ((unsigned char)str[i]) {
 		case 0xc2:
@@ -534,6 +560,7 @@ std:: string remapper(const char *str, size_t strLength)
 	if (buf != stackBuf.data()) {
 		delete [] buf;
 	}
+
 	return r;
 }
 
@@ -543,4 +570,3 @@ std:: string remapper(const std:: string &str)
 }
 
 const std:: string UTF8BOM("\xef\xbb\xbf");
-

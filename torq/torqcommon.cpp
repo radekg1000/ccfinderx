@@ -33,10 +33,11 @@ boost::int32_t/* pos */ common::substrFind(const std:: vector<MYWCHAR_T> &str, b
 
 	boost::int32_t p = pos;
 	while (true) {
-		while (p < str.size() && str[p] != ch0) {
+		while ((p < (boost::int32_t)str.size()) && (str[p] != ch0)) {
 			++p;
 		}
-		if (! (p < str.size())) {
+
+		if (! (p < (boost::int32_t)str.size())) {
 			return -1; // not found
 		}
 		assert(str[p] == ch0);
