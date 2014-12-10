@@ -194,7 +194,7 @@ public:
 								}
 								else {
 									if (a.reference == b.reference) {
-										NULL;
+										//do nothing
 									}
 								}
 							}

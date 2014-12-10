@@ -1642,7 +1642,7 @@ protected:
 				boost::int32_t code = tdata[p].label;
 				assert(code != -1);
 				if (code == cNULL) {
-					NULL;
+					//do nothing
 				}
 				else if (code == cANY) {
 					return -1;

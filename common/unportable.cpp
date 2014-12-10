@@ -566,7 +566,7 @@ void find_files_i(std:: vector<std:: string> *pFiles, const std:: set<std:: stri
 	struct stat fi;
 
 	if ((dp = opendir(currentDir.c_str())) == NULL) {
-		assert(("fail to open directory", false)); // 2007/11/22
+		assert(("fail to open directory" /*, false*/)); // 2007/11/22
 	}
 
 	while ((dir = readdir(dp)) != NULL) {
@@ -611,7 +611,7 @@ void find_named_directories_i(std:: vector<std:: string> *pFiles, const std:: se
 	struct stat fi;
 
 	if ((dp = opendir(currentDir.c_str())) == NULL) {
-		assert(("fail to open directory", false)); // 2007/11/22
+		assert(("fail to open directory" /*, false*/)); // 2007/11/22
 	}
 
 	while ((dir = readdir(dp)) != NULL) {

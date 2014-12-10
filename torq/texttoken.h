@@ -191,7 +191,7 @@ public:
 			const Token *pL = body[i];
 			const Token *pR = right.body[i];
 			if (pL == pR) {
-				NULL;
+                //do nothing
 			}
 			else {
 				if (pL == NULL || pR == NULL) {
@@ -199,7 +199,7 @@ public:
 				}
 				else {
 					if (pL->operator==(*pR)) {
-						NULL;
+                        //do nothing
 					}
 					else {
 						return false;
@@ -722,7 +722,7 @@ private:
 			const text::GeneratedToken *g = pToken->castToGenerated();
 			if (g != NULL) {
 				if (g->code == 0 && (data.options & SkipNull) != 0) {
-					NULL;
+					//do nothing
 				}
 				else if (g->code == 3/* EOL */ && (data.options & NewLineThru) != 0) {
 					output << std:: endl;
@@ -857,7 +857,7 @@ private:
 			if (g != NULL) {
 				boost::int32_t code = g->code;
 				if (code == 0 && (data.options & SkipNull) != 0) {
-					NULL;
+					//do nothing
 				}
 				else {
 					if (
@@ -1286,7 +1286,7 @@ private:
 			if (g != NULL) {
 				const TokenSequence &value = g->value;
 				if (g->code == 0) {
-					NULL;
+					//do nothing
 				}
 				else {
 					printCng_i_leaftext(&output, value);

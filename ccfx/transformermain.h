@@ -359,7 +359,7 @@ private:
 								return true;
 							}
 							else if (a.right.end == b.right.end) {
-								NULL;
+                                //do nothing
 							}
 						}
 					}

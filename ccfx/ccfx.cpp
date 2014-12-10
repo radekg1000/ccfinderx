@@ -1338,7 +1338,7 @@ private:
 					std::cerr << "warning: option -pp- is *experimental*. Be careful!" << std::endl;
 				}
 				else if (this->analyzeLongOptions(argi)) {
-					NULL;
+					//do nothing
 				}
 				else if (boost::starts_with(argi, "-")) {
 					std::pair<int, std::string> r = threadFunction.scanOption(argi, (i + 1 < argv.size()) ? argv[i + 1] : "");

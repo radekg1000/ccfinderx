@@ -552,7 +552,7 @@ void print_result(std:: ostream *pOutput,
 			ni.closing = staticExpandSpecials(ni.closing);
 		}
 		else if (i == 0 /* null */ && (options & text::Helper::SkipNull) != 0) {
-			NULL;
+			//do nothing
 		}
 		else if (i == 0 /* null */ && (options & text::Helper::RecurseNull) == 0) {
 			text::Helper::NodeFormat &ni = nodeFormats[(boost::int32_t)i];

@@ -47,7 +47,7 @@ public:
 			flag += F_TEMPORARY_FILE_OPTIMIZATION;
 		}
 #else
-        canBeTemporaryFile; //to avoid unused parameter warning
+        (void)canBeTemporaryFile; //to avoid unused parameter warning
 #endif
 
 		pFile = ::fopen(filePath_.c_str(), flag.c_str());
@@ -90,7 +90,7 @@ public:
 		if (pFile != NULL) {
 			unsigned long long newByteCount = (newSize + 8 - 1) / 8;
 			if (newByteCount >= LONG_MAX) {
-				assert(("too large size for onfile::DynamicBitSet", false));
+				assert(("too large size for onfile::DynamicBitSet" /*, false*/));
 			}
 			if (newSize > bitCount) {
 				unsigned long long byteCount = (bitCount + 8 - 1) / 8;

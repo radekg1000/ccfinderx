@@ -16,7 +16,6 @@ global_compiler_flags = \
     -g -O0 \
     -fno-default-inline \
     -Wno-unused-variable \
-    -Wno-unused-value \
     -DUNICODE \
     $(ICU_CXXFLAGS) \
     $(OPENMP_CFLAGS) \
