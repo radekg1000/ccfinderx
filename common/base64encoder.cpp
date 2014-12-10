@@ -22,7 +22,9 @@ void encode_i(std::string *pOutput, const char buf3[3])
 	}
 	for (size_t i = 0; i < 4; ++i) {
 		boost::uint32_t slice = (bits >> ((4 - 1 - i) * 6)) & 0x3f;
-		assert(0 <= slice && slice < 64);
+		assert(
+            //0 <= slice && //always true
+            slice < 64);
 		(*pOutput) += table[slice];
 	}
 }
@@ -31,7 +33,9 @@ void decode_i(std::vector<char> *pBuffer, boost::uint32_t bits)
 {
 	for (size_t i = 0; i < 3; ++i) {
 		boost::uint32_t slice = (bits >> ((3 - 1 - i) * 8)) & 0xff;
-		assert(0 <= slice && slice < 0x100);
+		assert(
+            //0 <= slice && //always true
+            slice < 0x100);
 		(*pBuffer).push_back((char)slice);
 	}
 }

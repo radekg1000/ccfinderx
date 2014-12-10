@@ -441,6 +441,7 @@ private:
 						filesHavingCloneWithIt.insert(it, pair.right.file);
 					}
 				}
+
 				if (pair.right.file != fileID) {
 					assert(
                         (0 <= pair.left.begin) &&
@@ -499,7 +500,12 @@ private:
 			tokensRepeated.resize(seq.size());
 			for (size_t i = 0; i < reps.size(); ++i) {
 				const repdet::Repetition &rep = reps[i];
-				assert(0 <= rep.beginEnd.first + rep.unit && rep.beginEnd.first + rep.unit <= rep.beginEnd.second && rep.beginEnd.second <= tokensRepeated.size());
+				assert(
+                    //(0 <= rep.beginEnd.first + rep.unit) && //always true
+                    (rep.beginEnd.first + rep.unit <= rep.beginEnd.second) &&
+                    (rep.beginEnd.second <= tokensRepeated.size())
+                    );
+
 				for (size_t pos = rep.beginEnd.first + rep.unit; pos < rep.beginEnd.second; ++pos) {
 					tokensRepeated[pos] = true;
 				}

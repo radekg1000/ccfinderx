@@ -25,7 +25,7 @@ void bitvector::reserve(size_t numBits)
 
 void bitvector::set(size_t index, bool value)
 {
-	assert(0 <= index);
+	//assert(0 <= index); //always true
 	assert(index < num_bits);
 	size_t byte_address = index / 8;
 	assert(byte_address < body.size());
@@ -43,12 +43,15 @@ void bitvector::set(size_t index, bool value)
 
 void bitvector::set(size_t begin, size_t end, bool value)
 {
-	if (begin < 0) {
-		begin = 0;
-	}
+    //Commented because always true
+	//if (begin < 0) {
+	//	begin = 0;
+	//}
+
 	if (end > num_bits) {
 		end = num_bits;
 	}
+
 	if (begin >= end) {
 		return;
 	}
@@ -111,18 +114,21 @@ size_t bitvector::countValue(size_t begin, size_t end, bool value) const
 	};
 
 	size_t count = 0;
-	if (begin < 0) {
-		begin = 0;
-	}
+    //Commented because always true
+	//if (begin < 0) {
+	//	begin = 0;
+	//}
+
 	if (end > num_bits) {
 		end = num_bits;
 	}
+
 	if (begin > end) {
 		assert(false);
 		return 0;
 	}
 
-	size_t index = begin; 
+	size_t index = begin;
 	while (index < end) {
 		size_t byte_address = index / 8;
 		assert(byte_address < body.size());
@@ -140,7 +146,7 @@ size_t bitvector::countValue(size_t begin, size_t end, bool value) const
 			++index;
 		}
 	}
-	
+
 	if (value) {
         return count;
 	}

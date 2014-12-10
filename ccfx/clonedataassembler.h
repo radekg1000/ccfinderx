@@ -171,7 +171,9 @@ public:
 				values.push_back(value);
 			}
 			boost::uint32_t countOfOptions = values.size();
-			assert(0 <= countOfOptions && countOfOptions <= 4);
+			assert(
+                //0 <= countOfOptions && //always true
+                countOfOptions <= 4);
 			flip_endian(&countOfOptions, sizeof(boost::uint32_t));
 			FWRITE(&countOfOptions, sizeof(boost::uint32_t), 1, poutp);
 			for (size_t i = 0; i < countOfOptions; ++i) {

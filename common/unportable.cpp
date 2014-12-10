@@ -431,7 +431,9 @@ const char *last_char(const char *str0)
 
 	const unsigned char *pos = p;
 	while (*p != '\x0') {
-		assert('\x0' <= *p && *p <= '\x7e');
+		assert(
+            //('\x0' <= *p) && //always true
+            (*p <= '\x7e'));
 		pos = p;
 		++p;
 	}
