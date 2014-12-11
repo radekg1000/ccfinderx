@@ -1,7 +1,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.59)
-AC_INIT([ccfinderx],[10.2.7.4],[radekg1000@gmail.com])
+AC_INIT([ccfinderx],[10.3],[radekg1000@gmail.com])
 
 #Use tar-pax format to allow unlimited length file names
 AM_INIT_AUTOMAKE([1.9 tar-pax foreign subdir-objects -Wall -Werror])
@@ -71,9 +71,9 @@ dnl ---------------------------------------------------------------------------
 AC_CHECK_ICU([52],
     [AC_MSG_RESULT([yes])],
     [AC_MSG_ERROR([
-		libicu must bee installed on your system.
+        libicu must bee installed on your system.
 
-		Please install libicu development package.])
+        Please install libicu development package.])
     ]
 )
 
@@ -90,16 +90,16 @@ AX_PYTHON_DEVEL([>= '2.7.0'])
 # Check for presence of ant to compile java packages
 AC_CHECK_PROG(ANT, ant, ant, no)
 if test "$ANT" = "no"; then
-	AC_MSG_ERROR([ant is not installed.])
+    AC_MSG_ERROR([ant is not installed.])
 fi
 
 #Check for presence of icu4j.jar
 AC_CHECK_FILE(/usr/share/java/icu4j.jar,
     [ ],
     [AC_MSG_ERROR([
-		icu4j.jar must bee installed on your system.
+        icu4j.jar must bee installed on your system.
 
-		Please install libicu4j-java development package.])
+        Please install libicu4j-java development package.])
     ]
 )
 
@@ -107,9 +107,9 @@ AC_CHECK_FILE(/usr/share/java/icu4j.jar,
 AC_CHECK_FILE(/usr/share/java/swt.jar,
     [ ],
     [AC_MSG_ERROR([
-		swt.jar must bee installed on your system.
+        swt.jar must bee installed on your system.
 
-		Please install libswt-gtk-3-java development package.])
+        Please install libswt-gtk-3-java development package.])
     ]
 )
 
@@ -117,9 +117,9 @@ AC_CHECK_FILE(/usr/share/java/swt.jar,
 AC_CHECK_FILE(/usr/share/java/trove.jar,
     [ ],
     [AC_MSG_ERROR([
-		trove.jar must bee installed on your system.
+        trove.jar must bee installed on your system.
 
-		Please install libtrove-java development package.])
+        Please install libtrove-java development package.])
     ]
 )
 
@@ -129,7 +129,7 @@ AC_CHECK_FILE(/usr/lib/jni/libswt-cairo-gtk-3836.so,
     [AC_MSG_ERROR([
     libswt-cairo-gtk-3836.so  must bee installed on your system.
 
-		Please install libswt-cairo-gtk-3-jni development package.])
+        Please install libswt-cairo-gtk-3-jni development package.])
     ]
 )
 
