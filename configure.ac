@@ -1,7 +1,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.59)
-AC_INIT([ccfinderx],[10.3],[radekg1000@gmail.com])
+AC_INIT([ccfinderx],[10.2.8],[radekg1000@gmail.com])
 
 #Use tar-pax format to allow unlimited length file names
 AM_INIT_AUTOMAKE([1.9 tar-pax foreign subdir-objects -Wall -Werror])
