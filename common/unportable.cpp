@@ -385,6 +385,16 @@ std::string get_application_data_path()
 	}
 	return "";
 #else
+    std::string applicationDataPath(get_application_config_path());
+
+	return applicationDataPath;
+#endif
+}
+
+#if defined _MSC_VER
+#else
+std::string get_application_config_path()
+{
     //Excerpt from http://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html
     //
     //There is a single base directory relative to which user-specific configuration
@@ -394,33 +404,31 @@ std::string get_application_data_path()
     //$XDG_CONFIG_HOME defines the base directory relative to which user specific
     //configuration files should be stored. If $XDG_CONFIG_HOME is either not set
     //or empty, a default equal to $HOME/.config should be used.
-    std::string homePath;
+    std::string applicationConfigPath;
 
     const char* XDG_CONFIG_HOME = getenv("XDG_CONFIG_HOME");
     if  (XDG_CONFIG_HOME != 0) //i.e. undefined
     {
-        homePath = XDG_CONFIG_HOME;
+        applicationConfigPath = XDG_CONFIG_HOME;
     }
     else
     {
         const char* HOME = getenv("HOME");
         if (HOME != 0)
         {
-            homePath = HOME;
+            applicationConfigPath = HOME;
         }
         else
         {
             //Recovery if HOME not defined. /tmp should be accessible to anyone
-            homePath = "/tmp";
+            applicationConfigPath = "/tmp";
         }
-
-        homePath += "/.config";
     }
+    applicationConfigPath += "/CCFinderX";
 
-    homePath += "/CCFinderX/";
-	return homePath;
-#endif
+	return applicationConfigPath;
 }
+#endif
 
 namespace {
 

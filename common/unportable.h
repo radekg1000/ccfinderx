@@ -49,12 +49,13 @@ std:: string make_temp_file_on_the_same_directory(
 		const std:: string &filePath, const std:: string &base, const std:: string &ext);
 
 std:: string make_filename_on_the_same_directory(
-		const std:: string &fileName, const std:: string &targetPathFile); 
+		const std:: string &fileName, const std:: string &targetPathFile);
 
 bool find_files(std:: vector<std:: string> *pFiles, const std:: set<std:: string> &extensions, const std:: string &directory);
 bool find_named_directories(std:: vector<std:: string> *pFiles, const std:: set<std:: string> &names, const std:: string &directory);
 
 std::string get_application_data_path();
+std::string get_application_config_path();
 
 struct PathTime {
 public:
@@ -79,7 +80,7 @@ private:
 	LARGE_INTEGER size;
 	const char *aByte;
 	bool opened;
-public: 
+public:
 	MappedFileReader()
 		: hMapping(NULL), size(), aByte(NULL), opened(false)
 	{
@@ -122,7 +123,7 @@ public:
 		if (! ::GetFileSizeEx(hFile, &size)) {
 			return false; // fail
 		}
-		
+
 		hMapping = ::CreateFileMapping(
 				hFile,
 				NULL,
@@ -141,9 +142,9 @@ public:
 				0,
 				0
 				);
-		
+
 		opened = true;
-		
+
 		return true;
 	}
 	void close()
@@ -156,7 +157,7 @@ public:
 
 			::UnmapViewOfFile(aByte);
 			aByte = NULL;
-			
+
 			fileName.clear();
 		}
 	}

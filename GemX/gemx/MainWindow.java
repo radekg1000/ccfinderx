@@ -69,7 +69,10 @@ class CCFinderXHelper {
 		}
 
 		String[] preprocessors = getPreprocessScriptList();
-
+		if (preprocessors == null) {
+			return null;
+		}
+		
 		ArrayList<String> preprocessorsHavingExtensions = new ArrayList<String>();
 		for (int i = 0; i < preprocessors.length; ++i) {
 			String prep = preprocessors[i];
