@@ -417,6 +417,7 @@ std::string get_application_config_path()
         if (HOME != 0)
         {
             applicationConfigPath = HOME;
+            applicationConfigPath += "/.config";
         }
         else
         {

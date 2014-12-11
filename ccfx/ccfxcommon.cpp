@@ -58,7 +58,7 @@ std::string join(const std::vector<std::string> &fields, const std::string &sepa
 	return buffer;
 }
 
-bool getPreprocessedSequenceOfFile(std:: vector<ccfx_token_t> *pSeq, 
+bool getPreprocessedSequenceOfFile(std:: vector<ccfx_token_t> *pSeq,
 		const std:: string &fileName, const std:: string &postfix,
 		PreprocessedFileReader *pPreprocessedFileReader, std:: string *pErrorMessage)
 {
@@ -135,19 +135,19 @@ bool getPreprocessedSequenceOfFile(std:: vector<ccfx_token_t> *pSeq,
 //				packLookup[p] = nullPtr;
 //			}
 //		}
-//		if (fields.empty() 
-//				|| fields.size() == 1 && fields[0] == "." 
+//		if (fields.empty()
+//				|| fields.size() == 1 && fields[0] == "."
 //#if defined _OS_WIN32
 //				|| fields.size() == 1 && fields[0][fields[0].length() - 1] == ':' /*like "C:" */
 //#else
-//				|| fields.size() == 1 && fields[0] == "") 
+//				|| fields.size() == 1 && fields[0] == "")
 //#endif
 //		{
 //			break; // while
 //		}
 //		fields.pop_back();
 //	}
-//	
+//
 //	if (fai.get() == NULL) {
 //		return false;
 //	}
@@ -233,7 +233,7 @@ bool PreprocessedFileRawReader::readLines(const std::string &fileName0, const st
 			}
 		}
 	}
-	
+
 	bool fileRead = false;
 	std::vector<unsigned char> buf;
 	do {
@@ -343,7 +343,7 @@ bool PreprocessedFileReader::readFile(const std:: string &fileName, const std::s
 			}
 		}
 	}
-	
+
 	if (seq.empty() || seq.back() != 0) {
 		seq.push_back(0); // push delimiter
 	}
@@ -392,7 +392,7 @@ bool PreprocessedFileReader::readFileByName(const std:: string &fileName, std:: 
 			}
 		}
 	}
-	
+
 	if (seq.empty() || seq.back() != 0) {
 		seq.push_back(0); // push delimiter
 	}
@@ -423,7 +423,7 @@ bool PreprocessedFileReader::countLinesOfFile(const std:: string &fileName, cons
 		std::string &str = lines[i];
 		if (pSloc != NULL || pLoc != NULL || pAvailableTokens != NULL) {
 			std::string::size_type pos = str.find('.');
-			if (pos != std:: string::npos) { 
+			if (pos != std:: string::npos) {
 				std:: string lineNumberStr = str.substr(0, pos);
 				char *p;
 				size_t lineNumber = (size_t)strtol(lineNumberStr.c_str(), &p, 16);
@@ -446,7 +446,7 @@ bool PreprocessedFileReader::countLinesOfFile(const std:: string &fileName, cons
 			}
 		}
 	}
-	
+
 	if (pSloc != NULL) {
 		*pSloc = sloc;
 	}
@@ -589,10 +589,10 @@ bool get_raw_lines(const std:: string &file_path, std:: vector<std:: string> *pL
 	}
 
 	(*pLines).swap(lines);
-	
+
 	file.close();
 
-	return true;	
+	return true;
 }
 
 //bool get_raw_lines(const std:: string &file_path, std:: vector<std:: string> *pLines)
@@ -628,17 +628,17 @@ bool get_raw_lines(const std:: string &file_path, std:: vector<std:: string> *pL
 //	}
 //
 //	(*pLines).swap(lines);
-//	
+//
 //	if (pInput == &file) {
 //		file.close();
 //	}
 //
-//	return true;	
+//	return true;
 //}
 
 namespace {
 
-int read_script_table_i(std::vector<std::pair<std::string/* ext */, std::string/* scriptFile */> > *pOutput, 
+int read_script_table_i(std::vector<std::pair<std::string/* ext */, std::string/* scriptFile */> > *pOutput,
 		const std::string &prepScriptDescriptionFile)
 {
 	assert(pOutput != NULL);
@@ -659,7 +659,7 @@ int read_script_table_i(std::vector<std::pair<std::string/* ext */, std::string/
 		std::string scriptFile = fields[0];
 		std::vector<std::string> exts;
 		boost::split(exts, fields[1], boost::is_any_of(",:;"));
-		
+
 		for (size_t j = 0; j < exts.size(); ++j) {
             const std::string &ext = exts[j];
 			if (ext.empty()) {
@@ -674,7 +674,7 @@ int read_script_table_i(std::vector<std::pair<std::string/* ext */, std::string/
 				std:: cerr << "error: invalid line in the script setting file" << std:: endl;
 				return 2;
 			}
-			
+
 			data.push_back(std::pair<std::string, std::string>(ext, scriptFile));
 		}
 	}
@@ -684,14 +684,60 @@ int read_script_table_i(std::vector<std::pair<std::string/* ext */, std::string/
 
 } // namespace
 
-int read_script_table(std::vector<std::pair<std::string/* ext */, std::string/* scriptFile */> > *pOutput, const std::string &argv0, 
-		const boost::optional<std::vector<std::string> > &oOptionalPrepScriptDescriptionFiles)
+int read_script_table(
+    std::vector<std::pair<std::string/* ext */, std::string/* scriptFile */> > *pOutput,
+    const std::string &argv0,
+	const boost::optional<std::vector<std::string> > &oOptionalPrepScriptDescriptionFiles)
 {
+    const char CCFX_PREP_SCRIPT_NAME[] = "ccfx_prep_scripts.ini";
+
 	assert(pOutput != NULL);
 	std::vector<std::pair<std::string/* ext */, std::string/* scriptFile */> > &data = *pOutput;
 
 	std::vector<std::string> descFiles;
-	descFiles.push_back(make_filename_on_the_same_directory("ccfx_prep_scripts.ini", argv0));
+    std::string scriptFileName(make_filename_on_the_same_directory(CCFX_PREP_SCRIPT_NAME, argv0));
+
+    //Check if ccfx_prep_script exists in the current directory
+	std::fstream file;
+	file.open(scriptFileName.c_str(), std::ios::in | std::ios::binary);
+	if (file.is_open()) {
+        descFiles.push_back(scriptFileName);
+        file.close();
+	}
+    else
+    {
+        //Check if config file exists in config directory
+        scriptFileName = get_application_config_path();
+        scriptFileName += "/";
+        scriptFileName += CCFX_PREP_SCRIPT_NAME;
+
+        file.open(scriptFileName.c_str(), std::ios::in | std:: ios::binary);
+        if (file.is_open()) {
+            descFiles.push_back(scriptFileName);
+            std::cout << "File " << scriptFileName << " found" << std::endl;
+            file.close();
+        }
+        else
+        {
+            //Create the file in config directory because it does not exist (or we cannot open it!)
+            file.open(scriptFileName.c_str(), std::ios::out | std::ios::binary);
+            if (file.is_open()) {
+                file <<
+                    "cpp=.c;.cpp;.cxx;.cc;.h;.hpp;.hxx;.hh\n"
+                    "cobol=.cbl;.cob;.cobol\n"
+                    "java=.java\n"
+                    "visualbasic=.vb;.bas;.frm\n"
+                    "csharp=.cs\n"
+                    "plaintext=.txt\n";
+
+                std::cout << "File " << scriptFileName << " created with default contents" << std::endl;
+
+                descFiles.push_back(scriptFileName);
+                file.close();
+            }
+        }
+    }
+
 
 	if (oOptionalPrepScriptDescriptionFiles) {
 		const std::vector<std::string> &dfs = *oOptionalPrepScriptDescriptionFiles;
@@ -763,7 +809,7 @@ void ThreadFunction::applyToSystem()
 	}
 	else {
 		omp_set_num_threads(m);
-	
+
 	}
 #endif
 }

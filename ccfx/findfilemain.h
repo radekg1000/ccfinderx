@@ -42,7 +42,7 @@ private:
 	bool optionPrintGroupSeparator;
 
 private:
-//	int making_pack_files(const std::vector<std::string> &directoryPaths) 
+//	int making_pack_files(const std::vector<std::string> &directoryPaths)
 //	{
 //		std::string argv0 = script_table_reader::getArgv0();
 //		std::string scriptPath = ::make_filename_on_the_same_directory("scripts" + file_separator() + "preprocess.py", argv0);
@@ -79,14 +79,14 @@ public:
 
 		assert(argv.size() >= 2);
 		if (argv.size() == 2 || argv[2] == "-h" || argv[2] == "--help") {
-			std:: cout << 
+			std:: cout <<
 				"Usage 1: ccfx F PREPROCESS_SCRIPT OPTIONS directories..." "\n"
 				"  Finds files that matches the preprocess_script." "\n"
 				"Option" "\n"
 				"  -a: prints out each file in full path (absolute path)." "\n"
 				"  -e: prints out extensions that are associated with the preprocess script." "\n"
 				"  -l n: generates lines for preprocessed-file directories." "\n"
-				"  -l is: generates lines for group separators." "\n"  
+				"  -l is: generates lines for group separators." "\n"
 				"  -o out.txt: output file." "\n"
 				"  --listoptions: prints out preprocess options." "\n"
 				"  --preprocessedextension: prints out extension of preprocessed file." "\n"
@@ -107,16 +107,16 @@ public:
 		optionConvertToAbsolutePath = false;
 		optionPrintPreprocessedFilesDirectories = false;
 		optionPrintGroupSeparator = false;
-		
+
 		enum { MODE_NONE = 0,
 			MODE_FINDFILES,
-			MODE_PRINTPROCESSORS, 
-			MODE_PRINTEXTENSIONS, 
-			MODE_PRINTAVAILABLEENCODINGS, 
-			MODE_PRINTPREPROCESSOPTIONDESCRIPTION, 
+			MODE_PRINTPROCESSORS,
+			MODE_PRINTEXTENSIONS,
+			MODE_PRINTAVAILABLEENCODINGS,
+			MODE_PRINTPREPROCESSOPTIONDESCRIPTION,
 			MODE_PRINTPREPROCESSEDFILEEXTENSION,
 			MODE_PRINTDEFAULTPARAMETERIZING,
-			MODE_FINDREPROCESSFILEDIRECTORIES 
+			MODE_FINDREPROCESSFILEDIRECTORIES
 		};
 
 		int mode = MODE_NONE;
@@ -192,19 +192,19 @@ public:
 					}
 					if (argi == "-c") {
 						mode = MODE_PRINTAVAILABLEENCODINGS;
-					} 
+					}
 					else if (argi == "-d") {
 						mode = MODE_PRINTPREPROCESSOPTIONDESCRIPTION;
-					} 
+					}
 					else if (argi == "-e") {
 						mode = MODE_PRINTEXTENSIONS;
-					} 
+					}
 					else if (argi == "-p") {
 						mode = MODE_PRINTPROCESSORS;
-					} 
+					}
 					else if (argi == "-n") {
 						mode = MODE_FINDREPROCESSFILEDIRECTORIES;
-					} 
+					}
 					else {
 						std:: cerr << "error: unknown option '" << argi << "'" << std:: endl;
 						return 1;
@@ -219,7 +219,7 @@ public:
 				args.push_back(argi);
 			}
 		}
-		
+
 		if (mode == MODE_NONE) {
 			if (args.size() == 0) {
 				mode = MODE_PRINTPROCESSORS;
@@ -263,7 +263,7 @@ public:
 				}
 
 				std:: ostream *pOutput = &std:: cout;
-				
+
 				std:: ofstream output;
 				if (! outputFile.empty()) {
 					output.open(outputFile.c_str());
@@ -298,7 +298,7 @@ public:
 				}
 
 				std:: ostream *pOutput = &std:: cout;
-				
+
 				std:: ofstream output;
 				if (! outputFile.empty()) {
 					output.open(outputFile.c_str());
@@ -308,7 +308,7 @@ public:
 					}
 					pOutput = &output;
 				}
-				
+
 				for (std::map<std::string, int>::const_iterator i = defaultParameterizing.begin(); i != defaultParameterizing.end(); ++i) {
 					const std::string &tokenName = i->first;
 					int paramOperation = i->second;
@@ -352,7 +352,7 @@ public:
 			{
 				assert(! script.empty());
 				std:: ostream *pOutput = &std:: cout;
-				
+
 				std:: ofstream output;
 				if (! outputFile.empty()) {
 					output.open(outputFile.c_str());
@@ -362,7 +362,7 @@ public:
 					}
 					pOutput = &output;
 				}
-				
+
 				std:: map<std:: string/* preprocessor */, std:: set<std:: string> >::iterator i = preprocessorTable.find(script);
 				if (i == preprocessorTable.end()) {
 					std:: cerr << "error: unknown preprocess script '" << script << "'" << std:: endl;
@@ -408,7 +408,7 @@ public:
 		case MODE_PRINTPROCESSORS:
 			{
 				std:: ostream *pOutput = &std:: cout;
-				
+
 				std:: ofstream output;
 				if (! outputFile.empty()) {
 					output.open(outputFile.c_str());
@@ -418,7 +418,7 @@ public:
 					}
 					pOutput = &output;
 				}
-				
+
 				for (std:: map<std:: string/* preprocessor */, std:: set<std:: string> >::iterator i = preprocessorTable.begin(); i != preprocessorTable.end(); ++i) {
 					(*pOutput) << i->first << std:: endl;
 				}
@@ -438,7 +438,7 @@ public:
 		}
 
 		assert(mode == MODE_FINDFILES || mode == MODE_FINDREPROCESSFILEDIRECTORIES);
-		
+
 		if (mode == MODE_FINDFILES) {
 			if (preprocessorTable.find(script) == preprocessorTable.end()) {
 				std:: cerr << "error: unknown script identifier '" << script << "'" << std:: endl;
@@ -559,19 +559,22 @@ public:
 
 		return 0;
 	}
+
 protected:
 	int readScriptTable(const std:: string &argv0_)
 	{
 		this->argv0 = argv0_;
 
 		preprocessorTable.clear();
-		
+
 		std::vector<std::pair<std::string, std::string> > data;
 		int r = read_script_table(&data, argv0);
 		if (r != 0) {
 			return r;
 		}
-		for (std::vector<std::pair<std::string, std::string> >::const_iterator si = data.begin(); si != data.end(); ++si) {
+
+		for (std::vector<std::pair<std::string, std::string> >::const_iterator si = data.begin(); si != data.end(); ++si)
+        {
 			const std::string &extension = si->first;
 			const std::string &scriptName = si->second;
 			preprocessorTable[scriptName].insert(extension);
@@ -579,8 +582,9 @@ protected:
 
 		return 0;
 	}
+
 private:
-	static bool getExtensionOfPreprocessedFile(std::string *pPostfix, const std::string &preprocessScript, const std::vector<std::string> &preprocessOptions, 
+	static bool getExtensionOfPreprocessedFile(std::string *pPostfix, const std::string &preprocessScript, const std::vector<std::string> &preprocessOptions,
 			std::string *pErrorMessage)
 	{
 		assert(pPostfix != NULL);
@@ -600,6 +604,7 @@ private:
 		*pPostfix = prepInvoker.getPostfix();
 		return true;
 	}
+
 	static bool getDefaultParameterizing(std::map<std::string, int> *pParameterizing, const std::string &preprocessScript,
 			std::string *pErrorMessage)
 	{

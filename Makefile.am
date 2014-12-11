@@ -213,7 +213,6 @@ copy_libeasytorq_to_script_dir : libeasytorq.la
 
 distdatadir = $(pkgdatadir)
 dist_data_DATA = \
-	@top_srcdir@/build/ccfx_prep_scripts.ini \
 	@top_srcdir@/build/gemx.sh \
 	@top_srcdir@/build/scripts/ccfxconfig.py \
 	@top_srcdir@/build/scripts/easytorq_helper.py \
