@@ -28,20 +28,24 @@ private:
 	private:
 		size_t begin;
 		size_t end;
+
 	public:
 		SubSequence(size_t beginPos_, size_t endPos_)
 			: begin(beginPos_), end(endPos_)
 		{
 			assert(beginPos_ <= endPos_);
 		}
+
 		SubSequence()
 			: begin(), end()
 		{
 		}
+
 		SubSequence(const SubSequence &right)
 			: begin(right.begin), end(right.end)
 		{
 		}
+
 	public:
 		//bool operator==(const SubSequence &right) const
 		//{
@@ -108,41 +112,50 @@ private:
 		//{
 		//	return *(li + index);
 		//}
+
 		void swap(SubSequence &right)
 		{
 			std:: swap(this->begin, right.begin);
 			std:: swap(this->end, right.end);
 		}
+
 		inline size_t size() const
 		{
 			return end - begin;
 		}
+
 		inline size_t getBegin() const
 		{
 			return this->begin;
 		}
+
 		inline size_t getEnd() const
 		{
 			return this->end;
 		}
+
 	public:
 		class SequencePrevComparator {
 		private:
 			size_t unitLength;
 			const typename std:: vector<ElemType> *pSeq;
+
 		public:
 			SequencePrevComparator(size_t unitLength_, const std:: vector<ElemType> *pSeq_)
 				: unitLength(unitLength_), pSeq(pSeq_)
 			{
 			}
+
 			SequencePrevComparator()
 				: unitLength(0), pSeq(NULL)
 			{
 			}
+
 			SequencePrevComparator(const SequencePrevComparator &right)
 				: unitLength(right.unitLength), pSeq(right.pSeq)
 			{
 			}
+
 			bool operator()(size_t posLeft, size_t posRight) const
 			{
 				assert(posLeft + unitLength <= (*pSeq).size());
@@ -169,23 +182,28 @@ private:
 				}
 			}
 		};
+
 		class ExtensionPrevComparator {
 		private:
 			size_t baseLength;
 			const typename std:: vector<ElemType> *pSeq;
+
 		public:
 			ExtensionPrevComparator(size_t baseLength_, const std:: vector<ElemType> *pSeq_)
 				: baseLength(baseLength_), pSeq(pSeq_)
 			{
 			}
+
 			ExtensionPrevComparator()
 				: baseLength(0), pSeq(NULL)
 			{
 			}
+
 			ExtensionPrevComparator(const ExtensionPrevComparator &right)
 				: baseLength(right.baseLength), pSeq(right.pSeq)
 			{
 			}
+
 			bool operator()(size_t posLeft, size_t posRight) const
 			{
 				assert(posLeft + baseLength < (*pSeq).size());
@@ -202,6 +220,7 @@ private:
 				}
 			}
 		};
+
 		class PrevExtensionComparator {
 		private:
 			size_t baseLength;
@@ -211,14 +230,17 @@ private:
 				: baseLength(baseLength_), pSeq(pSeq_)
 			{
 			}
+
 			PrevExtensionComparator()
 				: baseLength(0), pSeq(NULL)
 			{
 			}
+
 			PrevExtensionComparator(const ExtensionPrevComparator &right)
 				: baseLength(right.baseLength), pSeq(right.pSeq)
 			{
 			}
+
 			bool operator()(size_t posLeft, size_t posRight) const
 			{
 				const ElemType &lp = to_reversereference_compared(*pSeq, posLeft - 1, posLeft, posLeft + baseLength);
@@ -236,6 +258,7 @@ private:
 			}
 		};
 	};
+
 	static bool subsequenceEqual(const typename std:: vector<ElemType> *pSeq, const SubSequence &left, const SubSequence &right)
 	{
 		if (left.size() != right.size()) {
@@ -254,6 +277,7 @@ private:
 		}
 		return true;
 	}
+
 public:
 	class SequenceHashFunction {
 	public:
@@ -262,6 +286,7 @@ public:
 		}
 		virtual HashValueType operator()(const typename std:: vector<ElemType> &seq, size_t begin, size_t end) = 0;
 	};
+
 public:
 	struct CloneSetItem {
 	public:
@@ -278,6 +303,7 @@ public:
 		{
 		}
 	};
+
 	class CloneSetListener {
 	private:
 		const std:: vector<ElemType> *pSeq;
@@ -407,29 +433,35 @@ public:
 		virtual ~ClonePairListenerWithScope()
 		{
 		}
+
 		ClonePairListenerWithScope()
 			: ClonePairListener(), barrior(0), mode(mode_all)
 		{
 		}
+
 		ClonePairListenerWithScope(const CloneSetListener &right)
 			: ClonePairListener(right), barrior(right.barrior), mode(right.mode)
 		{
 		}
+
 	public:
 		void setAllMode()
 		{
 			mode = mode_all;
 		}
+
 		void setCrossMode(size_t barrior_)
 		{
 			mode = mode_cross;
 			barrior = barrior_;
 		}
+
 		void setLeftAndCrossMode(size_t barrior_)
 		{
 			mode = mode_left_and_cross;
 			barrior = barrior_;
 		}
+
 	public:
 		virtual bool rangeCheck(const std:: vector<CloneSetItem> &cloneSet)
 		{
@@ -477,6 +509,7 @@ public:
 			}
 			return false;
 		}
+
 		virtual void found(size_t posA, size_t posB, size_t baseLength, boost::uint64_t cloneSetReferenceNumber)
 		{
 			assert(posA < posB);
@@ -589,15 +622,18 @@ private:
 	//bool optionVerbose;
 	boost::uint64_t cloneSetReferenceNumber;
 	size_t numThreads;
+
 public:
 	CloneDetector()
 		: pSeq(NULL), bottomUnitLength(0), multiply(1), hashSeq()/*, optionVerbose(false)*/, cloneSetReferenceNumber(0), numThreads(1)
 	{
 	}
+
 	CloneDetector(const CloneDetector &right)
 		: pSeq(right.pSeq), bottomUnitLength(right.bottomUnitLength), multiply(right.multiply), hashSeq(right.hashSeq)/*, optionVerbose(right.optionVerbose)*/, numThreads(1)
 	{
 	}
+
 private:
 	CloneDetector(size_t dummy) // dummy to ensure methods
 	{
@@ -609,53 +645,65 @@ private:
 		ElemType t2 = to_reversereference_compared(&seqDummy, pos, begin, end);
 		assert(false);
 	}
+
 public:
 	void setThreads(size_t numThreads_)
 	{
 		numThreads = numThreads_;
 	}
+
 	void attachSequence(const std:: vector<ElemType> *pSeq_)
 	{
 		assert(pSeq_ != NULL);
 		pSeq = pSeq_;
 	}
+
 	const typename std:: vector<ElemType> &refSeq() const
 	{
 		return *pSeq;
 	}
+
 	void detachSequence()
 	{
 		pSeq = NULL;
 	}
+
 	void setBottomUnitLength(size_t bottomUnitLength_)
 	{
 		bottomUnitLength = bottomUnitLength_;
 	}
+
 	void setMultiply(size_t multiply_)
 	{
 		multiply = multiply_;
 	}
+
 	size_t getUnitLength() const
 	{
 		return bottomUnitLength * multiply;
 	}
+
 //	void setOptionVerbose(bool ov)
 //	{
 //		optionVerbose = ov;
 //	}
+
 //	bool getOptionVerbose() const
 //	{
 //		return optionVerbose;
 //	}
+
 	void clearCloneSetReferenceNumber()
 	{
 		cloneSetReferenceNumber = 0;
 	}
+
 	void findClonePair(ClonePairListener *pListener, SequenceHashFunction &hashFunc)
 	{
 		ClonePairListenerAdapter a(pListener);
 		findCloneSet(&a, hashFunc);
 	}
+
 public:
 	void print_seq(size_t beginPos, size_t len)
 	{
@@ -675,11 +723,13 @@ public:
 			}
 		}
 	}
+
 private:
 	struct CloneSetData {
 		std::vector<CloneSetItem> cloneSet;
 		size_t baseLength;
 	};
+
 	void send_clone_set_data_to_listener(ThreadQueue<std::vector<std::vector<CloneSetData> > *> *pQue, CloneSetListener *pListener) {
 		std::vector<std::vector<CloneSetData> > *pFoundCloneSetsForThreads;
 		while ((pFoundCloneSetsForThreads = (*pQue).pop()) != NULL) {
@@ -695,6 +745,7 @@ private:
 			delete pFoundCloneSetsForThreads;
 		}
 	}
+
 public:
 	void findCloneSet(CloneSetListener *pListener, SequenceHashFunction &hashFunc)
 	{
@@ -803,7 +854,7 @@ public:
 
 			size_t validCiCount = validCis.size();
 #pragma omp parallel for schedule(dynamic)
-			for (int cii = 0; cii < validCiCount; ++cii) {
+			for (size_t cii = 0; cii < validCiCount; ++cii) {
 				const size_t threadNum = cii;
 				size_t tci = validCis[cii];
 				std::vector<CloneSetData> &foundCloneSets = foundCloneSetsForThreads[threadNum];
@@ -858,6 +909,7 @@ public:
 
 		hashSeq.clear();
 	}
+
 private:
 	void find_clone_set_i(std:: vector<size_t/* pos */> *pPoss, size_t begin, size_t end,
 			size_t baseLength, CloneSetListener *pListener, std::vector<CloneSetData> *pFoundCloneSets)
@@ -914,6 +966,7 @@ private:
 			j = k;
 		}
 	}
+
 	void output_clone_set(const std:: vector<size_t/* pos */> &poss, size_t begin, size_t end, size_t baseLength, CloneSetListener *pListener,
 			std::vector<CloneSetData> *pFoundCloneSets)
 	{
@@ -965,6 +1018,7 @@ private:
 			cloneSetData.baseLength = baseLength;
 		}
 	}
+
 	size_t calc_max_extend(const std:: vector<size_t/* pos */> &poss, size_t begin, size_t end, size_t baseLength)
 	{
 		assert(end - begin >= 2);
@@ -1057,8 +1111,9 @@ private:
 		assert(endPos <= hashSeq.size());
 		assert(hashSeq[endPos - 1] == 0);
 		assert(unitLength >= 1);
+        assert(endPos > unitLength * multiply);
 
-		for (int i = beginPos + 1; i < endPos - unitLength * multiply; ++i) {
+		for (size_t i = beginPos + 1; i < endPos - unitLength * multiply; ++i) {
 			HashValueType value = 0;
 			for (size_t j = 0; j < multiply; ++j) {
 				HashValueType h = hashSeq[i + j * unitLength];
@@ -1087,6 +1142,7 @@ private:
 			make_bottom_level_hash_sequence(seq, hashFunc, pHashSeq, unitLength, 0, seq.size());
 		}
 	}
+
 	static void make_bottom_level_hash_sequence(const std:: vector<ElemType> &seq, SequenceHashFunction &hashFunc,
 			std:: vector<HashValueType> *pHashSeq, size_t unitLength, size_t beginPos, size_t endPos)
 	{
@@ -1160,4 +1216,3 @@ private:
 };
 
 #endif // CLONEDETECTOR_H
-

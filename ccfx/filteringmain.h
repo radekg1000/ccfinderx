@@ -623,9 +623,11 @@ private:
 			if (str.empty() && is.eof()) {
 				break; // while
 			}
+
 			if (str.length() >= 1 && str[str.length() - 1] == '\r') {
 				str.resize(str.length() - 1);
 			}
+
 			long long num;
 			try {
 				num = boost::lexical_cast<long long>(str);
@@ -633,8 +635,9 @@ private:
 			catch (boost::bad_lexical_cast &) {
 				return false;
 			}
-			assert(num + 1 < std::numeric_limits<size_t>::max());
-			if (! (num < (*pBits).size())) {
+
+			//assert(num + 1 < std::numeric_limits<size_t>::max()); //does not make much sense for Linux/Win 32/64
+			if (! (num < (long long)(*pBits).size())) {
 				(*pBits).resize(num + 1);
 			}
 			(*pBits).set(num, true);
@@ -657,8 +660,9 @@ private:
 			if (FREAD(&num, sizeof(long long), 1, pf) != 1) {
 				break; // while
 			}
-			assert(num + 1 < std::numeric_limits<size_t>::max());
-			if (! (num < (*pBits).size())) {
+
+			//assert(num + 1 < std::numeric_limits<size_t>::max()); //does not make much sense for Linux/Win 32/64 - alwayst true
+			if (! (num < (long long)(*pBits).size())) {
 				(*pBits).resize(num + 1);
 			}
 			(*pBits).set(num, true);
